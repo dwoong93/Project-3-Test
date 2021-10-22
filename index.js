@@ -1,3 +1,4 @@
+const { Router } = require("express");
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
@@ -12,6 +13,7 @@ app.set("view engine", "hbs");
 // static folder
 app.use(express.static("public"));
 
+
 // setup wax-on
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
@@ -23,11 +25,48 @@ app.use(
   })
 );
 
+//Import Routes
+const landingRoutes = require('./routes/landing');
+
+
+//async function
 async function main() {
-    app.get('/', (req,res)=>{
-        res.send("It's alive!")
-    })
-  
+    app.use('/', landingRoutes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+//end of main function 
 }
 
 main();
