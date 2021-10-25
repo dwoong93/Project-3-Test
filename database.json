@@ -1,8 +1,8 @@
 {
     "dev": {
         "driver": "mysql",
-        "user": "foo",
-        "password": "bar",
+        "user": "dwoong",
+        "password": "kopipeng123",
         "database": "keyboard"
     }
 }
