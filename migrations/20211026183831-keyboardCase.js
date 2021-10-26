@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('pcb', {
+  return db.createTable('keyboardCase', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -27,10 +27,20 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
+    material: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
+    size: {
+      type: 'int',
+      length: 100,
+      notNull: false
+    },
     cost: 'int',
     description: 'text'
   })
 };
 exports.down = function (db) {
-  return db.dropTable('pcb');
+  return db.dropTable('keyboardCase');
 };
