@@ -1,0 +1,54 @@
+{{#extends 'base'}}
+{{#block 'content'}}
+<h1>hello fcdsfworld</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Form Factor</th>
+        <th>Material</th>
+        <th>Keyboard Kit</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock Count</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.size}}
+            </td>
+            <td>
+                {{this.material}}
+            </td>
+            <td>
+                {{this.keyboardKit}}
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+</table>
+
+{{/block}}
+{{/extends}}
