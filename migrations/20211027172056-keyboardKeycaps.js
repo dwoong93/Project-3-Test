@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('keyboardSwitch', {
+  return db.createTable('keyboardKeycaps', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -27,7 +27,17 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
-    switchType: {
+    size: {
+      type: 'int',
+      length: 100,
+      notNull: false
+    },
+    keycapMaterial: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
+    keycapProfile: {
       type: 'string',
       length: 100,
       notNull: false
@@ -37,5 +47,5 @@ exports.up = function (db) {
   })
 };
 exports.down = function (db) {
-  return db.dropTable('keyboardSwitch');
+  return db.dropTable('keyboardKeycaps');
 };

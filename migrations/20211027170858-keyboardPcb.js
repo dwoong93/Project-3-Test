@@ -37,6 +37,11 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
+    keyboardKit: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
     cost: 'int',
     description: 'text'
   })
