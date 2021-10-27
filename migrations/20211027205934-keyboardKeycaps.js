@@ -42,6 +42,10 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
+    quantity: {
+      type: 'int',
+      unsigned: true,
+    },
     cost: 'int',
     description: 'text'
   })
