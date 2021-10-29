@@ -1,5 +1,7 @@
 const bookshelf = require('../bookshelf')
-const Product = bookshelf.model('keyboard', {
-tableName:'keyboardCase'
+const Keyboardcase = bookshelf.model('Keyboardcase', {
+tableName:'keyboardCase'//<-- the name of the table inside the MYSQL database
 });
-module.exports = {Product};
+module.exports = {
+    'Keyboardcase':Keyboardcase
+}

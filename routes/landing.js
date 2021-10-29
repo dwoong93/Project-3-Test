@@ -11,7 +11,7 @@ router.get('/build', (req,res)=>{
     res.render('landing/build')
 });
 
-router.get('/catalog/keyboardcase', (req,res)=>{
+router.get('/catalog', (req,res)=>{
     res.render('products/index')
 });
 
