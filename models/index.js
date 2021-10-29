@@ -1,5 +1,5 @@
 const bookshelf = require('../bookshelf')
-const keyboardCase = bookshelf.model('keyboardCase', {
+const Product = bookshelf.model('keyboard', {
 tableName:'keyboardCase'
 });
-module.exports = { keyboardCase };
+module.exports = {Product};

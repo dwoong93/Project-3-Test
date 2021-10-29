@@ -11,8 +11,9 @@ router.get('/build', (req,res)=>{
     res.render('landing/build')
 });
 
-router.get('/catalog', (req,res)=>{
-    res.render('landing/catalog')
+router.get('/catalog/keyboardcase', (req,res)=>{
+    res.render('products/index')
 });
+
 //Export Router
 module.exports = router;
