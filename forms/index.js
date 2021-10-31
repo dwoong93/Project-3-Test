@@ -41,7 +41,8 @@ const createProductForm = () => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            'validators':[validators.integer()]
         }),
         'keyboardKit': fields.string({
             required: true,
@@ -55,14 +56,16 @@ const createProductForm = () => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            'validators':[validators.integer()]
         }),
         'cost': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            'validators':[validators.integer()]
         }),
         'description': fields.string({
             required: true,
