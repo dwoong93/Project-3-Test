@@ -31,7 +31,7 @@ const productRoutes = require('./routes/products');
 
 //async function
 async function main() {
-    app.use('/test', landingRoutes);
+    app.use('/keyboardshop', landingRoutes);
     app.use('/products', productRoutes);
 
 
