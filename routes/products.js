@@ -6,18 +6,18 @@ const { bootstrapField, createProductForm } = require('../forms');
 // #1 import in the Product model
 const {Keyboardcase} = require('../models')
 
-router.get('/keyboardCases', async function(req,res){
-    let keyboardcases = await Keyboardcase.collection().fetch();
+router.get('/keyboardcases', async function(req,res){
+    let keebCases = await Keyboardcase.collection().fetch();
     res.render('products/index',{
-        'keyboardcases':keyboardcases.toJSON()
+        'keyboardcases':keebCases.toJSON()
     }) 
 })
-router.get('/you', async(req,res)=>{
-    let q = await Keyboardcase.collection().fetch();
-    res.render('products/index', {
-        'q': q.toJSON()      
-    })
-})
+// router.get('/keyboardCases', async(req,res)=>{
+//     let q = await Keyboardcase.collection().fetch();
+//     res.render('products/index', {
+//         'q': q.toJSON()      
+//     })
+// })
 // create product
 // -------------------------------------------------------------------------------
 router.get('/createproduct', async (req, res) => {
@@ -27,11 +27,11 @@ router.get('/createproduct', async (req, res) => {
     })
 })
 //post created product
-router.post('/create', async(req,res)=>{
+router.post('/createproduct', async(req,res)=>{
     const productForm = createProductForm();
     productForm.handle(req, {
         'success': async (form) => {
-            const product = new Product();
+            const product = new Keyboardcase();
             product.set('name', form.data.name);
             product.set('material', form.data.material);
             product.set('name', form.data.name);
@@ -41,7 +41,7 @@ router.post('/create', async(req,res)=>{
             product.set('cost', form.data.cost);
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/keyboardshop/catalog');
+            res.redirect('/products/keyboardcases');
         },
         'error': async (form) => {
             res.render('products/create', {

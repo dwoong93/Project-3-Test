@@ -46,7 +46,7 @@ exports.up = function (db) {
       type: 'int',
       unsigned: true,
     },
-    cost: 'int',
+    cost: 'float',
     description: 'text'
   })
 };

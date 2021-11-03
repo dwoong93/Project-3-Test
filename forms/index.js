@@ -59,7 +59,7 @@ const createProductForm = () => {
             cssClasses: {
                 label: ['form-label']
             },
-            'validators':[validators.integer()]
+            
         }),
         'cost': fields.string({
             required: true,
