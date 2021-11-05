@@ -20,14 +20,14 @@ router.get('/keyboardcases', async function(req,res){
 // })
 // create product
 // -------------------------------------------------------------------------------
-router.get('/createproduct', async (req, res) => {
+router.get('/keyboardcases/createproduct', async (req, res) => {
     const productForm = createProductForm();
     res.render('products/create',{
     'form': productForm.toHTML(bootstrapField)
     })
 })
 //post created product
-router.post('/createproduct', async(req,res)=>{
+router.post('/keyboardcases/createproduct', async(req,res)=>{
     const productForm = createProductForm();
     productForm.handle(req, {
         'success': async (form) => {

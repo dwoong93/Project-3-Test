@@ -67,7 +67,6 @@ const createProductForm = () => {
             cssClasses: {
                 label: ['form-label']
             },
-            'validators':[validators.integer()]
         }),
         'description': fields.string({
             required: true,
