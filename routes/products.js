@@ -49,6 +49,8 @@ router.post('/keyboardcases/createproduct', async(req,res)=>{
         }
     })
 })
+
+//update product by id
 router.get('/:product_id/update', async (req, res) => {
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
@@ -59,33 +61,37 @@ router.get('/:product_id/update', async (req, res) => {
         console.log(keebCases)
 
 
-        // const productForm = createProductForm();
+        const productForm = createProductForm();
+        
 
-        // productForm.fields.name.value = Keyboardcase.get('name');
-        // productForm.fields.material.value = Keyboardcase.get('material');
-        // productForm.fields.size.value = Keyboardcase.get('size');
-        // productForm.fields.keyboardKit.value = Keyboardcase.get('keyboardKit');
-        // productForm.fields.quantity.value = Keyboardcase.get('quantity');
-        // productForm.fields.cost.value = Keyboardcase.get('cost');
-        // productForm.fields.description.value = Keyboardcase.get('description');
+        productForm.fields.name.value = keebCases.get('name');
+        productForm.fields.material.value = keebCases.get('material');
+        productForm.fields.size.value = keebCases.get('size');
+        productForm.fields.keyboardKit.value = keebCases.get('keyboardKit');
+        productForm.fields.quantity.value = keebCases.get('quantity');
+        productForm.fields.cost.value = keebCases.get('cost');
+        productForm.fields.description.value = keebCases.get('description');
 
-        // res.render('products/update', {
-        //     'form': productForm.toHTML(bootstrapField),
-        //     'product': product.toJSON()
-        // })
+        res.render('products/update', {
+            'form': productForm.toHTML(bootstrapField),
+            'keyboardcases':keebCases.toJSON()
+        })
         res.render('products/update')
     })
 //process update
 router.post('/:product_id/update', async (req, res) => {
+    // fetch the product that we want to update
     const keebCases = await Keyboardcase.where({
-        'id': productId}).fetch({
-            require: true
-        });
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
     const productForm = createProductForm();
     productForm.handle(req,{
         'success': async (form)=>{
-            product.set(form.data);
-            product.save();
+            keebCases.set(form.data);
+            keebCases.save();
             res.redirect('/products/keyboardcases');
         },
         'error':async (form) =>{
