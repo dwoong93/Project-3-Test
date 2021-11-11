@@ -37,7 +37,7 @@ router.post('/keyboardcases/createproduct', async(req,res)=>{
             product.set('size', form.data.size);
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('quantity', form.data.quantity);
-            product.set('cost', form.data.cost);
+            product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
             res.redirect('/products/keyboardcases');
@@ -57,8 +57,8 @@ router.get('/:product_id/update', async (req, res) => {
         'id': productId}).fetch({
             require: true
         });
-        console.log(productId);
-        console.log(keebCases)
+        // console.log(productId);
+        // console.log(keebCases)
 
 
         const productForm = createProductForm();
@@ -76,8 +76,8 @@ router.get('/:product_id/update', async (req, res) => {
             'form': productForm.toHTML(bootstrapField),
             'keyboardcases':keebCases.toJSON()
         })
-        res.render('products/update')
-    })
+        // res.render('products/update')
+})
 //process update
 router.post('/:product_id/update', async (req, res) => {
     // fetch the product that we want to update
@@ -102,9 +102,32 @@ router.post('/:product_id/update', async (req, res) => {
         }
     })
     
-        
-        
+})
 
+//delete product
+router.get('/:product_id/delete', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebCases = await Keyboardcase.where({
+        'id': productId}).fetch({
+            require: true
+        });
+        // console.log(productId);
+        // console.log(keebCases)
+
+
+        res.render('products/delete', {
+            'keyboardcases':keebCases.toJSON()
+        })
+})
+//process delete
+router.post('/:product_id/delete', async (req, res) => {
+    const keebCases = await Keyboardcase.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    await keebCases.destroy();
+    res.redirect('/products/keyboardcases')
 })
 
 
