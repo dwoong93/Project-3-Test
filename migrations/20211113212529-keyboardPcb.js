@@ -46,10 +46,18 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
-    cost: 'int',
+    cost: 'float',
     description: 'text'
   })
 };
 exports.down = function (db) {
   return db.dropTable('keyboardPcb');
+};
+
+exports.down = function(db) {
+  return null;
+};
+
+exports._meta = {
+  "version": 1
 };

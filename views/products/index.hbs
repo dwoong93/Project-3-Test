@@ -10,6 +10,7 @@
         <th>Name</th>
         <th>Form Factor</th>
         <th>Material</th>
+        <th>Connection Type</th>
         <th>Keyboard Kit</th>
         <th>Description</th>
         <th>Price</th>
@@ -17,6 +18,45 @@
         <th></th>
         </tr>
     </thead>
+
+    <tbody>
+        {{#each keyboardpcb}}
+        {{!-- {{#each keyboardcases}} --}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.size}}
+            </td>
+            <td>
+                {{this.material}}
+            </td>
+            <td>
+                {{this.switchConnectionType}}
+            </td>
+            <td>
+                {{this.keyboardKit}}
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+            <td>
+                <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
 
     <tbody>
         {{#each keyboardcases}}
@@ -34,6 +74,9 @@
                 {{this.material}}
             </td>
             <td>
+                {{this.switchConnectionType}}
+            </td>
+            <td>
                 {{this.keyboardKit}}
             </td>
             <td>
@@ -46,8 +89,8 @@
                 {{this.quantity}}
             </td>
             <td>
-                <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-                <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                <a href="/products/keyboardcase/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
         {{/each}}

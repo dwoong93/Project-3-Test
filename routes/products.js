@@ -1,57 +1,86 @@
 const express = require("express");
 const router = express.Router();
 // import in  Forms
-const { bootstrapField, createProductForm } = require('../forms');
+const { bootstrapField, createkeyboardCaseForm, createkeyboardPcbForm} = require('../forms');
 
 // #1 import in the Product model
-const {Keyboardcase} = require('../models')
+const {Keyboardcase, Keyboardpcb, Keyboardplate} = require('../models')
 
+//Display keyboard Cases
 router.get('/keyboardcases', async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch();
+    let keebPcb = await Keyboardpcb.collection().fetch();
     res.render('products/index',{
-        'keyboardcases':keebCases.toJSON()
+        'keyboardcases':keebCases.toJSON(),
+        'keyboardpcb':keebPcb.toJSON()
     }) 
 })
-// router.get('/keyboardCases', async(req,res)=>{
-//     let q = await Keyboardcase.collection().fetch();
-//     res.render('products/index', {
-//         'q': q.toJSON()      
-//     })
-// })
-// create product
-// -------------------------------------------------------------------------------
-router.get('/keyboardcases/createproduct', async (req, res) => {
-    const productForm = createProductForm();
-    res.render('products/create',{
+
+// Create keyboardCase
+router.get('/keyboardcases/create', async (req, res) => {
+    const productForm = createkeyboardCaseForm();
+    res.render('products/createcase',{
     'form': productForm.toHTML(bootstrapField)
     })
 })
-//post created product
-router.post('/keyboardcases/createproduct', async(req,res)=>{
-    const productForm = createProductForm();
+// post created KeyboardCase
+router.post('/keyboardcases/create', async(req,res)=>{
+    const productForm = createkeyboardCaseForm();
     productForm.handle(req, {
         'success': async (form) => {
             const product = new Keyboardcase();
             product.set('name', form.data.name);
             product.set('material', form.data.material);
             product.set('size', form.data.size);
-            product.set('keyboardKit', form.data.keyboardKit);
             product.set('quantity', form.data.quantity);
+            product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
             res.redirect('/products/keyboardcases');
         },
         'error': async (form) => {
-            res.render('products/create', {
+            res.render('products/createpcb', {
                 'form': form.toHTML(bootstrapField)
             })
         }
     })
 })
 
-//update product by id
-router.get('/:product_id/update', async (req, res) => {
+//create keyboard pcb
+router.get('/keyboardpcb/create', async (req, res) => {
+    const productForm = createkeyboardPcbForm();
+    res.render('products/createpcb',{
+    'form': productForm.toHTML(bootstrapField)
+    })
+})
+
+// post created pcb
+router.post('/keyboardpcb/create', async(req,res)=>{
+    const productForm = createkeyboardPcbForm();
+    productForm.handle(req, {
+        'success': async (form) => {
+            const product = new Keyboardpcb();
+            product.set('name', form.data.name);
+            product.set('switchConnectionType', form.data.switchConnectionType);
+            product.set('size', form.data.size);
+            product.set('quantity', form.data.quantity);
+            product.set('keyboardKit', form.data.keyboardKit);
+            product.set('cost', (parseFloat(form.data.cost)));
+            product.set('description', form.data.description);
+            await product.save();
+            res.redirect('/products/keyboardcases');
+        },
+        'error': async (form) => {
+            res.render('products/createpcb', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+//update KeyboardCase by id
+router.get('/keyboardcase/:product_id/update', async (req, res) => {
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
         'id': productId}).fetch({
@@ -61,7 +90,7 @@ router.get('/:product_id/update', async (req, res) => {
         // console.log(keebCases)
 
 
-        const productForm = createProductForm();
+        const productForm = createkeyboardCaseForm();
         
 
         productForm.fields.name.value = keebCases.get('name');
@@ -78,8 +107,8 @@ router.get('/:product_id/update', async (req, res) => {
         })
         // res.render('products/update')
 })
-//process update
-router.post('/:product_id/update', async (req, res) => {
+//process update of KeyboardCase
+router.post('/keyboardcase/:product_id/update', async (req, res) => {
     // fetch the product that we want to update
     const keebCases = await Keyboardcase.where({
         'id': req.params.product_id
@@ -87,7 +116,7 @@ router.post('/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createProductForm();
+    const productForm = createkeyboardCaseForm();
     productForm.handle(req,{
         'success': async (form)=>{
             keebCases.set(form.data);
@@ -104,8 +133,8 @@ router.post('/:product_id/update', async (req, res) => {
     
 })
 
-//delete product
-router.get('/:product_id/delete', async (req, res) => {
+//Delete keyboardCase
+router.get('/keyboardcase/:product_id/delete', async (req, res) => {
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
         'id': productId}).fetch({
@@ -119,8 +148,8 @@ router.get('/:product_id/delete', async (req, res) => {
             'keyboardcases':keebCases.toJSON()
         })
 })
-//process delete
-router.post('/:product_id/delete', async (req, res) => {
+//process delete keyboard Case
+router.post('/keyboardcase/:product_id/delete', async (req, res) => {
     const keebCases = await Keyboardcase.where({
         'id': req.params.product_id
     }).fetch({
