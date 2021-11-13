@@ -68,6 +68,7 @@ const createkeyboardCaseForm = () => {
             cssClasses: {
                 label: ['form-label']
             },
+            'validators':[validators.integer()]
         }),
         'description': fields.string({
             required: true,
@@ -125,6 +126,7 @@ const createkeyboardPcbForm = () => {
         cssClasses: {
             label: ['form-label']
         },
+        'validators':[validators.integer()]
     }),
     'description': fields.string({
         required: true,
