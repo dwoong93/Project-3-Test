@@ -53,3 +53,11 @@ exports.up = function (db) {
 exports.down = function (db) {
   return db.dropTable('keyboardPlate');
 };
+
+exports.down = function(db) {
+  return null;
+};
+
+exports._meta = {
+  "version": 1
+};

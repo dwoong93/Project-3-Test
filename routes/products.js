@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // import in  Forms
-const { bootstrapField, createkeyboardCaseForm, createkeyboardPcbForm} = require('../forms');
+const { bootstrapField, createkeyboardCaseForm, createkeyboardPcbForm, createkeyboardPlateForm} = require('../forms');
 
 // #1 import in the Product model
 const {Keyboardcase, Keyboardpcb, Keyboardplate} = require('../models')
@@ -10,9 +10,11 @@ const {Keyboardcase, Keyboardpcb, Keyboardplate} = require('../models')
 router.get('/keyboardcases', async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch();
     let keebPcb = await Keyboardpcb.collection().fetch();
+    let keebPlate = await Keyboardplate.collection().fetch();
     res.render('products/index',{
         'keyboardcases':keebCases.toJSON(),
-        'keyboardpcb':keebPcb.toJSON()
+        'keyboardpcb':keebPcb.toJSON(),
+        'keyboardplate':keebPlate.toJSON()
     }) 
 })
 //////////////////////////////////CREATE///////////////////////////////////////////
@@ -73,6 +75,38 @@ router.post('/keyboardpcb/create', async(req,res)=>{
         },
         'error': async (form) => {
             res.render('products/createpcb', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+//create keyboard plate
+router.get('/keyboardplate/create', async (req, res) => {
+    const productForm = createkeyboardPlateForm();
+    res.render('products/createplate',{
+    'form': productForm.toHTML(bootstrapField)
+    })
+})
+
+// post created plate
+router.post('/keyboardplate/create', async(req,res)=>{
+    const productForm = createkeyboardPlateForm();
+    productForm.handle(req, {
+        'success': async (form) => {
+            const product = new Keyboardplate();
+            product.set('name', form.data.name);
+            product.set('plateMaterial', form.data.plateMaterial);
+            product.set('size', form.data.size);
+            product.set('quantity', form.data.quantity);
+            product.set('keyboardKit', form.data.keyboardKit);
+            product.set('cost', (parseFloat(form.data.cost)));
+            product.set('description', form.data.description);
+            await product.save();
+            res.redirect('/products/keyboardcases');
+        },
+        'error': async (form) => {
+            res.render('products/createplate', {
                 'form': form.toHTML(bootstrapField)
             })
         }

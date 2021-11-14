@@ -20,6 +20,44 @@
     </thead>
 
     <tbody>
+        {{#each keyboardplate}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.size}}
+            </td>
+            <td>
+                {{this.material}}
+            </td>
+            <td>
+                {{this.plateMaterial}}
+            </td>
+            <td>
+                {{this.keyboardKit}}
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+            <td>
+                <a href="/products/keyboardplate/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/keyboardplate/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+    <tbody>
         {{#each keyboardpcb}}
         {{!-- {{#each keyboardcases}} --}}
         <tr>
