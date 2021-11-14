@@ -323,6 +323,31 @@ router.post('/keyboardpcb/:product_id/delete', async (req, res) => {
     res.redirect('/products/keyboardcases')
 })
 
+//Delete keyboardPlate
+router.get('/keyboardplate/:product_id/delete', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebPlate = await Keyboardplate.where({
+        'id': productId}).fetch({
+            require: true
+        });
+        // console.log(productId);
+        // console.log(keebCases)
+
+
+        res.render('products/deleteplate', {
+            'keyboardplate':keebPlate.toJSON()
+        })
+})
+//process delete keyboardPlate
+router.post('/keyboardplate/:product_id/delete', async (req, res) => {
+    const keebPlate = await Keyboardplate.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    await keebPlate.destroy();
+    res.redirect('/products/keyboardcases')
+})
 
 
 
