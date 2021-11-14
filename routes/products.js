@@ -217,6 +217,59 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
     
 })
 
+//update KeyboardPlate by id
+router.get('/keyboardplate/:product_id/update', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebPlate = await Keyboardplate.where({
+        'id': productId}).fetch({
+            require: true
+        });
+        // console.log(productId);
+        // console.log(keebPcb)
+
+        const productForm = createkeyboardPlateForm();
+        
+        productForm.fields.name.value = keebPlate.get('name');
+        productForm.fields.plateMaterial.value = keebPlate.get('plateMaterial');
+        productForm.fields.size.value = keebPlate.get('size');
+        productForm.fields.keyboardKit.value = keebPlate.get('keyboardKit');
+        productForm.fields.quantity.value = keebPlate.get('quantity');
+        productForm.fields.cost.value = keebPlate.get('cost');
+        productForm.fields.description.value = keebPlate.get('description');
+
+        res.render('products/updateplate', {
+            'form': productForm.toHTML(bootstrapField),
+            'keyboardplate':keebPlate.toJSON()
+        })
+
+})
+
+//process update of KeyboardPlate
+router.post('/keyboardpLATE/:product_id/update', async (req, res) => {
+    // fetch the product that we want to update
+    const keebPlate = await Keyboardplate.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
+    const productForm = createkeyboardPlateForm();
+    productForm.handle(req,{
+        'success': async (form)=>{
+            keebPlate.set(form.data);
+            keebPlate.save();
+            res.redirect('/products/keyboardcases');
+        },
+        'error':async (form) =>{
+            res.render('products/updateplate',{
+                'form': form.toHTML(bootstrapField),
+                'keyboardplate': keebPlate.toJSON()
+            })
+        }
+    })
+    
+})
+
 //////////////////////////////////DELETE//////////////////////////////////////////
 //Delete keyboardCase
 router.get('/keyboardcase/:product_id/delete', async (req, res) => {
