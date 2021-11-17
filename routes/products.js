@@ -9,7 +9,7 @@ const { bootstrapField, createkeyboardCaseForm,
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap} = require('../models')
 
 //Display keyboard Cases
-router.get('/keyboardcases', async function(req,res){
+router.get('/catalog', async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch();
     let keebPcb = await Keyboardpcb.collection().fetch();
     let keebPlate = await Keyboardplate.collection().fetch();
@@ -47,7 +47,7 @@ router.post('/keyboardcases/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error': async (form) => {
             res.render('products/createpcb', {
@@ -79,7 +79,7 @@ router.post('/keyboardpcb/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error': async (form) => {
             res.render('products/createpcb', {
@@ -112,7 +112,7 @@ router.post('/keyboardplate/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error': async (form) => {
             res.render('products/createplate', {
@@ -144,7 +144,7 @@ router.post('/keyboardswitch/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error': async (form) => {
             res.render('products/createswitch', {
@@ -177,7 +177,7 @@ router.post('/keyboardkeycap/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error': async (form) => {
             res.render('products/createkeycap', {
@@ -228,7 +228,7 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
         'success': async (form)=>{
             keebCases.set(form.data);
             keebCases.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error':async (form) =>{
             res.render('products/updatecase',{
@@ -279,7 +279,7 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
         'success': async (form)=>{
             keebPcb.set(form.data);
             keebPcb.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error':async (form) =>{
             res.render('products/updatepcb',{
@@ -331,7 +331,7 @@ router.post('/keyboardplate/:product_id/update', async (req, res) => {
         'success': async (form)=>{
             keebPlate.set(form.data);
             keebPlate.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error':async (form) =>{
             res.render('products/updateplate',{
@@ -382,7 +382,7 @@ router.post('/keyboardswitch/:product_id/update', async (req, res) => {
         'success': async (form)=>{
             keebSwitch.set(form.data);
             keebSwitch.save();
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/catalog');
         },
         'error':async (form) =>{
             res.render('products/updateswitch',{
@@ -394,6 +394,57 @@ router.post('/keyboardswitch/:product_id/update', async (req, res) => {
     
 })
 
+//update KeyboardKeycap by id
+router.get('/keyboardkeycap/:product_id/update', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebKeycap = await Keyboardkeycap.where({
+        'id': productId}).fetch({
+            require: true
+        });
+
+        const productForm = createkeyboardKeycapForm();
+        
+        productForm.fields.name.value = keebKeycap.get('name');
+        productForm.fields.brand.value = keebKeycap.get('brand');
+        productForm.fields.size.value = keebKeycap.get('size');
+        productForm.fields.keycapMaterial.value = keebKeycap.get('keycapMaterial');
+        productForm.fields.keycapProfile.value = keebKeycap.get('keycapProfile');
+        productForm.fields.quantity.value = keebKeycap.get('quantity');
+        productForm.fields.cost.value = keebKeycap.get('cost');
+        productForm.fields.description.value = keebKeycap.get('description');
+
+        res.render('products/updatekeycap', {
+            'form': productForm.toHTML(bootstrapField),
+            'keyboardkeycap':keebKeycap.toJSON()
+        })
+
+})
+
+//process update of KeyboardKeycap
+router.post('/keyboardkeycap/:product_id/update', async (req, res) => {
+    // fetch the product that we want to update
+    const keebKeycap = await Keyboardkeycap.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
+    const productForm = createkeyboardKeycapForm();
+    productForm.handle(req,{
+        'success': async (form)=>{
+            keebKeycap.set(form.data);
+            keebKeycap.save();
+            res.redirect('/products/catalog');
+        },
+        'error':async (form) =>{
+            res.render('products/updatekeycap',{
+                'form': form.toHTML(bootstrapField),
+                'keyboardkeycap': keebKeycap.toJSON()
+            })
+        }
+    })
+    
+})
 
 //////////////////////////////////DELETE//////////////////////////////////////////
 //Delete keyboardCase
@@ -419,7 +470,7 @@ router.post('/keyboardcase/:product_id/delete', async (req, res) => {
         require: true
     });
     await keebCases.destroy();
-    res.redirect('/products/keyboardcases')
+    res.redirect('/products/catalog')
 })
 
 //Delete keyboardPcb
@@ -445,7 +496,7 @@ router.post('/keyboardpcb/:product_id/delete', async (req, res) => {
         require: true
     });
     await keebPcb.destroy();
-    res.redirect('/products/keyboardcases')
+    res.redirect('/products/catalog')
 })
 
 //Delete keyboardPlate
@@ -467,7 +518,7 @@ router.post('/keyboardplate/:product_id/delete', async (req, res) => {
         require: true
     });
     await keebPlate.destroy();
-    res.redirect('/products/keyboardcases')
+    res.redirect('/products/catalog')
 })
 
 //Delete keyboardSwitch
@@ -489,7 +540,29 @@ router.post('/keyboardswitch/:product_id/delete', async (req, res) => {
         require: true
     });
     await keebSwitch.destroy();
-    res.redirect('/products/keyboardcases')
+    res.redirect('/products/catalog')
+})
+
+//Delete keyboardKeycap
+router.get('/keyboardkeycap/:product_id/delete', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebKeycap = await Keyboardkeycap.where({
+        'id': productId}).fetch({
+            require: true
+        });
+        res.render('products/deletekeycap', {
+            'keyboardkeycap':keebKeycap.toJSON()
+        })
+})
+//process delete keyboardKeycap
+router.post('/keyboardkeycap/:product_id/delete', async (req, res) => {
+    const keebKeycap = await Keyboardkeycap.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    await keebKeycap.destroy();
+    res.redirect('/products/catalog')
 })
 
 
