@@ -31,6 +31,12 @@ const createkeyboardCaseForm = () => {
                 label: ['form-label']
             }
         }),
+        'brand': fields.string({required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
         'material': fields.string({
             required: true,
             errorAfterField: true,
@@ -68,7 +74,7 @@ const createkeyboardCaseForm = () => {
             cssClasses: {
                 label: ['form-label']
             },
-            'validators':[validators.integer()]
+            // 'validators':[validators.integer()]
         }),
         'description': fields.string({
             required: true,
@@ -84,6 +90,12 @@ const createkeyboardCaseForm = () => {
 const createkeyboardPcbForm = () => {
     return forms.create({
     'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']
@@ -126,7 +138,7 @@ const createkeyboardPcbForm = () => {
         cssClasses: {
             label: ['form-label']
         },
-        'validators':[validators.integer()]
+        // 'validators':[validators.integer()]
     }),
     'description': fields.string({
         required: true,
@@ -141,6 +153,12 @@ const createkeyboardPcbForm = () => {
 const createkeyboardPlateForm = () => {
     return forms.create({
     'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']
@@ -183,7 +201,7 @@ const createkeyboardPlateForm = () => {
         cssClasses: {
             label: ['form-label']
         },
-        'validators':[validators.integer()]
+        // 'validators':[validators.integer()]
     }),
     'description': fields.string({
         required: true,
@@ -194,5 +212,65 @@ const createkeyboardPlateForm = () => {
     }),
 })
 };
-module.exports = { createkeyboardCaseForm, createkeyboardPcbForm, createkeyboardPlateForm, bootstrapField };
+
+//create keyboard switch form function
+const createkeyboardSwitchForm = () => {
+    return forms.create({
+    'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'switchType': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'switchConnectionType': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'quantity': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]   
+    }),
+    'cost': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    'description': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+})
+};
+module.exports = { 
+    createkeyboardCaseForm, 
+    createkeyboardPcbForm, 
+    createkeyboardPlateForm, 
+    createkeyboardSwitchForm, 
+    bootstrapField };
         

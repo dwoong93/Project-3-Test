@@ -8,8 +8,10 @@
         <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>Brand</th>
         <th>Form Factor</th>
         <th>Material</th>
+        <th>Type</th>
         <th>Connection Type</th>
         <th>Keyboard Kit</th>
         <th>Description</th>
@@ -29,13 +31,19 @@
                 {{this.name}}
             </td>
             <td>
+                {{this.brand}}
+            </td>
+            <td>
                 {{this.size}}
+            </td>
+            <td>
+                {{this.plateMaterial}}
             </td>
             <td>
                 NA
             </td>
             <td>
-                {{this.plateMaterial}}
+                NA
             </td>
             <td>
                 {{this.keyboardKit}}
@@ -68,7 +76,13 @@
                 {{this.name}}
             </td>
             <td>
+                {{this.brand}}
+            </td>
+            <td>
                 {{this.size}}
+            </td>
+            <td>
+                NA
             </td>
             <td>
                 NA
@@ -106,10 +120,16 @@
                 {{this.name}}
             </td>
             <td>
+                {{this.brand}}
+            </td>
+            <td>
                 {{this.size}}
             </td>
             <td>
                 {{this.material}}
+            </td>
+            <td>
+                NA
             </td>
             <td>
                 NA
@@ -129,6 +149,50 @@
             <td>
                 <a href="/products/keyboardcase/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
                 <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+    <tbody>
+        {{#each keyboardswitch}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.brand}}
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                {{this.switchType}}
+            </td>
+            <td>
+                {{this.switchConnectionType}}
+            </td>
+            <td>
+                {{this.keyboardKit}}
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+            <td>
+                <a href="/products/keyboardswitch/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/keyboardswitch/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
         {{/each}}

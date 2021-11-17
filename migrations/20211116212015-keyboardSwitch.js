@@ -27,6 +27,11 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
+    brand: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
     switchType: {
       type: 'string',
       length: 100,
@@ -47,4 +52,8 @@ exports.up = function (db) {
 };
 exports.down = function (db) {
   return db.dropTable('keyboardSwitch');
+};
+
+exports._meta = {
+  "version": 1
 };

@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('keyboardPlate', {
+  return db.createTable('keyboardPcb', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -27,7 +27,12 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
-    plateMaterial: {
+    brand: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
+    switchConnectionType: {
       type: 'string',
       length: 100,
       notNull: false
@@ -46,12 +51,12 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
-    cost: 'int',
+    cost: 'decimal(6,2)',
     description: 'text'
   })
 };
 exports.down = function (db) {
-  return db.dropTable('keyboardPlate');
+  return db.dropTable('keyboardPcb');
 };
 
 exports.down = function(db) {

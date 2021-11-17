@@ -27,6 +27,11 @@ exports.up = function (db) {
       length: 100,
       notNull: false
     },
+    brand: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
     material: {
       type: 'string',
       length: 100,
@@ -46,10 +51,14 @@ exports.up = function (db) {
       type: 'int',
       unsigned: true,
     },
-    cost: 'float',
+    cost: 'decimal(6,2)',
     description: 'text'
   })
 };
 exports.down = function (db) {
   return db.dropTable('keyboardCase');
+};
+
+exports._meta = {
+  "version": 1
 };

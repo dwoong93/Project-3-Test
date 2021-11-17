@@ -12,6 +12,10 @@ const Keyboardplate = bookshelf.model('Keyboardplate', {
     tableName:'keyboardPlate'
     });
 
+const Keyboardswitch = bookshelf.model('Keyboardswitch', {
+    tableName:'keyboardSwitch'
+    });
+
 
 
 
@@ -25,5 +29,6 @@ const Keyboardplate = bookshelf.model('Keyboardplate', {
 module.exports = {
     'Keyboardcase':Keyboardcase,
     'Keyboardpcb':Keyboardpcb,
-    'Keyboardplate':Keyboardplate
+    'Keyboardplate':Keyboardplate,
+    'Keyboardswitch': Keyboardswitch
 }
