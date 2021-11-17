@@ -20,7 +20,7 @@ router.get('/keyboardcases', async function(req,res){
         'keyboardcases':keebCases.toJSON(),
         'keyboardpcb':keebPcb.toJSON(),
         'keyboardplate':keebPlate.toJSON(),
-        'keyboardswitch':keebSwitch.toJSON()
+        'keyboardswitch':keebSwitch.toJSON(),
         'keyboardkeycap':keebKeycap.toJSON()
     }) 
 })
@@ -130,7 +130,7 @@ router.get('/keyboardswitch/create', async (req, res) => {
     })
 })
 
-// post created plate
+// post created switch
 router.post('/keyboardswitch/create', async(req,res)=>{
     const productForm = createkeyboardSwitchForm();
     productForm.handle(req, {
@@ -148,6 +148,39 @@ router.post('/keyboardswitch/create', async(req,res)=>{
         },
         'error': async (form) => {
             res.render('products/createswitch', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+//create keyboard keycap
+router.get('/keyboardkeycap/create', async (req, res) => {
+    const productForm = createkeyboardKeycapForm();
+    res.render('products/createkeycap',{
+    'form': productForm.toHTML(bootstrapField)
+    })
+})
+
+// post created keycap
+router.post('/keyboardkeycap/create', async(req,res)=>{
+    const productForm = createkeyboardKeycapForm();
+    productForm.handle(req, {
+        'success': async (form) => {
+            const product = new Keyboardkeycap();
+            product.set('name', form.data.name);
+            product.set('brand', form.data.brand);
+            product.set('size', form.data.size);
+            product.set('keycapMaterial', form.data.keycapMaterial);
+            product.set('keycapProfile', form.data.keycapProfile);
+            product.set('quantity', form.data.quantity);
+            product.set('cost', (parseFloat(form.data.cost)));
+            product.set('description', form.data.description);
+            await product.save();
+            res.redirect('/products/keyboardcases');
+        },
+        'error': async (form) => {
+            res.render('products/createkeycap', {
                 'form': form.toHTML(bootstrapField)
             })
         }

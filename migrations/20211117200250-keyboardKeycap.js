@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('keyboardKeycaps', {
+  return db.createTable('keyboardKeycap', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -56,7 +56,7 @@ exports.up = function (db) {
   })
 };
 exports.down = function (db) {
-  return db.dropTable('keyboardKeycaps');
+  return db.dropTable('keyboardKeycap');
 };
 
 exports._meta = {

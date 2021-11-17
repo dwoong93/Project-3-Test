@@ -10,6 +10,7 @@
         <th>Name</th>
         <th>Brand</th>
         <th>Form Factor</th>
+        <th>Keycap Profile</th>
         <th>Material</th>
         <th>Type</th>
         <th>Connection Type</th>
@@ -35,6 +36,9 @@
             </td>
             <td>
                 {{this.size}}
+            </td>
+            <td>
+                NA
             </td>
             <td>
                 {{this.plateMaterial}}
@@ -67,7 +71,6 @@
 
     <tbody>
         {{#each keyboardpcb}}
-        {{!-- {{#each keyboardcases}} --}}
         <tr>
             <td>
                 {{this.id}}
@@ -80,6 +83,9 @@
             </td>
             <td>
                 {{this.size}}
+            </td>
+            <td>
+                NA
             </td>
             <td>
                 NA
@@ -124,6 +130,9 @@
             </td>
             <td>
                 {{this.size}}
+            </td>
+            <td>
+                NA
             </td>
             <td>
                 {{this.material}}
@@ -173,6 +182,9 @@
                 NA
             </td>
             <td>
+                NA
+            </td>
+            <td>
                 {{this.switchType}}
             </td>
             <td>
@@ -197,6 +209,55 @@
         </tr>
         {{/each}}
     </tbody>
+
+    <tbody>
+        {{#each keyboardkeycap}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.brand}}
+            </td>
+            <td>
+                {{this.size}}
+            </td>
+            <td>
+                {{this.keycapProfile}}
+            </td>
+            <td>
+                {{this.keycapMaterial}}
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+            <td>
+                <a href="/products/keyboardkeycap/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/keyboardkeycap/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+    
 
 </table>
 
