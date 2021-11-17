@@ -3,10 +3,10 @@ const router = express.Router();
 // import in  Forms
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
-    createkeyboardSwitchForm} = require('../forms');
+    createkeyboardSwitchForm, createkeyboardKeycapForm} = require('../forms');
 
 // #1 import in the Product model
-const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch} = require('../models')
+const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap} = require('../models')
 
 //Display keyboard Cases
 router.get('/keyboardcases', async function(req,res){
@@ -14,12 +14,14 @@ router.get('/keyboardcases', async function(req,res){
     let keebPcb = await Keyboardpcb.collection().fetch();
     let keebPlate = await Keyboardplate.collection().fetch();
     let keebSwitch = await Keyboardswitch.collection().fetch();
+    let keebKeycap = await Keyboardkeycap.collection().fetch();
 
     res.render('products/index',{
         'keyboardcases':keebCases.toJSON(),
         'keyboardpcb':keebPcb.toJSON(),
         'keyboardplate':keebPlate.toJSON(),
         'keyboardswitch':keebSwitch.toJSON()
+        'keyboardkeycap':keebKeycap.toJSON()
     }) 
 })
 //////////////////////////////////CREATE///////////////////////////////////////////

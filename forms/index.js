@@ -267,10 +267,73 @@ const createkeyboardSwitchForm = () => {
     }),
 })
 };
+//create keyboard keycap form function
+const createkeyboardKeycapForm = () => {
+    return forms.create({
+    'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'size': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+    }),
+    'keycapMaterial': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+    }),
+    'keycapProfile': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+    }),
+    'quantity': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]   
+    }),
+    'cost': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    'description': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+})
+};
 module.exports = { 
     createkeyboardCaseForm, 
     createkeyboardPcbForm, 
     createkeyboardPlateForm, 
-    createkeyboardSwitchForm, 
+    createkeyboardSwitchForm,
+    createkeyboardKeycapForm, 
     bootstrapField };
         
