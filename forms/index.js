@@ -1,6 +1,7 @@
 // import in caolan forms
 const forms = require("forms");
 // create some shortcuts
+const widgets = forms.widgets;
 const fields = forms.fields;
 const validators = forms.validators;
 var bootstrapField = function (name, object) {
@@ -23,7 +24,7 @@ var bootstrapField = function (name, object) {
 };
 
 //create keyboard case form function
-const createkeyboardCaseForm = () => {
+const createkeyboardCaseForm = (categories) => {
         return forms.create({
         'name': fields.string({required: true,
             errorAfterField: true,
@@ -44,14 +45,22 @@ const createkeyboardCaseForm = () => {
                 label: ['form-label']
             }
         }),
-        'size': fields.string({
+        // 'size': fields.string({
+        //     required: true,
+        //     errorAfterField: true,
+        //     cssClasses: {
+        //         label: ['form-label']
+        //     },
+        //     'validators':[validators.integer()]
+        // }),
+        'category_id': fields.string({
+            label: 'Form Factor',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
-            'validators':[validators.integer()]
-        }),
+            widget: widgets.select(),
+            choices:categories
+
+            }),
         'keyboardKit': fields.string({
             required: true,
             errorAfterField: true,

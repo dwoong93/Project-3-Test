@@ -1,15 +1,24 @@
 const bookshelf = require('../bookshelf')
 
 const Keyboardcase = bookshelf.model('Keyboardcase', {
-tableName:'keyboardCase'
-});
+    tableName:'keyboardCase',
+    category(){
+        return this.belongsTo('Category')
+    }
+    });
 
 const Keyboardpcb = bookshelf.model('Keyboardpcb', {
-    tableName:'keyboardPcb'
+    tableName:'keyboardPcb',
+    category(){
+        return this.belongsTo('Category')
+    }
     });
 
 const Keyboardplate = bookshelf.model('Keyboardplate', {
-    tableName:'keyboardPlate'
+    tableName:'keyboardPlate',
+    category(){
+        return this.belongsTo('Category')
+    }
     });
 
 const Keyboardswitch = bookshelf.model('Keyboardswitch', {
@@ -22,7 +31,16 @@ const Keyboardstabilizer = bookshelf.model('Keyboardstabilizer', {
     tableName:'keyboardStabilizer'
     });
 const Category = bookshelf.model('Category', {
-    tableName:'categories'
+    tableName:'categories',
+    keyboardcases(){
+        return this.hasMany('Keyboardcase')
+    },
+    keyboardpcbs(){
+        return this.hasMany('Keyboardpcb')
+    },
+    keyboardplates(){
+        return this.hasMany('Keyboardplate')
+    },
     });
 
 

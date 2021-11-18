@@ -7,13 +7,13 @@ const { bootstrapField, createkeyboardCaseForm,
     createkeyboardStabilizerForm} = require('../forms');
 
 // #1 import in the Product model
-const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer} = require('../models')
+const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
 
 //Display keyboard Cases
 router.get('/catalog', async function(req,res){
-    let keebCases = await Keyboardcase.collection().fetch();
-    let keebPcb = await Keyboardpcb.collection().fetch();
-    let keebPlate = await Keyboardplate.collection().fetch();
+    let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
+    let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
+    let keebPlate = await Keyboardplate.collection().fetch({withRelated:['category']});
     let keebSwitch = await Keyboardswitch.collection().fetch();
     let keebKeycap = await Keyboardkeycap.collection().fetch();
     let keebStabilizer = await Keyboardstabilizer.collection().fetch();
@@ -31,7 +31,10 @@ router.get('/catalog', async function(req,res){
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create keyboardCase
 router.get('/keyboardcases/create', async (req, res) => {
-    const productForm = createkeyboardCaseForm();
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    const productForm = createkeyboardCaseForm(allCategories);
     res.render('products/createcase',{
     'form': productForm.toHTML(bootstrapField)
     })
@@ -45,7 +48,7 @@ router.post('/keyboardcases/create', async(req,res)=>{
             product.set('name', form.data.name);
             product.set('brand', form.data.brand);
             product.set('material', form.data.material);
-            product.set('size', form.data.size);
+            product.set('category_id', form.data.category_id);
             product.set('quantity', form.data.quantity);
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
@@ -227,6 +230,9 @@ router.post('/keyboardstabilizer/create', async(req,res)=>{
 //////////////////////////////////UPDATE////////////////////////////////////////////////
 //update KeyboardCase by id
 router.get('/keyboardcase/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
         'id': productId}).fetch({
@@ -235,12 +241,12 @@ router.get('/keyboardcase/:product_id/update', async (req, res) => {
         // console.log(productId);
         // console.log(keebCases)
 
-        const productForm = createkeyboardCaseForm();
+        const productForm = createkeyboardCaseForm(allCategories);
         
         productForm.fields.name.value = keebCases.get('name');
         productForm.fields.brand.value = keebCases.get('brand');
         productForm.fields.material.value = keebCases.get('material');
-        productForm.fields.size.value = keebCases.get('size');
+        productForm.fields.category_id.value = keebCases.get('category_id');
         productForm.fields.keyboardKit.value = keebCases.get('keyboardKit');
         productForm.fields.quantity.value = keebCases.get('quantity');
         productForm.fields.cost.value = keebCases.get('cost');
@@ -253,6 +259,9 @@ router.get('/keyboardcase/:product_id/update', async (req, res) => {
 })
 //process update of KeyboardCase
 router.post('/keyboardcase/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     // fetch the product that we want to update
     const keebCases = await Keyboardcase.where({
         'id': req.params.product_id
@@ -260,7 +269,7 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createkeyboardCaseForm();
+    const productForm = createkeyboardCaseForm(allCategories);
     productForm.handle(req,{
         'success': async (form)=>{
             keebCases.set(form.data);
