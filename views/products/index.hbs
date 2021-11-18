@@ -1,6 +1,7 @@
 {{#extends 'base'}}
 {{#block 'content'}}
-<h1>hello User</h1>
+<h1>Shop Catalog</h1>
+<h3>Admin </h3>
 
 <table class="table">
 
@@ -205,6 +206,53 @@
             <td>
                 <a href="/products/keyboardswitch/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
                 <a href="/products/keyboardswitch/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+    <tbody>
+        {{#each keyboardstabilizer}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.brand}}
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                {{this.stabilizerType}}
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                NA
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.quantity}}
+            </td>
+            <td>
+                <a href="/products/keyboardstabilizer/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/products/keyboardstabilizer/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
         {{/each}}

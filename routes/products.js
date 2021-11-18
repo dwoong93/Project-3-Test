@@ -3,10 +3,11 @@ const router = express.Router();
 // import in  Forms
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
-    createkeyboardSwitchForm, createkeyboardKeycapForm} = require('../forms');
+    createkeyboardSwitchForm, createkeyboardKeycapForm,
+    createkeyboardStabilizerForm} = require('../forms');
 
 // #1 import in the Product model
-const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap} = require('../models')
+const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer} = require('../models')
 
 //Display keyboard Cases
 router.get('/catalog', async function(req,res){
@@ -15,13 +16,16 @@ router.get('/catalog', async function(req,res){
     let keebPlate = await Keyboardplate.collection().fetch();
     let keebSwitch = await Keyboardswitch.collection().fetch();
     let keebKeycap = await Keyboardkeycap.collection().fetch();
+    let keebStabilizer = await Keyboardstabilizer.collection().fetch();
 
     res.render('products/index',{
         'keyboardcases':keebCases.toJSON(),
         'keyboardpcb':keebPcb.toJSON(),
         'keyboardplate':keebPlate.toJSON(),
         'keyboardswitch':keebSwitch.toJSON(),
-        'keyboardkeycap':keebKeycap.toJSON()
+        'keyboardkeycap':keebKeycap.toJSON(),
+        'keyboardstabilizer':keebStabilizer.toJSON()
+
     }) 
 })
 //////////////////////////////////CREATE///////////////////////////////////////////
@@ -186,6 +190,39 @@ router.post('/keyboardkeycap/create', async(req,res)=>{
         }
     })
 })
+
+//create keyboard stabilizer
+router.get('/keyboardstabilizer/create', async (req, res) => {
+    const productForm = createkeyboardStabilizerForm();
+    res.render('products/createstabilizer',{
+    'form': productForm.toHTML(bootstrapField)
+    })
+})
+
+// post created stabilizer
+router.post('/keyboardstabilizer/create', async(req,res)=>{
+    const productForm = createkeyboardStabilizerForm();
+    productForm.handle(req, {
+        'success': async (form) => {
+            const product = new Keyboardstabilizer();
+            product.set('name', form.data.name);
+            product.set('brand', form.data.brand);
+            product.set('stabilizerType', form.data.stabilizerType);
+            product.set('quantity', form.data.quantity);
+            product.set('cost', (parseFloat(form.data.cost)));
+            product.set('description', form.data.description);
+            await product.save();
+            res.redirect('/products/catalog');
+        },
+        'error': async (form) => {
+            res.render('products/createstabilizer', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+
 
 //////////////////////////////////UPDATE////////////////////////////////////////////////
 //update KeyboardCase by id
@@ -446,6 +483,56 @@ router.post('/keyboardkeycap/:product_id/update', async (req, res) => {
     
 })
 
+//update KeyboardStabilizer by id
+router.get('/keyboardstabilizer/:product_id/update', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebStabilizer = await Keyboardstabilizer.where({
+        'id': productId}).fetch({
+            require: true
+        });
+
+        const productForm = createkeyboardStabilizerForm();
+        
+        productForm.fields.name.value = keebStabilizer.get('name');
+        productForm.fields.brand.value = keebStabilizer.get('brand');
+        productForm.fields.stabilizerType.value = keebStabilizer.get('stabilizerType');
+        productForm.fields.quantity.value = keebStabilizer.get('quantity');
+        productForm.fields.cost.value = keebStabilizer.get('cost');
+        productForm.fields.description.value = keebStabilizer.get('description');
+
+        res.render('products/updatestabilizer', {
+            'form': productForm.toHTML(bootstrapField),
+            'keyboardstabilizer':keebStabilizer.toJSON()
+        })
+
+})
+
+//process update of KeyboardStabilizer
+router.post('/keyboardstabilizer/:product_id/update', async (req, res) => {
+    // fetch the product that we want to update
+    const keebStabilizer = await Keyboardstabilizer.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
+    const productForm = createkeyboardStabilizerForm();
+    productForm.handle(req,{
+        'success': async (form)=>{
+            keebStabilizer.set(form.data);
+            keebStabilizer.save();
+            res.redirect('/products/catalog');
+        },
+        'error':async (form) =>{
+            res.render('products/updatestabilizer',{
+                'form': form.toHTML(bootstrapField),
+                'keyboardstabilizer': keebStabilizer.toJSON()
+            })
+        }
+    })
+    
+})
+
 //////////////////////////////////DELETE//////////////////////////////////////////
 //Delete keyboardCase
 router.get('/keyboardcase/:product_id/delete', async (req, res) => {
@@ -562,6 +649,28 @@ router.post('/keyboardkeycap/:product_id/delete', async (req, res) => {
         require: true
     });
     await keebKeycap.destroy();
+    res.redirect('/products/catalog')
+})
+
+//Delete keyboardStabilizer
+router.get('/keyboardstabilizer/:product_id/delete', async (req, res) => {
+    const productId = req.params.product_id;
+    const keebStabilizer = await Keyboardstabilizer.where({
+        'id': productId}).fetch({
+            require: true
+        });
+        res.render('products/deletestabilizer', {
+            'keyboardstabilizer':keebStabilizer.toJSON()
+        })
+})
+//process delete keyboardStabilizer
+router.post('/keyboardstabilizer/:product_id/delete', async (req, res) => {
+    const keebStabilizer = await Keyboardstabilizer.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    await keebStabilizer.destroy();
     res.redirect('/products/catalog')
 })
 

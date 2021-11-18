@@ -18,6 +18,9 @@ const Keyboardswitch = bookshelf.model('Keyboardswitch', {
 const Keyboardkeycap = bookshelf.model('Keyboardkeycap', {
     tableName:'keyboardKeycap'
     });
+const Keyboardstabilizer = bookshelf.model('Keyboardstabilizer', {
+    tableName:'keyboardStabilizer'
+    });
 
 
 
@@ -34,5 +37,6 @@ module.exports = {
     'Keyboardpcb':Keyboardpcb,
     'Keyboardplate':Keyboardplate,
     'Keyboardswitch': Keyboardswitch,
-    'Keyboardkeycap': Keyboardkeycap
+    'Keyboardkeycap': Keyboardkeycap,
+    'Keyboardstabilizer': Keyboardstabilizer
 }

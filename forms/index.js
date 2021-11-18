@@ -329,11 +329,59 @@ const createkeyboardKeycapForm = () => {
     }),
 })
 };
+//create keyboard stabilizer form function
+const createkeyboardStabilizerForm = () => {
+    return forms.create({
+    'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'stabilizerType': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+    }),
+    'quantity': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]   
+    }),
+    'cost': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    'description': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+})
+};
 module.exports = { 
     createkeyboardCaseForm, 
     createkeyboardPcbForm, 
     createkeyboardPlateForm, 
     createkeyboardSwitchForm,
-    createkeyboardKeycapForm, 
+    createkeyboardKeycapForm,
+    createkeyboardStabilizerForm, 
     bootstrapField };
         
