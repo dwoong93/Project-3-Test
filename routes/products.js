@@ -66,7 +66,10 @@ router.post('/keyboardcases/create', async(req,res)=>{
 
 //create keyboard pcb
 router.get('/keyboardpcb/create', async (req, res) => {
-    const productForm = createkeyboardPcbForm();
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    const productForm = createkeyboardPcbForm(allCategories);
     res.render('products/createpcb',{
     'form': productForm.toHTML(bootstrapField)
     })
@@ -80,7 +83,7 @@ router.post('/keyboardpcb/create', async(req,res)=>{
             product.set('name', form.data.name);
             product.set('brand', form.data.brand);
             product.set('switchConnectionType', form.data.switchConnectionType);
-            product.set('size', form.data.size);
+            product.set('category_id', form.data.category_id);
             product.set('quantity', form.data.quantity);
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
@@ -98,7 +101,10 @@ router.post('/keyboardpcb/create', async(req,res)=>{
 
 //create keyboard plate
 router.get('/keyboardplate/create', async (req, res) => {
-    const productForm = createkeyboardPlateForm();
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    const productForm = createkeyboardPlateForm(allCategories);
     res.render('products/createplate',{
     'form': productForm.toHTML(bootstrapField)
     })
@@ -113,7 +119,7 @@ router.post('/keyboardplate/create', async(req,res)=>{
             product.set('name', form.data.name);
             product.set('brand', form.data.brand);
             product.set('plateMaterial', form.data.plateMaterial);
-            product.set('size', form.data.size);
+            product.set('category_id', form.data.category_id);
             product.set('quantity', form.data.quantity);
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
@@ -288,18 +294,21 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
 
 //update KeyboardPcb by id
 router.get('/keyboardpcb/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     const productId = req.params.product_id;
     const keebPcb = await Keyboardpcb.where({
         'id': productId}).fetch({
             require: true
         });
 
-        const productForm = createkeyboardPcbForm();
+        const productForm = createkeyboardPcbForm(allCategories);
         
         productForm.fields.name.value = keebPcb.get('name');
         productForm.fields.brand.value = keebPcb.get('brand');
         productForm.fields.switchConnectionType.value = keebPcb.get('switchConnectionType');
-        productForm.fields.size.value = keebPcb.get('size');
+        productForm.fields.category_id.value = keebPcb.get('category_id');
         productForm.fields.keyboardKit.value = keebPcb.get('keyboardKit');
         productForm.fields.quantity.value = keebPcb.get('quantity');
         productForm.fields.cost.value = keebPcb.get('cost');
@@ -313,6 +322,9 @@ router.get('/keyboardpcb/:product_id/update', async (req, res) => {
 })
 //process update of KeyboardPcb
 router.post('/keyboardpcb/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     // fetch the product that we want to update
     const keebPcb = await Keyboardpcb.where({
         'id': req.params.product_id
@@ -320,7 +332,7 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createkeyboardPcbForm();
+    const productForm = createkeyboardPcbForm(allCategories);
     productForm.handle(req,{
         'success': async (form)=>{
             keebPcb.set(form.data);
@@ -339,18 +351,21 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
 
 //update KeyboardPlate by id
 router.get('/keyboardplate/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     const productId = req.params.product_id;
     const keebPlate = await Keyboardplate.where({
         'id': productId}).fetch({
             require: true
         });
 
-        const productForm = createkeyboardPlateForm();
+        const productForm = createkeyboardPlateForm(allCategories);
         
         productForm.fields.name.value = keebPlate.get('name');
         productForm.fields.brand.value = keebPlate.get('brand');
         productForm.fields.plateMaterial.value = keebPlate.get('plateMaterial');
-        productForm.fields.size.value = keebPlate.get('size');
+        productForm.fields.category_id.value = keebPlate.get('category_id');
         productForm.fields.keyboardKit.value = keebPlate.get('keyboardKit');
         productForm.fields.quantity.value = keebPlate.get('quantity');
         productForm.fields.cost.value = keebPlate.get('cost');
@@ -365,6 +380,9 @@ router.get('/keyboardplate/:product_id/update', async (req, res) => {
 
 //process update of KeyboardPlate
 router.post('/keyboardplate/:product_id/update', async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
     // fetch the product that we want to update
     const keebPlate = await Keyboardplate.where({
         'id': req.params.product_id
@@ -372,7 +390,7 @@ router.post('/keyboardplate/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createkeyboardPlateForm();
+    const productForm = createkeyboardPlateForm(allCategories);
     productForm.handle(req,{
         'success': async (form)=>{
             keebPlate.set(form.data);

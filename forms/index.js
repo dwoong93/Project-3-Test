@@ -45,14 +45,6 @@ const createkeyboardCaseForm = (categories) => {
                 label: ['form-label']
             }
         }),
-        // 'size': fields.string({
-        //     required: true,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     },
-        //     'validators':[validators.integer()]
-        // }),
         'category_id': fields.string({
             label: 'Form Factor',
             required: true,
@@ -96,7 +88,7 @@ const createkeyboardCaseForm = (categories) => {
 };
 
 //create keyboard pcb form function
-const createkeyboardPcbForm = () => {
+const createkeyboardPcbForm = (categories) => {
     return forms.create({
     'name': fields.string({required: true,
         errorAfterField: true,
@@ -117,14 +109,13 @@ const createkeyboardPcbForm = () => {
             label: ['form-label']
         }
     }),
-    'size': fields.string({
+    'category_id': fields.string({
+        label: 'Form Factor',
         required: true,
         errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        },
-        'validators':[validators.integer()]
-    }),
+        widget: widgets.select(),
+        choices:categories
+        }),
     'quantity': fields.string({
         required: true,
         errorAfterField: true,
@@ -159,7 +150,7 @@ const createkeyboardPcbForm = () => {
 })
 };
 //create keyboard plate form function
-const createkeyboardPlateForm = () => {
+const createkeyboardPlateForm = (categories) => {
     return forms.create({
     'name': fields.string({required: true,
         errorAfterField: true,
@@ -180,13 +171,12 @@ const createkeyboardPlateForm = () => {
             label: ['form-label']
         }
     }),
-    'size': fields.string({
+    'category_id': fields.string({
+        label: 'Form Factor',
         required: true,
         errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        },
-        'validators':[validators.integer()]
+        widget: widgets.select(),
+        choices:categories
     }),
     'quantity': fields.string({
         required: true,
