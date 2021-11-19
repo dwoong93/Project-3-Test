@@ -34,14 +34,23 @@ router.get('/keyboardcases/create', async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
-    const productForm = createkeyboardCaseForm(allCategories);
+    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    })
+    const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
     res.render('products/createcase',{
     'form': productForm.toHTML(bootstrapField)
     })
 })
 // post created KeyboardCase
 router.post('/keyboardcases/create', async(req,res)=>{
-    const productForm = createkeyboardCaseForm();
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    })
+    const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
     productForm.handle(req, {
         'success': async (form) => {
             const product = new Keyboardcase();
@@ -54,6 +63,10 @@ router.post('/keyboardcases/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             await product.save();
+             //check it user has selected compatible pcb
+            if (form.data.keyboardPcb) {
+            await product.allKeyboardPcb().attach(form.data.keyboardPcb.split(','))  
+            }
             res.redirect('/products/catalog');
         },
         'error': async (form) => {

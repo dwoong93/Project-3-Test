@@ -24,7 +24,7 @@ var bootstrapField = function (name, object) {
 };
 
 //create keyboard case form function
-const createkeyboardCaseForm = (categories) => {
+const createkeyboardCaseForm = (categories, keyboardpcb) => {
         return forms.create({
         'name': fields.string({required: true,
             errorAfterField: true,
@@ -59,6 +59,13 @@ const createkeyboardCaseForm = (categories) => {
             cssClasses: {
                 label: ['form-label']
             }
+        }),
+        'keyboardPcb': fields.string({
+            label: 'Compatible PCB',
+            required: true,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: keyboardpcb
         }),
         'quantity': fields.string({
             required: true,
