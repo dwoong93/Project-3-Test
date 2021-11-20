@@ -65,7 +65,7 @@ router.post('/keyboardcases/create', async(req,res)=>{
             await product.save();
              //check it user has selected compatible pcb
             if (form.data.keyboardPcb) {
-            await product.allKeyboardPcb().attach(form.data.keyboardPcb.split(','))  
+            await product.keyboardpcb().attach(form.data.keyboardPcb.split(','))
             }
             res.redirect('/products/catalog');
         },

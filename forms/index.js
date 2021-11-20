@@ -60,7 +60,7 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
                 label: ['form-label']
             }
         }),
-        'keyboardPcb': fields.string({
+        'keyboardpcb': fields.string({
             label: 'Compatible PCB',
             required: true,
             errorAfterField: true,
