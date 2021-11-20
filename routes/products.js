@@ -67,6 +67,8 @@ router.post('/keyboardcases/create', async(req,res)=>{
             if (form.data.keyboardPcb) {
             await product.keyboardpcb().attach(form.data.keyboardPcb.split(','))
             }
+            
+            console.log(form.data.keyboardpcb);
             res.redirect('/products/catalog');
         },
         'error': async (form) => {
