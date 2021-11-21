@@ -98,7 +98,7 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
 };
 
 //create keyboard pcb form function
-const createkeyboardPcbForm = (categories) => {
+const createkeyboardPcbForm = (categories, keyboardcase) => {
     return forms.create({
     'name': fields.string({required: true,
         errorAfterField: true,
@@ -141,6 +141,16 @@ const createkeyboardPcbForm = (categories) => {
         cssClasses: {
             label: ['form-label']
         }
+    }),
+    'keyboardcase': fields.string({
+        label: 'Compatible Cases',
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        widget: widgets.multipleSelect(),
+        choices: keyboardcase
     }),
     'cost': fields.string({
         required: true,
