@@ -9,6 +9,7 @@ const { bootstrapField, createkeyboardCaseForm,
 // #1 import in the Product model
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
 
+
 //Display keyboard Cases
 router.get('/catalog', async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
@@ -66,8 +67,8 @@ router.post('/keyboardcases/create', async(req,res)=>{
             await product.save();
              //check it user has selected compatible pcb
              
-            if (form.data.keyboardPcb) {
-                await product.Keyboardpcb().attach(form.data.keyboardPcb.split(','))
+            if (form.data.keyboardpcb) {
+                await product.keyboardpcbs().attach(form.data.keyboardpcb.split(','))
             }
             
             console.log(form.data.keyboardpcb);
