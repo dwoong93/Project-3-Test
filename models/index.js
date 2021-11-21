@@ -5,7 +5,7 @@ const Keyboardcase = bookshelf.model('Keyboardcase', {
     category(){
         return this.belongsTo('Category')
     },
-    Keyboardpcbs(){
+    keyboardpcbs(){
         return this.belongsToMany('Keyboardpcb')
     }
     });
@@ -15,7 +15,7 @@ const Keyboardpcb = bookshelf.model('Keyboardpcb', {
     category(){
         return this.belongsTo('Category')
     },
-    Keyboardcases(){
+    keyboardcases(){
         return this.belongsToMany('Keyboardcase')
     }
     });

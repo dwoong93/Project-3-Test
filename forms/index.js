@@ -64,6 +64,9 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
             label: 'Compatible PCB',
             required: true,
             errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
             widget: widgets.multipleSelect(),
             choices: keyboardpcb
         }),

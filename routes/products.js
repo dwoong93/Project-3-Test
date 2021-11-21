@@ -53,6 +53,7 @@ router.post('/keyboardcases/create', async(req,res)=>{
     const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
     productForm.handle(req, {
         'success': async (form) => {
+
             const product = new Keyboardcase();
             product.set('name', form.data.name);
             product.set('brand', form.data.brand);
@@ -64,6 +65,7 @@ router.post('/keyboardcases/create', async(req,res)=>{
             product.set('description', form.data.description);
             await product.save();
              //check it user has selected compatible pcb
+             
             if (form.data.keyboardPcb) {
                 await product.Keyboardpcb().attach(form.data.keyboardPcb.split(','))
             }
