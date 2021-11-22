@@ -115,9 +115,12 @@ const createkeyboardPcbForm = (categories, keyboardcase) => {
     'switchConnectionType': fields.string({
         required: true,
         errorAfterField: true,
+        widget: widgets.select(),
+        choices: {'Hotswap':'Hotswap', 'Solder':'Solder'},
         cssClasses: {
             label: ['form-label']
         }
+        
     }),
     'category_id': fields.string({
         label: 'Form Factor',
