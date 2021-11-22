@@ -147,7 +147,7 @@ const createkeyboardPcbForm = (categories, keyboardcase) => {
     }),
     'keyboardcase': fields.string({
         label: 'Compatible Cases',
-        required: true,
+        required: false,
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']

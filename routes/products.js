@@ -268,18 +268,22 @@ router.post('/keyboardstabilizer/create', async(req,res)=>{
 //////////////////////////////////UPDATE////////////////////////////////////////////////
 //update KeyboardCase by id
 router.get('/keyboardcase/:product_id/update', async (req, res) => {
+    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    })
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
         'id': productId}).fetch({
-            require: true
+            require: true,
+            'withRelated': ['keyboardpcbs']
         });
         // console.log(productId);
         // console.log(keebCases)
 
-        const productForm = createkeyboardCaseForm(allCategories);
+        const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
         
         productForm.fields.name.value = keebCases.get('name');
         productForm.fields.brand.value = keebCases.get('brand');
@@ -289,6 +293,9 @@ router.get('/keyboardcase/:product_id/update', async (req, res) => {
         productForm.fields.quantity.value = keebCases.get('quantity');
         productForm.fields.cost.value = keebCases.get('cost');
         productForm.fields.description.value = keebCases.get('description');
+        //fetch all related keyboard pcbs
+        let selectedKeyboardpcbs = await keebCases.related('keyboardpcbs').pluck('id');
+        productForm.fields.keyboardpcb.value = selectedKeyboardpcbs;
 
         res.render('products/updatecase', {
             'form': productForm.toHTML(bootstrapField),
@@ -300,6 +307,9 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
+    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    })
     // fetch the product that we want to update
     const keebCases = await Keyboardcase.where({
         'id': req.params.product_id
@@ -307,11 +317,30 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createkeyboardCaseForm(allCategories);
+    const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
     productForm.handle(req,{
         'success': async (form)=>{
-            keebCases.set(form.data);
-            keebCases.save();
+            let {keyboardpcb, ...keebCasesData} = form.data;
+            keebCases.set(keebCasesData);
+            await keebCases.save();
+
+        
+            //update the relationship
+            let keyboardpcbIds= keyboardpcb.split(',')
+            //get all pcbs selected
+            let existingkeyboardpcbIds = await keebCases.related('keyboardpcbs').pluck('id')
+            
+            
+            //remove pcbs not selected anymore
+            let toRemove = id=> keyboardpcbIds.includes(id) === false;
+            await keebCases.keyboardpcbs().detach(toRemove);
+            // await keebCases.keyboardpcbs().detach(id=>keyboardpcbIds.includes(id) === false);
+            //add in pcbs that are selected
+            await keebCases.keyboardpcbs().attach(keyboardpcbIds);
+
+
+
+            
             res.redirect('/products/catalog');
         },
         'error':async (form) =>{
@@ -326,16 +355,20 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
 
 //update KeyboardPcb by id
 router.get('/keyboardpcb/:product_id/update', async (req, res) => {
+    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
+        return[keyboardcase.get('id'), keyboardcase.get('name') ]
+    })
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
     const productId = req.params.product_id;
     const keebPcb = await Keyboardpcb.where({
         'id': productId}).fetch({
-            require: true
+            require: true,
+            'withRelated': ['keyboardcases']
         });
 
-        const productForm = createkeyboardPcbForm(allCategories);
+        const productForm = createkeyboardPcbForm(allCategories, allKeyboardCase);
         
         productForm.fields.name.value = keebPcb.get('name');
         productForm.fields.brand.value = keebPcb.get('brand');
@@ -345,6 +378,9 @@ router.get('/keyboardpcb/:product_id/update', async (req, res) => {
         productForm.fields.quantity.value = keebPcb.get('quantity');
         productForm.fields.cost.value = keebPcb.get('cost');
         productForm.fields.description.value = keebPcb.get('description');
+        //fetch all related keyboard cases
+        let selectedKeyboardcases = await keebPcb.related('keyboardcases').pluck('id');
+        productForm.fields.keyboardcase.value = selectedKeyboardcases;
 
         res.render('products/updatepcb', {
             'form': productForm.toHTML(bootstrapField),
@@ -354,6 +390,9 @@ router.get('/keyboardpcb/:product_id/update', async (req, res) => {
 })
 //process update of KeyboardPcb
 router.post('/keyboardpcb/:product_id/update', async (req, res) => {
+    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
+        return[keyboardcase.get('id'), keyboardcase.get('name') ]
+    })
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -364,13 +403,34 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
         require: true
     })
     //process form
-    const productForm = createkeyboardPcbForm(allCategories);
+    const productForm = createkeyboardPcbForm(allCategories, allKeyboardCase);
     productForm.handle(req,{
         'success': async (form)=>{
-            keebPcb.set(form.data);
-            keebPcb.save();
+            let {keyboardcase, ...keebPcbsData} = form.data;
+            keebPcb.set(keebPcbsData);
+            await keebPcb.save();
+
+
+            //update the relationship
+            let keyboardcaseIds= keyboardcase.split(',')
+            //get all pcbs selected
+            let existingkeyboardcaseIds = await keebPcb.related('keyboardcases').pluck('id')
+            
+            
+            //remove pcbs not selected anymore
+            let toRemove = id=> keyboardcaseIds.includes(id) === false;
+            await keebPcb.keyboardcases().detach(toRemove);
+            // await keebCases.keyboardpcbs().detach(id=>keyboardpcbIds.includes(id) === false);
+            //add in pcbs that are selected
+            await keebPcb.keyboardcases().attach(keyboardcaseIds);
+
+
+
             res.redirect('/products/catalog');
         },
+
+
+        
         'error':async (form) =>{
             res.render('products/updatepcb',{
                 'form': form.toHTML(bootstrapField),
