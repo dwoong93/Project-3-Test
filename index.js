@@ -2,6 +2,8 @@ const { Router } = require("express");
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
+const session = require('express-session');
+const flash = require('connect-flash');
 require("dotenv").config();
 
 // create an instance of express app
@@ -24,6 +26,12 @@ app.use(
     extended: false
   })
 );
+// set up sessions
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+  }))
 
 //Import Routes
 const landingRoutes = require('./routes/landing');
