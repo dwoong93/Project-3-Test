@@ -55,6 +55,20 @@
           </div>
         </nav>
       </div>
+    {{#if success_messages }}
+    {{#each success_messages}}
+      <div class="alert alert-success">
+        {{this}}
+      </div>
+    {{/each}}
+      {{/if}}
+      {{#if error_messages}}
+        {{#each error_messages}}
+          <div class="alert alert-danger">
+            {{this}}
+          </div>
+        {{/each}}
+      {{/if}}
     {{#block 'content'}}
     {{/block}}
     </div>

@@ -70,8 +70,11 @@ router.post('/keyboardcases/create', async(req,res)=>{
             if (form.data.keyboardpcb) {
                 await product.keyboardpcbs().attach(form.data.keyboardpcb.split(','))
             }
+
+            req.flash("success_messages", `New Product
+            ${product.get('name')} has been created`)
+
             
-            console.log(form.data.keyboardpcb);
             
             res.redirect('/products/catalog');
         },
