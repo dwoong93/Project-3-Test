@@ -46,11 +46,13 @@ next();
 //Import Routes
 const landingRoutes = require('./routes/landing');
 const productRoutes = require('./routes/products');
+const userRoutes = require('./routes/users');
 
 //async function
 async function main() {
     app.use('/keyboardshop', landingRoutes);
     app.use('/products', productRoutes);
+    app.use('/users', userRoutes);
 
 
 

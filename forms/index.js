@@ -398,12 +398,47 @@ const createkeyboardStabilizerForm = () => {
     }),
 })
 };
+const createRegistrationForm = () => {
+    return forms.create({
+    'username': fields.string({
+    required: true,
+    errorAfterField: true,
+    cssClasses: {
+    label: ['form-label']
+    }
+    }),
+    'email': fields.string({
+    required: true,
+    errorAfterField: true,
+    cssClasses: {
+    label: ['form-label']
+    }
+    }),
+    'password': fields.password({
+    required: true,
+    errorAfterField: true,
+    cssClasses: {
+    label: ['form-label']
+    }
+    }),
+    'confirm_password': fields.password({
+    required: true,
+    errorAfterField: true,
+    cssClasses: {
+    label: ['form-label']
+    },
+    validators: [validators.matchField('password')]
+    })
+    })
+}
+  
 module.exports = { 
     createkeyboardCaseForm, 
     createkeyboardPcbForm, 
     createkeyboardPlateForm, 
     createkeyboardSwitchForm,
     createkeyboardKeycapForm,
-    createkeyboardStabilizerForm, 
+    createkeyboardStabilizerForm,
+    createRegistrationForm, 
     bootstrapField };
         

@@ -48,6 +48,9 @@ const Category = bookshelf.model('Category', {
         return this.hasMany('Keyboardplate')
     },
     });
+const User = bookshelf.model('User',{
+    tableName: 'users'
+})
 
 
 
@@ -66,5 +69,6 @@ module.exports = {
     'Keyboardswitch': Keyboardswitch,
     'Keyboardkeycap': Keyboardkeycap,
     'Keyboardstabilizer': Keyboardstabilizer,
-    'Category': Category
+    'Category': Category,
+    'User': User
 }
