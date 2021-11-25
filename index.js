@@ -1,5 +1,4 @@
 const { Router } = require("express");
-
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
