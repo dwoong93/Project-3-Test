@@ -1,10 +1,12 @@
 const { Router } = require("express");
+
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
 require("dotenv").config();
 const session = require('express-session');
 const flash = require('connect-flash');
+const FileStore = require('session-file-store')(session);
 
 // create an instance of express app
 let app = express();
@@ -28,9 +30,10 @@ app.use(
 );
 // set up sessions
 app.use(session({
+  'store': new FileStore(),
   'secret': 'keyboard cat',
-  'resave': false,
-  'saveUninitialized': true
+  'resave': false, //session will not be resaved if there are no changes
+  'saveUninitialized': true // if a client connects with no session, immediately create one
   }))
 
 //flash 
