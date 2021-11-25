@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 // import in the User model
 const { User } = require('../models');
-const { createRegistrationForm, bootstrapField } = require('../forms');
+const { createRegistrationForm, createLoginForm, bootstrapField } = require('../forms');
 
+
+//user registration
 router.get('/register', (req,res)=>{
     const registerForm = createRegistrationForm();
     res.render('users/register', {
@@ -11,3 +13,103 @@ router.get('/register', (req,res)=>{
     })
 })
 module.exports = router;
+//process user reg
+router.post('/register', (req, res) => {
+    const registerForm = createRegistrationForm();
+    registerForm.handle(req, {
+        success: async (form) => {
+            const user = new User({
+                'username': form.data.username,
+                'password': form.data.password,
+                'email': form.data.email
+            });
+            await user.save();
+            req.flash("success_messages", "Registration Complete, you may log in now.");
+            res.redirect('/users/login')
+        },
+        'error': (form) => {
+            res.render('users/register', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+
+//login
+router.get('/login', (req, res) => {
+    const loginForm = createLoginForm();
+    res.render('users/login', {
+        'form': loginForm.toHTML(bootstrapField)
+    })
+})
+
+
+//process login
+router.post('/login', async (req, res) => {
+const loginForm = createLoginForm();
+    loginForm.handle(req, {
+        'success': async (form) => {
+            // process the login
+            // ...find the user by email and password
+            let user = await User.where({
+                'email': form.data.email
+            }).fetch({
+                require: false
+            });
+            if (!user) {
+                req.flash("error_messages", "Sorry, the login details that you have provided is not correct.")
+                    res.redirect('/users/login');
+            }
+                else {
+                    // check if the password matches
+                    if (user.get('password') === form.data.password) {
+                        // add to the session that login succeed
+                        // store the user details
+                        req.session.user = {
+                            id: user.get('id'),
+                            username: user.get('username'),
+                            email: user.get('email')
+                        }
+                        req.flash("success_messages", "Welcome back, " + user.get('username'));
+                        res.redirect('/users/profile');
+                    } 
+                    else {
+                        req.flash("error_messages", "Sorry, the login details that you have provided is not correct.")
+                            res.redirect('/users/login')
+                    }
+                }
+        }, 
+        'error': (form) => {
+            req.flash("error_messages", "There is a problem with the login, please fill in the form again ")
+                res.render('users/login', {
+                    'form': form.toHTML(bootstrapField)
+                })
+        }
+    })
+})
+
+
+//profile
+router.get('/profile', (req, res) => {
+    const user = req.session.user;
+    if (!user) {
+    req.flash('error_messages', 'You do not have permission to view this page')
+    res.redirect('/users/login');
+    }
+    else {
+    res.render('users/profile',{
+        'user': user})
+    }
+})
+
+
+//logout
+router.get('/logout', (req, res) => {
+    req.session.user = null;
+    req.flash('success_messages', "Logged out successfully, Goodbye");
+    res.redirect('/users/login');
+    })
+    
+
+       
