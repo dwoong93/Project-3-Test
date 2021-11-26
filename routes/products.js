@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {checkIfAuthenticated} = require('../middlewares');
 // import in  Forms
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
@@ -31,7 +32,7 @@ router.get('/catalog', async function(req,res){
 })
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create keyboardCase
-router.get('/keyboardcases/create', async (req, res) => {
+router.get('/keyboardcases/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -44,7 +45,7 @@ router.get('/keyboardcases/create', async (req, res) => {
     })
 })
 // post created KeyboardCase
-router.post('/keyboardcases/create', async(req,res)=>{
+router.post('/keyboardcases/create', checkIfAuthenticated, async(req,res)=>{
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })

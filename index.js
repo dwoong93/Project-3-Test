@@ -44,6 +44,12 @@ res.locals.error_messages = req.flash("error_messages");
 next();
 });
 
+// Share the user data with hbs files
+app.use(function(req,res,next){
+  res.locals.user = req.session.user;
+  next();
+})
+  
 
 //Import Routes
 const landingRoutes = require('./routes/landing');

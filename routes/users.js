@@ -100,8 +100,8 @@ const loginForm = createLoginForm();
 router.get('/profile', (req, res) => {
     const user = req.session.user;
     if (!user) {
-    req.flash('error_messages', 'You do not have permission to view this page')
-    res.redirect('/users/login');
+        req.flash('error_messages', 'You do not have permission to view this page')
+        return res.redirect('/users/login');
     }
     else {
     res.render('users/profile',{

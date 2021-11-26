@@ -18,6 +18,7 @@
   "homepage": "https://github.com/dwoong93/gitpod-full-template#readme",
   "dependencies": {
     "bookshelf": "^1.2.0",
+    "bootstrap-icons": "^1.7.1",
     "connect-flash": "^0.1.1",
     "db-migrate": "^1.0.0-beta.16",
     "db-migrate-mysql": "^2.2.0",
