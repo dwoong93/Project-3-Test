@@ -94,6 +94,10 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
                 label: ['form-label']
             }
         }),
+        'image_url':fields.string({
+            widget: widgets.hidden()
+            })
+            
     })
 };
 

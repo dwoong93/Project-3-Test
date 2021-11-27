@@ -40,9 +40,14 @@ router.get('/keyboardcases/create', checkIfAuthenticated, async (req, res) => {
         return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     })
     const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
-    res.render('products/createcase',{
-    'form': productForm.toHTML(bootstrapField)
-    })
+
+    res.render('products/createcase', {
+        'form': productForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+        })
+        
 })
 // post created KeyboardCase
 router.post('/keyboardcases/create', checkIfAuthenticated, async(req,res)=>{
@@ -65,6 +70,7 @@ router.post('/keyboardcases/create', checkIfAuthenticated, async(req,res)=>{
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url)
             await product.save();
              //check it user has selected compatible pcb
              
@@ -297,13 +303,20 @@ router.get('/keyboardcase/:product_id/update', async (req, res) => {
         productForm.fields.quantity.value = keebCases.get('quantity');
         productForm.fields.cost.value = keebCases.get('cost');
         productForm.fields.description.value = keebCases.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebCases.get('image_url');
+
         //fetch all related keyboard pcbs
         let selectedKeyboardpcbs = await keebCases.related('keyboardpcbs').pluck('id');
         productForm.fields.keyboardpcb.value = selectedKeyboardpcbs;
 
         res.render('products/updatecase', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardcases':keebCases.toJSON()
+            'keyboardcases':keebCases.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 })
 //process update of KeyboardCase

@@ -7,11 +7,13 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
 const csrf = require('csurf');
+const cloudinaryRoutes = require('./routes/cloudinary.js')
 
-console.log(process.env.CLOUDINARY_NAME)
-console.log(process.env.CLOUDINARY_API_KEY)
-console.log(process.env.CLOUDINARY_API_SECRET)
-console.log(process.env.CLOUDINARY_UPLOAD_PRESET)
+
+// console.log(process.env.CLOUDINARY_NAME)
+// console.log(process.env.CLOUDINARY_API_KEY)
+// console.log(process.env.CLOUDINARY_API_SECRET)
+// console.log(process.env.CLOUDINARY_UPLOAD_PRESET)
 
 // create an instance of express app
 let app = express();
@@ -75,6 +77,7 @@ const userRoutes = require('./routes/users');
 async function main() {
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
 
 
 
