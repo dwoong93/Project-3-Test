@@ -4,6 +4,7 @@
 <h1>Welcome Admin, Add a new Keyboard PCB</h1>
 <form method="POST">
     {{{form}}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
     <input type="submit" value="Add Product" class="btn btn-primary"/>
     <a href="/products/catalog" class="btn btn-outline-success">Cancel</a>
 </form>

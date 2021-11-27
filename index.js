@@ -6,6 +6,12 @@ require("dotenv").config();
 const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
+const csrf = require('csurf');
+
+console.log(process.env.CLOUDINARY_NAME)
+console.log(process.env.CLOUDINARY_API_KEY)
+console.log(process.env.CLOUDINARY_API_SECRET)
+console.log(process.env.CLOUDINARY_UPLOAD_PRESET)
 
 // create an instance of express app
 let app = express();
@@ -36,13 +42,23 @@ app.use(session({
   }))
 
 //flash 
-app.use(flash())
+app.use(flash());
+
 // Register Flash middleware
 app.use(function (req, res, next) {
 res.locals.success_messages = req.flash("success_messages");
 res.locals.error_messages = req.flash("error_messages");
 next();
 });
+
+// enable CSRF
+app.use(csrf());
+
+// Share CSRF with hbs files
+app.use(function(req,res,next){
+  res.locals.csrfToken = req.csrfToken();
+  next();
+  })  
 
 // Share the user data with hbs files
 app.use(function(req,res,next){
