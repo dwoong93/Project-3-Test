@@ -13,7 +13,7 @@
 
 
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid bg-light">
       <div class="row">
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark mx-0">
           <div class="container-fluid">
@@ -65,6 +65,9 @@
                   <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
               </ul>
+
+              {{!-- Right side components --}}
+              {{!-- Display username and dropdown options menu --}}
               <div class="d-flex, text-white">
                 {{#if user}}
                 <div class="nav-item dropdown">
@@ -74,13 +77,12 @@
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="/products/catalog">Edit profile</a></li>
                     <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="/users/register">Register new Staff Account</a></li>
                   </ul>
                 </li>
                 {{else}}
-                Hi, stranger
-                <a href="/users/login" class="ml-3 btn btn-primary btn-sm">Login</a>
-                <a href="/users/register" class="ml-3 btn btn-primary btn-sm">Register</a>
-
+                Welcome, Guest!
+                
                 {{/if}}
               </div>
 
@@ -105,8 +107,13 @@
     {{#block 'content'}}
     {{/block}}
 
-    <div class="text-center color-primary">
+    <div class="text-center color-primary bg-dark text-white">
+      <a href="https://discord.gg/5bUfDVTjHY" target="_blank" class="ml-3 btn btn-outline-white btn-success btn-sm">
+      <img src="views/layouts/judge.png" class="img-thumbnail" alt="Join Our Discord Community!">
+      
+      </a><br>
       <h7>This is a placeholder for the Footer</h7>
+      <span><a href="/users/login" class="ml-3 btn btn-primary btn-sm">Login</a>
     </div>
     </div>
 

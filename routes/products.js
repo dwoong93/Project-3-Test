@@ -12,7 +12,7 @@ const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap,
 
 
 //Display keyboard Cases
-router.get('/catalog', async function(req,res){
+router.get('/catalog', checkIfAuthenticated, async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
     let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
     let keebPlate = await Keyboardplate.collection().fetch({withRelated:['category']});
@@ -94,7 +94,7 @@ router.post('/keyboardcases/create', checkIfAuthenticated, async(req,res)=>{
 })
 
 //create keyboard pcb
-router.get('/keyboardpcb/create', async (req, res) => {
+router.get('/keyboardpcb/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -110,7 +110,7 @@ router.get('/keyboardpcb/create', async (req, res) => {
     })
 })
 // post created pcb
-router.post('/keyboardpcb/create', async(req,res)=>{
+router.post('/keyboardpcb/create', checkIfAuthenticated, async(req,res)=>{
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -146,7 +146,7 @@ router.post('/keyboardpcb/create', async(req,res)=>{
 })
 
 //create keyboard plate
-router.get('/keyboardplate/create', async (req, res) => {
+router.get('/keyboardplate/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -160,7 +160,7 @@ router.get('/keyboardplate/create', async (req, res) => {
 })
 
 // post created plate
-router.post('/keyboardplate/create', async(req,res)=>{
+router.post('/keyboardplate/create', checkIfAuthenticated, async(req,res)=>{
     const productForm = createkeyboardPlateForm();
     productForm.handle(req, {
         'success': async (form) => {
@@ -186,7 +186,7 @@ router.post('/keyboardplate/create', async(req,res)=>{
 })
 
 //create keyboard switch
-router.get('/keyboardswitch/create', async (req, res) => {
+router.get('/keyboardswitch/create', checkIfAuthenticated, async (req, res) => {
     const productForm = createkeyboardSwitchForm();
     res.render('products/createswitch',{
     'form': productForm.toHTML(bootstrapField),
@@ -197,7 +197,7 @@ router.get('/keyboardswitch/create', async (req, res) => {
 })
 
 // post created switch
-router.post('/keyboardswitch/create', async(req,res)=>{
+router.post('/keyboardswitch/create', checkIfAuthenticated, async(req,res)=>{
     const productForm = createkeyboardSwitchForm();
     productForm.handle(req, {
         'success': async (form) => {
@@ -222,7 +222,7 @@ router.post('/keyboardswitch/create', async(req,res)=>{
 })
 
 //create keyboard keycap
-router.get('/keyboardkeycap/create', async (req, res) => {
+router.get('/keyboardkeycap/create', checkIfAuthenticated, async (req, res) => {
     const productForm = createkeyboardKeycapForm();
     res.render('products/createkeycap',{
     'form': productForm.toHTML(bootstrapField),
@@ -233,7 +233,7 @@ router.get('/keyboardkeycap/create', async (req, res) => {
 })
 
 // post created keycap
-router.post('/keyboardkeycap/create', async(req,res)=>{
+router.post('/keyboardkeycap/create', checkIfAuthenticated, async(req,res)=>{
     const productForm = createkeyboardKeycapForm();
     productForm.handle(req, {
         'success': async (form) => {
@@ -259,7 +259,7 @@ router.post('/keyboardkeycap/create', async(req,res)=>{
 })
 
 //create keyboard stabilizer
-router.get('/keyboardstabilizer/create', async (req, res) => {
+router.get('/keyboardstabilizer/create', checkIfAuthenticated, async (req, res) => {
     const productForm = createkeyboardStabilizerForm();
     res.render('products/createstabilizer',{
     'form': productForm.toHTML(bootstrapField),
@@ -270,7 +270,7 @@ router.get('/keyboardstabilizer/create', async (req, res) => {
 })
 
 // post created stabilizer
-router.post('/keyboardstabilizer/create', async(req,res)=>{
+router.post('/keyboardstabilizer/create', checkIfAuthenticated, async(req,res)=>{
     const productForm = createkeyboardStabilizerForm();
     productForm.handle(req, {
         'success': async (form) => {
@@ -297,7 +297,7 @@ router.post('/keyboardstabilizer/create', async(req,res)=>{
 
 //////////////////////////////////UPDATE////////////////////////////////////////////////
 //update KeyboardCase by id
-router.get('/keyboardcase/:product_id/update', async (req, res) => {
+router.get('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
         return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     })
@@ -340,7 +340,7 @@ router.get('/keyboardcase/:product_id/update', async (req, res) => {
         })
 })
 //process update of KeyboardCase
-router.post('/keyboardcase/:product_id/update', async (req, res) => {
+router.post('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -391,7 +391,7 @@ router.post('/keyboardcase/:product_id/update', async (req, res) => {
 })
 
 //update KeyboardPcb by id
-router.get('/keyboardpcb/:product_id/update', async (req, res) => {
+router.get('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
         return[keyboardcase.get('id'), keyboardcase.get('name') ]
     })
@@ -426,7 +426,7 @@ router.get('/keyboardpcb/:product_id/update', async (req, res) => {
 
 })
 //process update of KeyboardPcb
-router.post('/keyboardpcb/:product_id/update', async (req, res) => {
+router.post('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
         return[keyboardcase.get('id'), keyboardcase.get('name') ]
     })
@@ -479,7 +479,7 @@ router.post('/keyboardpcb/:product_id/update', async (req, res) => {
 })
 
 //update KeyboardPlate by id
-router.get('/keyboardplate/:product_id/update', async (req, res) => {
+router.get('/keyboardplate/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -508,7 +508,7 @@ router.get('/keyboardplate/:product_id/update', async (req, res) => {
 })
 
 //process update of KeyboardPlate
-router.post('/keyboardplate/:product_id/update', async (req, res) => {
+router.post('/keyboardplate/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
@@ -537,7 +537,7 @@ router.post('/keyboardplate/:product_id/update', async (req, res) => {
 })
 
 //update KeyboardSwitch by id
-router.get('/keyboardswitch/:product_id/update', async (req, res) => {
+router.get('/keyboardswitch/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebSwitch = await Keyboardswitch.where({
         'id': productId}).fetch({
@@ -562,7 +562,7 @@ router.get('/keyboardswitch/:product_id/update', async (req, res) => {
 })
 
 //process update of KeyboardSwitch
-router.post('/keyboardswitch/:product_id/update', async (req, res) => {
+router.post('/keyboardswitch/:product_id/update', checkIfAuthenticated, async (req, res) => {
     // fetch the product that we want to update
     const keebSwitch = await Keyboardswitch.where({
         'id': req.params.product_id
@@ -588,7 +588,7 @@ router.post('/keyboardswitch/:product_id/update', async (req, res) => {
 })
 
 //update KeyboardKeycap by id
-router.get('/keyboardkeycap/:product_id/update', async (req, res) => {
+router.get('/keyboardkeycap/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebKeycap = await Keyboardkeycap.where({
         'id': productId}).fetch({
@@ -614,7 +614,7 @@ router.get('/keyboardkeycap/:product_id/update', async (req, res) => {
 })
 
 //process update of KeyboardKeycap
-router.post('/keyboardkeycap/:product_id/update', async (req, res) => {
+router.post('/keyboardkeycap/:product_id/update', checkIfAuthenticated, async (req, res) => {
     // fetch the product that we want to update
     const keebKeycap = await Keyboardkeycap.where({
         'id': req.params.product_id
@@ -640,7 +640,7 @@ router.post('/keyboardkeycap/:product_id/update', async (req, res) => {
 })
 
 //update KeyboardStabilizer by id
-router.get('/keyboardstabilizer/:product_id/update', async (req, res) => {
+router.get('/keyboardstabilizer/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebStabilizer = await Keyboardstabilizer.where({
         'id': productId}).fetch({
@@ -664,7 +664,7 @@ router.get('/keyboardstabilizer/:product_id/update', async (req, res) => {
 })
 
 //process update of KeyboardStabilizer
-router.post('/keyboardstabilizer/:product_id/update', async (req, res) => {
+router.post('/keyboardstabilizer/:product_id/update', checkIfAuthenticated, async (req, res) => {
     // fetch the product that we want to update
     const keebStabilizer = await Keyboardstabilizer.where({
         'id': req.params.product_id
@@ -691,7 +691,7 @@ router.post('/keyboardstabilizer/:product_id/update', async (req, res) => {
 
 //////////////////////////////////DELETE//////////////////////////////////////////
 //Delete keyboardCase
-router.get('/keyboardcase/:product_id/delete', async (req, res) => {
+router.get('/keyboardcase/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebCases = await Keyboardcase.where({
         'id': productId}).fetch({
@@ -706,7 +706,7 @@ router.get('/keyboardcase/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboard Case
-router.post('/keyboardcase/:product_id/delete', async (req, res) => {
+router.post('/keyboardcase/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebCases = await Keyboardcase.where({
         'id': req.params.product_id
     }).fetch({
@@ -717,7 +717,7 @@ router.post('/keyboardcase/:product_id/delete', async (req, res) => {
 })
 
 //Delete keyboardPcb
-router.get('/keyboardpcb/:product_id/delete', async (req, res) => {
+router.get('/keyboardpcb/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebPcb = await Keyboardpcb.where({
         'id': productId}).fetch({
@@ -732,7 +732,7 @@ router.get('/keyboardpcb/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboardPcb
-router.post('/keyboardpcb/:product_id/delete', async (req, res) => {
+router.post('/keyboardpcb/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebPcb = await Keyboardpcb.where({
         'id': req.params.product_id
     }).fetch({
@@ -743,7 +743,7 @@ router.post('/keyboardpcb/:product_id/delete', async (req, res) => {
 })
 
 //Delete keyboardPlate
-router.get('/keyboardplate/:product_id/delete', async (req, res) => {
+router.get('/keyboardplate/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebPlate = await Keyboardplate.where({
         'id': productId}).fetch({
@@ -754,7 +754,7 @@ router.get('/keyboardplate/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboardPlate
-router.post('/keyboardplate/:product_id/delete', async (req, res) => {
+router.post('/keyboardplate/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebPlate = await Keyboardplate.where({
         'id': req.params.product_id
     }).fetch({
@@ -765,7 +765,7 @@ router.post('/keyboardplate/:product_id/delete', async (req, res) => {
 })
 
 //Delete keyboardSwitch
-router.get('/keyboardswitch/:product_id/delete', async (req, res) => {
+router.get('/keyboardswitch/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebSwitch = await Keyboardswitch.where({
         'id': productId}).fetch({
@@ -776,7 +776,7 @@ router.get('/keyboardswitch/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboardSwitch
-router.post('/keyboardswitch/:product_id/delete', async (req, res) => {
+router.post('/keyboardswitch/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebSwitch = await Keyboardswitch.where({
         'id': req.params.product_id
     }).fetch({
@@ -787,7 +787,7 @@ router.post('/keyboardswitch/:product_id/delete', async (req, res) => {
 })
 
 //Delete keyboardKeycap
-router.get('/keyboardkeycap/:product_id/delete', async (req, res) => {
+router.get('/keyboardkeycap/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebKeycap = await Keyboardkeycap.where({
         'id': productId}).fetch({
@@ -798,7 +798,7 @@ router.get('/keyboardkeycap/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboardKeycap
-router.post('/keyboardkeycap/:product_id/delete', async (req, res) => {
+router.post('/keyboardkeycap/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebKeycap = await Keyboardkeycap.where({
         'id': req.params.product_id
     }).fetch({
@@ -809,7 +809,7 @@ router.post('/keyboardkeycap/:product_id/delete', async (req, res) => {
 })
 
 //Delete keyboardStabilizer
-router.get('/keyboardstabilizer/:product_id/delete', async (req, res) => {
+router.get('/keyboardstabilizer/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
     const keebStabilizer = await Keyboardstabilizer.where({
         'id': productId}).fetch({
@@ -820,7 +820,7 @@ router.get('/keyboardstabilizer/:product_id/delete', async (req, res) => {
         })
 })
 //process delete keyboardStabilizer
-router.post('/keyboardstabilizer/:product_id/delete', async (req, res) => {
+router.post('/keyboardstabilizer/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const keebStabilizer = await Keyboardstabilizer.where({
         'id': req.params.product_id
     }).fetch({

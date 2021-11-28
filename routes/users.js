@@ -1,4 +1,5 @@
 const express = require("express");
+const {checkIfAuthenticated} = require('../middlewares');
 const router = express.Router();
 const crypto = require('crypto');
 const getHashedPassword = (password) => {
@@ -8,11 +9,19 @@ const getHashedPassword = (password) => {
 }
 // import in the User model
 const { User } = require('../models');
-const { createRegistrationForm, createLoginForm, bootstrapField } = require('../forms');
+const { createRegistrationForm, createLoginForm, UpdateAccountForm, bootstrapField } = require('../forms');
 
+// router.get('/user', async function(req,res){
+//     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
+
+//     res.render('products/index',{
+//         'keyboardcases':keebCases.toJSON(),
+
+//     }) 
+// })
 
 //user registration
-router.get('/register', (req,res)=>{
+router.get('/register', checkIfAuthenticated, (req,res)=>{
     const registerForm = createRegistrationForm();
     res.render('users/register', {
         'form': registerForm.toHTML(bootstrapField),
@@ -34,7 +43,7 @@ router.post('/register', (req, res) => {
                 'image_url': form.data.image_url
             });
             await user.save();
-            req.flash("success_messages", "Registration Complete, you may log in now.");
+            req.flash("success_messages", "New staff account registration is complete.");
             res.redirect('/users/login')
         },
         'error': (form) => {
@@ -46,29 +55,48 @@ router.post('/register', (req, res) => {
 })
 
 //update user by id
-router.get('/users/:user_id/update', async (req, res) => {
-    
-    const userId = req.params.user_id;
-    const keebUser = await User.where({
-        'id': user_id}).fetch({
+router.get('/user/:user_id/update', async (req, res) => {
+    const userId = req.params.user_id
+    const user = await User.where({
+        'id': userId}).fetch({
             require: true,
         });
-        console.log(userId);
 
-        const userForm = createLoginForm();
+        const userForm = UpdateAccountForm();
         
-        userForm.fields.username.value = keebUser.get('username');
-        userForm.fields.email.value = keebUser.get('email');
+        userForm.fields.username.value = user.get('username');
+        userForm.fields.email.value = user.get('email');
+        userForm.fields.password.value = user.get('password');
         
         
 
         res.render('users/userupdate', {
-            'form': productForm.toHTML(bootstrapField),
-            'users':keebUser.toJSON(),
-            // 2 - send to the HBS file the cloudinary information
-            // cloudinaryName: process.env.CLOUDINARY_NAME,
-            // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
-            // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            'form': userForm.toHTML(bootstrapField),
+            'user':user.toJSON()
+        })
+})
+
+//Process update user by id
+router.post('/user/:user_Id/update', async (req, res) => {
+    const user = await User.where({
+        'id': req.params.user_Id}).fetch({
+            require: true,
+        });
+
+        const userForm = UpdateAccountForm();
+        userForm.handle(req, {
+            'success': async (form) => {
+                user.set('username', form.data.username);
+                user.set('email', form.data.email);
+                user.set('password',getHashedPassword(form.data.password));
+                await user.save();
+                res.redirect('/products/catalog');
+            },
+            'error': async (form) => {
+                res.render('user/update', {
+                'form': form.toHTML(bootstrapField)
+                })
+            }
         })
 })
 
