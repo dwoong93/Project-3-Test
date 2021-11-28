@@ -103,7 +103,10 @@ router.get('/keyboardpcb/create', async (req, res) => {
     })
     const productForm = createkeyboardPcbForm(allCategories,allKeyboardCase);
     res.render('products/createpcb',{
-    'form': productForm.toHTML(bootstrapField)
+    'form': productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 // post created pcb
@@ -126,6 +129,7 @@ router.post('/keyboardpcb/create', async(req,res)=>{
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url);
             await product.save();
             if (form.data.keyboardcase) {
                 await product.keyboardcases().attach(form.data.keyboardcase.split(','))
@@ -148,7 +152,10 @@ router.get('/keyboardplate/create', async (req, res) => {
     })
     const productForm = createkeyboardPlateForm(allCategories);
     res.render('products/createplate',{
-    'form': productForm.toHTML(bootstrapField)
+    'form': productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -166,6 +173,7 @@ router.post('/keyboardplate/create', async(req,res)=>{
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url);
             await product.save();
             res.redirect('/products/catalog');
         },
@@ -181,7 +189,10 @@ router.post('/keyboardplate/create', async(req,res)=>{
 router.get('/keyboardswitch/create', async (req, res) => {
     const productForm = createkeyboardSwitchForm();
     res.render('products/createswitch',{
-    'form': productForm.toHTML(bootstrapField)
+    'form': productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -198,6 +209,7 @@ router.post('/keyboardswitch/create', async(req,res)=>{
             product.set('switchConnectionType', form.data.switchConnectionType);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url);
             await product.save();
             res.redirect('/products/catalog');
         },
@@ -213,7 +225,10 @@ router.post('/keyboardswitch/create', async(req,res)=>{
 router.get('/keyboardkeycap/create', async (req, res) => {
     const productForm = createkeyboardKeycapForm();
     res.render('products/createkeycap',{
-    'form': productForm.toHTML(bootstrapField)
+    'form': productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -231,6 +246,7 @@ router.post('/keyboardkeycap/create', async(req,res)=>{
             product.set('quantity', form.data.quantity);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url);
             await product.save();
             res.redirect('/products/catalog');
         },
@@ -246,7 +262,10 @@ router.post('/keyboardkeycap/create', async(req,res)=>{
 router.get('/keyboardstabilizer/create', async (req, res) => {
     const productForm = createkeyboardStabilizerForm();
     res.render('products/createstabilizer',{
-    'form': productForm.toHTML(bootstrapField)
+    'form': productForm.toHTML(bootstrapField),
+    cloudinaryName: process.env.CLOUDINARY_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -262,6 +281,7 @@ router.post('/keyboardstabilizer/create', async(req,res)=>{
             product.set('quantity', form.data.quantity);
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
+            product.set('image_url', form.data.image_url);
             await product.save();
             res.redirect('/products/catalog');
         },

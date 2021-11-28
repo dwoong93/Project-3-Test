@@ -15,7 +15,10 @@ const { createRegistrationForm, createLoginForm, bootstrapField } = require('../
 router.get('/register', (req,res)=>{
     const registerForm = createRegistrationForm();
     res.render('users/register', {
-        'form': registerForm.toHTML(bootstrapField)
+        'form': registerForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 module.exports = router;
@@ -27,7 +30,8 @@ router.post('/register', (req, res) => {
             const user = new User({
                 'username': form.data.username,
                 'password': getHashedPassword(form.data.password),
-                'email': form.data.email
+                'email': form.data.email,
+                'image_url': form.data.image_url
             });
             await user.save();
             req.flash("success_messages", "Registration Complete, you may log in now.");
@@ -39,6 +43,33 @@ router.post('/register', (req, res) => {
             })
         }
     })
+})
+
+//update user by id
+router.get('/users/:user_id/update', async (req, res) => {
+    
+    const userId = req.params.user_id;
+    const keebUser = await User.where({
+        'id': user_id}).fetch({
+            require: true,
+        });
+        console.log(userId);
+
+        const userForm = createLoginForm();
+        
+        userForm.fields.username.value = keebUser.get('username');
+        userForm.fields.email.value = keebUser.get('email');
+        
+        
+
+        res.render('users/userupdate', {
+            'form': productForm.toHTML(bootstrapField),
+            'users':keebUser.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            // cloudinaryName: process.env.CLOUDINARY_NAME,
+            // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+        })
 })
 
 

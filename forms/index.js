@@ -96,7 +96,7 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
         }),
         'image_url':fields.string({
             widget: widgets.hidden()
-            })
+        })
             
     })
 };
@@ -174,6 +174,9 @@ const createkeyboardPcbForm = (categories, keyboardcase) => {
             label: ['form-label']
         }
     }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
 })
 };
 //create keyboard plate form function
@@ -236,6 +239,9 @@ const createkeyboardPlateForm = (categories) => {
             label: ['form-label']
         }
     }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
 })
 };
 
@@ -291,6 +297,9 @@ const createkeyboardSwitchForm = () => {
             label: ['form-label']
         }
     }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
 })
 };
 //create keyboard keycap form function
@@ -353,6 +362,9 @@ const createkeyboardKeycapForm = () => {
             label: ['form-label']
         }
     }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
 })
 };
 //create keyboard stabilizer form function
@@ -400,39 +412,45 @@ const createkeyboardStabilizerForm = () => {
             label: ['form-label']
         }
     }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
 })
 };
 const createRegistrationForm = () => {
     return forms.create({
     'username': fields.string({
-    required: true,
-    errorAfterField: true,
-    cssClasses: {
-    label: ['form-label']
-    }
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
     }),
     'email': fields.string({
-    required: true,
-    errorAfterField: true,
-    cssClasses: {
-    label: ['form-label']
-    }
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
     }),
     'password': fields.password({
-    required: true,
-    errorAfterField: true,
-    cssClasses: {
-    label: ['form-label']
-    }
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
     }),
     'confirm_password': fields.password({
-    required: true,
-    errorAfterField: true,
-    cssClasses: {
-    label: ['form-label']
-    },
-    validators: [validators.matchField('password')]
-    })
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        },
+        validators: [validators.matchField('password')]
+        }),
+        'image_url':fields.string({
+            widget: widgets.hidden()
+        })
     })
 }
 
