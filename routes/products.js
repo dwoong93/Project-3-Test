@@ -31,31 +31,109 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
     })
 
 })
-// FILTER
-router.get('/catalog', async function(req,res){
+
+// //Display Case
+// router.get('/keyboardcases', checkIfAuthenticated, async function(req,res){
+//     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
+//     let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
+//     let keebPlate = await Keyboardplate.collection().fetch({withRelated:['category']});
+//     let keebSwitch = await Keyboardswitch.collection().fetch();
+//     let keebKeycap = await Keyboardkeycap.collection().fetch();
+//     let keebStabilizer = await Keyboardstabilizer.collection().fetch();
+
+//     res.render('products/selectcase',{
+//         'keyboardcases':keebCases.toJSON(),
+//         'keyboardpcb':keebPcb.toJSON(),
+//         'keyboardplate':keebPlate.toJSON(),
+//         'keyboardswitch':keebSwitch.toJSON(),
+//         'keyboardkeycap':keebKeycap.toJSON(),
+//         'keyboardstabilizer':keebStabilizer.toJSON()
+
+//     })
+
+// })
+// FILTER Cases
+router.get('/keyboardcases', async function(req,res){
     //get all categories
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
+    //create a fake cat that represents search all
     allCategories.unshift([0,'----'])
-    //get all pcb
+
+    // get all pcb
     const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
         return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     })
-    //get all case
-    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
-        return[keyboardcase.get('id'), keyboardcase.get('name') ]
-    })
+    // console.log(allKeyboardPcb)
+    // console.log(allCategories)
 
     //create search form
-    let searchForm = createkeyboardCaseSearchForm(allCategories, allTags);
+    let searchForm = createkeyboardCaseSearchForm(allCategories, allKeyboardPcb);
+    let q = Keyboardcase.collection();
+
     searchForm.handle(req, {
-    'empty': async (form) => {
-    },
-    'error': async (form) => {
-    },
-    'success': async (form) => {
-    }
+        'empty': async (form) => {
+            let keyboardcases = await q.fetch({
+                withRelated: ['category']
+        })
+            res.render('products/selectcase', {
+                'keyboardcases': keyboardcases.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let keyboardcases = await q.fetch({
+                withRelated: ['category']
+        })
+            res.render('products/selectcase', {
+                'keyboardcases': keyboardcases.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            if (form.data.name) {
+                q = q.where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if (form.data.material) {
+                q = q.where('material', 'like', '%' + req.query.material + '%')
+            }
+
+            if (form.data.brand) {
+                q = q.where('brand', 'like', '%' + req.query.brand + '%')
+            }
+
+            // if (form.data.category_id && form.data.category_id != "0"
+            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
+            //     .where('categories.name', 'like', '%' + req.query.category + '%')
+            // }
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            // if (form.data.min_cost) {
+            //     q = q.where('cost', '>=', req.query.min_cost)
+            // }
+
+            if (form.data.max_cost) {
+                q = q.where('cost', '<=', req.query.max_cost);
+            }
+
+            // if (form.data.keyboardpcb) {
+            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
+            //     .where('keyboardcase_id', 'in')
+            // }
+
+            let keyboardcases = await q.fetch({
+                withRelated: ['category']
+            })
+                res.render('products/selectcase', {
+                    'keyboardcases': keyboardcases.toJSON(),
+                    'form': form.toHTML(bootstrapField)
+                })
+                
+        }
     })
 
 })

@@ -613,50 +613,51 @@ const createkeyboardCaseSearchForm = (categories, keyboardpcb) => {
         choices:categories
 
         }),
-    'keyboardKit': fields.string({
-        required: false,
-        errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        }
-    }),
-    'keyboardpcb': fields.string({
-        label: 'Compatible PCB',
-        required: false,
-        errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        },
-        widget: widgets.multipleSelect(),
-        choices: keyboardpcb
-    }),
-    'quantity': fields.string({
+    // 'keyboardKit': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     }
+    // }),
+    // 'keyboardpcb': fields.string({
+    //     label: 'Compatible PCB',
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     widget: widgets.multipleSelect(),
+    //     choices: keyboardpcb
+    // }),
+    // 'quantity': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     'validators':[validators.integer()]
+        
+    // }),
+    'max_cost': fields.string({
+        label: 'Maximum Cost',
         required: false,
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']
         },
         'validators':[validators.integer()]
-        
     }),
-    'cost': fields.string({
-        required: false,
-        errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        },
-        // 'validators':[validators.integer()]
-    }),
-    'description': fields.string({
-        required: false,
-        errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        }
-    }),
-    'image_url':fields.string({
-        widget: widgets.hidden()
-    })
+    // 'description': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     }
+    // }),
+    // 'image_url':fields.string({
+    //     widget: widgets.hidden()
+    // })
         
 })
 };
