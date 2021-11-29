@@ -118,7 +118,53 @@ router.post('/user/:user_Id/update', async (req, res) => {
                 res.redirect('/products/catalog');
             },
             'error': async (form) => {
-                res.render('user/update', {
+                res.render('users/userupdate', {
+                'form': form.toHTML(bootstrapField)
+                })
+            }
+        })
+})
+
+//update customer by id
+router.get('/customer/:customer_id/update', async (req, res) => {
+    const customerId = req.params.customer_id
+    const customer = await Customer.where({
+        'id': customerId}).fetch({
+            require: true,
+        });
+
+        const userForm = UpdateCustomerAccountForm();
+        
+        userForm.fields.username.value = customer.get('username');
+        userForm.fields.email.value = customer.get('email');
+        userForm.fields.password.value = customer.get('password');
+        
+        
+
+        res.render('users/customerupdate', {
+            'form': userForm.toHTML(bootstrapField),
+            'customer':customer.toJSON()
+        })
+})
+
+//Process customer update by id
+router.post('/customer/:customer_id/update', async (req, res) => {
+    const customer = await Customer.where({
+        'id': req.params.customer_id}).fetch({
+            require: true,
+        });
+
+        const userForm = UpdateCustomerAccountForm();
+        userForm.handle(req, {
+            'success': async (form) => {
+                customer.set('username', form.data.username);
+                customer.set('email', form.data.email);
+                customer.set('password',getHashedPassword(form.data.password));
+                await customer.save();
+                res.redirect('/users/customer/profile');
+            },
+            'error': async (form) => {
+                res.render('users/customerupdate', {
                 'form': form.toHTML(bootstrapField)
                 })
             }
