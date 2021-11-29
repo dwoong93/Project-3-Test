@@ -50,7 +50,10 @@ const Category = bookshelf.model('Category', {
     });
 const User = bookshelf.model('User',{
     tableName: 'users'
-})
+    });
+const Customer = bookshelf.model('Customer',{
+    tableName: 'customers'
+    })
 
 
 
@@ -70,5 +73,6 @@ module.exports = {
     'Keyboardkeycap': Keyboardkeycap,
     'Keyboardstabilizer': Keyboardstabilizer,
     'Category': Category,
-    'User': User
+    'User': User,
+    'Customer': Customer
 }

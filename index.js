@@ -67,6 +67,11 @@ app.use(function(req,res,next){
   res.locals.user = req.session.user;
   next();
 })
+
+app.use(function(req,res,next){
+  res.locals.customer = req.session.customer;
+  next();
+})
   
 
 //Import Routes

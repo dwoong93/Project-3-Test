@@ -1,0 +1,12 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+        <h1>Customer Profile</h1>
+        <ul>
+        <li>Username: {{customer.username}}</li>
+        <li>Email:{{customer.email}}</li>
+        
+        </ul>
+        <a class="btn btn-primary" style="mx-3 my-3" href="/users/customer/{{customer.id}}/update">Edit profile</a>
+        <a class="btn btn-primary" style="mx-3 my-3" href="/users/customer/logout">Logout</a>
+    {{/block}}
+{{/extends}}

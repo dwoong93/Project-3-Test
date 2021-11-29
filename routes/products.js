@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {checkIfAuthenticated} = require('../middlewares');
+const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlewares');
 // import in  Forms
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
@@ -11,7 +11,7 @@ const { bootstrapField, createkeyboardCaseForm,
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
 
 
-//Display keyboard Cases
+//Display keyboard Cases for Admin
 router.get('/catalog', checkIfAuthenticated, async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
     let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
@@ -28,7 +28,29 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
         'keyboardkeycap':keebKeycap.toJSON(),
         'keyboardstabilizer':keebStabilizer.toJSON()
 
-    }) 
+    })
+
+})
+
+//Display keyboard Cases for Customer
+router.get('/customer/catalog', async function(req,res){
+    let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
+    let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
+    let keebPlate = await Keyboardplate.collection().fetch({withRelated:['category']});
+    let keebSwitch = await Keyboardswitch.collection().fetch();
+    let keebKeycap = await Keyboardkeycap.collection().fetch();
+    let keebStabilizer = await Keyboardstabilizer.collection().fetch();
+
+    res.render('products/customergallery',{
+        'keyboardcases':keebCases.toJSON(),
+        'keyboardpcb':keebPcb.toJSON(),
+        'keyboardplate':keebPlate.toJSON(),
+        'keyboardswitch':keebSwitch.toJSON(),
+        'keyboardkeycap':keebKeycap.toJSON(),
+        'keyboardstabilizer':keebStabilizer.toJSON()
+
+    })
+
 })
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create keyboardCase

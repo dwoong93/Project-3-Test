@@ -69,23 +69,25 @@
               {{!-- Right side components --}}
               {{!-- Display username and dropdown options menu --}}
               <div class="d-flex, text-white">
-                {{#if user}}
+                {{#if customer}}
                 <div class="nav-item dropdown">
                   <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{user.username}}
+                    {{customer.username}}
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/products/catalog">Edit profile</a></li>
-                    <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
-                    <li><a class="dropdown-item" href="/users/register">Register new Staff Account</a></li>
+                    
+                    <li><a class="dropdown-item" href="/users/customer/logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="/users/register">Edit Account</a></li>
                   </ul>
                 </li>
                 {{else}}
-                Welcome, Guest!
                 
+                <div>Welcome, Guest!</div>
+                
+                <a href="/users/customer/login" class="ml-3 btn btn-primary btn-sm">Login</a>
                 {{/if}}
+                
               </div>
-
             </div>
           </div>
         </nav>
@@ -113,7 +115,6 @@
       
       </a><br>
       <h7>This is a placeholder for the Footer</h7>
-      <span><a href="/users/login" class="ml-3 btn btn-primary btn-sm">Login</a>
     </div>
     </div>
 

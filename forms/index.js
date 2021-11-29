@@ -417,6 +417,8 @@ const createkeyboardStabilizerForm = () => {
     })
 })
 };
+
+//Users aka Staff
 const createRegistrationForm = () => {
     return forms.create({
     'username': fields.string({
@@ -498,6 +500,87 @@ const UpdateAccountForm = () => {
     }),
     })
 }
+//Customers
+const createCustomerRegistrationForm = () => {
+    return forms.create({
+    'username': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'email': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'password': fields.password({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'confirm_password': fields.password({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        },
+        validators: [validators.matchField('password')]
+        }),
+        'image_url':fields.string({
+            widget: widgets.hidden()
+        })
+    })
+}
+
+const createCustomerLoginForm = () => {
+    return forms.create({
+    'email': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'password': fields.password({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    })
+}
+const UpdateCustomerAccountForm = () => {
+    return forms.create({
+    'username': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'email': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'password': fields.password({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    })
+}
   
 module.exports = { 
     createkeyboardCaseForm, 
@@ -508,6 +591,9 @@ module.exports = {
     createkeyboardStabilizerForm,
     createRegistrationForm,
     createLoginForm,
-    UpdateAccountForm, 
+    UpdateAccountForm,
+    createCustomerRegistrationForm, 
+    createCustomerLoginForm,
+    UpdateCustomerAccountForm,
     bootstrapField };
         
