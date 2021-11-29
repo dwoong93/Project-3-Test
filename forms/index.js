@@ -581,6 +581,85 @@ const UpdateCustomerAccountForm = () => {
     }),
     })
 }
+
+//Search Engine
+//create keyboard case form function
+const createkeyboardCaseSearchForm = (categories, keyboardpcb) => {
+    return forms.create({
+    'name': fields.string({required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'material': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'category_id': fields.string({
+        label: 'Form Factor',
+        required: false,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices:categories
+
+        }),
+    'keyboardKit': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'keyboardpcb': fields.string({
+        label: 'Compatible PCB',
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        widget: widgets.multipleSelect(),
+        choices: keyboardpcb
+    }),
+    'quantity': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+        
+    }),
+    'cost': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    'description': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'image_url':fields.string({
+        widget: widgets.hidden()
+    })
+        
+})
+};
   
 module.exports = { 
     createkeyboardCaseForm, 
@@ -595,5 +674,6 @@ module.exports = {
     createCustomerRegistrationForm, 
     createCustomerLoginForm,
     UpdateCustomerAccountForm,
+    createkeyboardCaseSearchForm,
     bootstrapField };
         

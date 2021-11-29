@@ -3,7 +3,7 @@ const checkIfAuthenticated = (req, res, next) => {
         next()
     } 
     else {
-        req.flash("error_messages", "You need to sign in to access this page");
+        req.flash("error_messages", "You need to be an Administrator to access this page");
         res.redirect('/users/login');
     }
 }
@@ -13,8 +13,8 @@ const checkIfCustomerAuthenticated = (req, res, next) => {
         next()
     } 
     else {
-        req.flash("error_messages", "You need to sign in to access this page");
-        res.redirect('/users/login');
+        req.flash("error_messages", "You need to Log in to access this page");
+        res.redirect('/users/customer/login');
     }
 }
 

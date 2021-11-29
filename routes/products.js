@@ -5,7 +5,7 @@ const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlew
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
     createkeyboardSwitchForm, createkeyboardKeycapForm,
-    createkeyboardStabilizerForm} = require('../forms');
+    createkeyboardStabilizerForm, createkeyboardCaseSearchForm} = require('../forms');
 
 // #1 import in the Product model
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
@@ -31,6 +31,37 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
     })
 
 })
+// FILTER
+router.get('/catalog', async function(req,res){
+    //get all categories
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    allCategories.unshift([0,'----'])
+    //get all pcb
+    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    })
+    //get all case
+    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
+        return[keyboardcase.get('id'), keyboardcase.get('name') ]
+    })
+
+    //create search form
+    let searchForm = createkeyboardCaseSearchForm(allCategories, allTags);
+    searchForm.handle(req, {
+    'empty': async (form) => {
+    },
+    'error': async (form) => {
+    },
+    'success': async (form) => {
+    }
+    })
+
+})
+
+
+
 
 //Display keyboard Cases for Customer
 router.get('/customer/catalog', async function(req,res){
