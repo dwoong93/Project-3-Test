@@ -1,13 +1,94 @@
-{{#extends 'base'}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/formstyles.css">
+    <title>The Keyboard Shop</title>
+</head>
+<body id="body">
+
+    {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Welcome Admin, Add a new Switch</h1>
-<form method="POST">
-    {{{form}}}
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    <input type="submit" value="Add Product" class="btn btn-primary"/>
-    <a href="/products/catalog" class="btn btn-outline-success">Cancel</a>
-</form>
+
+<div class="container" >
+    <h1 class="justify-content-center">Welcome Admin <br>Create new Switch</h1>
+    <div class="container justify-content-center " id="form">
+        <div id="formmethod">
+            <form method="POST" class="col col-sm-12 col-md-12 col-lg-6 ">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            {{{form}}}
+        </div>
+
+
+        <!-- 1. shows the image if exists -->
+        <div>
+            {{#if keyboardswitch.image_url}}
+                <img src="{{keyboardswitch.image_url}}" id="uploaded_image" />
+            {{else}}
+                <img src="" style="display:none" id="uploaded_image" />
+            {{/if}}
+        </div>
+
+        <div>
+            <a href="#" class="btn btn-primary my-2" id="upload_widget">Upload Image</a>
+        </div>
+
+        <input type="submit" value="Add Product" class="btn btn-primary my-3"/>
+        <a href="/products/catalog" class="btn btn-outline-primary">Cancel</a>
+        </form>
+    </div>
+    
+</div>
+
 {{/block}}
 
 {{/extends}}
+
+
+{{#block js}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+<script>
+function generateSignature(callback, params_to_sign) {
+axios.get('/cloudinary/sign', {
+params: {
+params_to_sign
+}
+}).then(function (response) {
+callback(response.data);
+})
+}
+var myWidget = cloudinary.createUploadWidget({
+cloudName: '{{cloudinaryName}}',
+apiKey: '{{cloudinaryApiKey}}',
+uploadPreset: '{{cloudinaryPreset}}',
+uploadSignature: generateSignature
+}, (error, result) => {
+if (!error && result && result.event === "success") {
+console.log('Done! Here is the image info: ',
+result.info);
+// hide the upload widget
+document.querySelector('#upload_widget').style.display =
+"none";
+// display the image
+document.querySelector('#id_image_url').value =
+result.info.url;
+document.querySelector('#uploaded_image').src =
+result.info.url;
+document.querySelector('#uploaded_image').style.display =
+'inline';
+}
+}
+)
+document.getElementById("upload_widget").addEventListener("click",
+function () {
+myWidget.open();
+}, false);
+</script>
+{{/block}}
+    
+</body>
+</html>

@@ -39,7 +39,7 @@ app.use(
 // set up sessions
 app.use(session({
   'store': new FileStore(),
-  'secret': 'keyboard cat',
+  'secret': process.env.SESSION_SECRET_KEY,
   'resave': false, //session will not be resaved if there are no changes
   'saveUninitialized': true // if a client connects with no session, immediately create one
   }))

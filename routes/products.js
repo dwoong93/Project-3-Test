@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const dataLayer = require('../dal/products')
 const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlewares');
 // import in  Forms
 const { bootstrapField, createkeyboardCaseForm, 
@@ -58,16 +59,12 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 // FILTER Cases
 router.get('/keyboardcases', async function(req,res){
     //get all categories
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
+    const allCategories = await dataLayer.getAllCategories();
     //create a fake cat that represents search all
     allCategories.unshift([0,'----'])
 
     // get all pcb
-    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
-        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
-    })
+    const allKeyboardPcb = await dataLayer.getAllKeyboardPcb();
     // console.log(allKeyboardPcb)
     // console.log(allCategories)
 
@@ -144,16 +141,13 @@ router.get('/keyboardcases', async function(req,res){
 // FILTER PCB
 router.get('/keyboardpcbs', async function(req,res){
     //get all categories
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
+    const allCategories = await dataLayer.getAllCategories();
     //create a fake cat that represents search all
     allCategories.unshift([0,'----'])
 
     // get all pcb
-    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
-        return[keyboardcase.get('id'), keyboardcase.get('name') ]
-    })
+    const allKeyboardCase = await dataLayer.getAllKeyboardCase();
+
     const allConnectionType = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
         return[keyboardpcb.get('id'), keyboardpcb.get('switchConnectionType') ]
     })
@@ -196,26 +190,13 @@ router.get('/keyboardpcbs', async function(req,res){
                 q = q.where('brand', 'like', '%' + req.query.brand + '%')
             }
 
-            // if (form.data.category_id && form.data.category_id != "0"
-            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
-            //     .where('categories.name', 'like', '%' + req.query.category + '%')
-            // }
             if (form.data.category_id && form.data.category_id != "0") {
                 q.where('category_id', '=', form.data.category_id)
             }
 
-            // if (form.data.min_cost) {
-            //     q = q.where('cost', '>=', req.query.min_cost)
-            // }
-
             if (form.data.max_cost) {
                 q = q.where('cost', '<=', req.query.max_cost);
             }
-
-            // if (form.data.keyboardpcb) {
-            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
-            //     .where('keyboardcase_id', 'in')
-            // }
 
             let keyboardpcbs = await q.fetch({
                 withRelated: ['category']
@@ -521,20 +502,11 @@ router.post('/keyboardstabilizer/create', checkIfAuthenticated, async(req,res)=>
 //////////////////////////////////UPDATE////////////////////////////////////////////////
 //update KeyboardCase by id
 router.get('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req, res) => {
-    const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
-        return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
-    })
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
+    const allKeyboardPcb = await dataLayer.getAllKeyboardPcb();
+    const allCategories = await dataLayer.getAllCategories();
     const productId = req.params.product_id;
-    const keebCases = await Keyboardcase.where({
-        'id': productId}).fetch({
-            require: true,
-            'withRelated': ['keyboardpcbs']
-        });
-        // console.log(productId);
-        // console.log(keebCases)
+    const keebCases = await dataLayer.getKeyboardCaseById(productId);
+        
 
         const productForm = createkeyboardCaseForm(allCategories, allKeyboardPcb);
         
@@ -615,18 +587,10 @@ router.post('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req
 
 //update KeyboardPcb by id
 router.get('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req, res) => {
-    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
-        return[keyboardcase.get('id'), keyboardcase.get('name') ]
-    })
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
+    const allKeyboardCase = await dataLayer.getAllKeyboardCase();
+    const allCategories = await dataLayer.getAllCategories();
     const productId = req.params.product_id;
-    const keebPcb = await Keyboardpcb.where({
-        'id': productId}).fetch({
-            require: true,
-            'withRelated': ['keyboardcases']
-        });
+    const keebPcb = await dataLayer.getKeyboardPcbById(productId);
 
         const productForm = createkeyboardPcbForm(allCategories, allKeyboardCase);
         
@@ -638,13 +602,20 @@ router.get('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req, 
         productForm.fields.quantity.value = keebPcb.get('quantity');
         productForm.fields.cost.value = keebPcb.get('cost');
         productForm.fields.description.value = keebPcb.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebPcb.get('image_url');
+
         //fetch all related keyboard cases
         let selectedKeyboardcases = await keebPcb.related('keyboardcases').pluck('id');
         productForm.fields.keyboardcase.value = selectedKeyboardcases;
 
         res.render('products/updatepcb', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardpcb':keebPcb.toJSON()
+            'keyboardpcb':keebPcb.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 
 })
@@ -703,14 +674,10 @@ router.post('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req,
 
 //update KeyboardPlate by id
 router.get('/keyboardplate/:product_id/update', checkIfAuthenticated, async (req, res) => {
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
+    const allCategories = await dataLayer.getAllCategories();
+    
     const productId = req.params.product_id;
-    const keebPlate = await Keyboardplate.where({
-        'id': productId}).fetch({
-            require: true
-        });
+    const keebPlate = await dataLayer.getKeyboardPlateById(productId);
 
         const productForm = createkeyboardPlateForm(allCategories);
         
@@ -722,10 +689,16 @@ router.get('/keyboardplate/:product_id/update', checkIfAuthenticated, async (req
         productForm.fields.quantity.value = keebPlate.get('quantity');
         productForm.fields.cost.value = keebPlate.get('cost');
         productForm.fields.description.value = keebPlate.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebPlate.get('image_url');
 
         res.render('products/updateplate', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardplate':keebPlate.toJSON()
+            'keyboardplate':keebPlate.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 
 })
@@ -762,10 +735,7 @@ router.post('/keyboardplate/:product_id/update', checkIfAuthenticated, async (re
 //update KeyboardSwitch by id
 router.get('/keyboardswitch/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
-    const keebSwitch = await Keyboardswitch.where({
-        'id': productId}).fetch({
-            require: true
-        });
+    const keebSwitch = await dataLayer.getKeyboardSwitchById(productId);
 
         const productForm = createkeyboardSwitchForm();
         
@@ -776,10 +746,17 @@ router.get('/keyboardswitch/:product_id/update', checkIfAuthenticated, async (re
         productForm.fields.quantity.value = keebSwitch.get('quantity');
         productForm.fields.cost.value = keebSwitch.get('cost');
         productForm.fields.description.value = keebSwitch.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebSwitch.get('image_url');
+
 
         res.render('products/updateswitch', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardswitch':keebSwitch.toJSON()
+            'keyboardswitch':keebSwitch.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 
 })
@@ -813,10 +790,7 @@ router.post('/keyboardswitch/:product_id/update', checkIfAuthenticated, async (r
 //update KeyboardKeycap by id
 router.get('/keyboardkeycap/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
-    const keebKeycap = await Keyboardkeycap.where({
-        'id': productId}).fetch({
-            require: true
-        });
+    const keebKeycap = await dataLayer.getKeyboardKeycapById(productId);
 
         const productForm = createkeyboardKeycapForm();
         
@@ -828,10 +802,16 @@ router.get('/keyboardkeycap/:product_id/update', checkIfAuthenticated, async (re
         productForm.fields.quantity.value = keebKeycap.get('quantity');
         productForm.fields.cost.value = keebKeycap.get('cost');
         productForm.fields.description.value = keebKeycap.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebKeycap.get('image_url');
 
         res.render('products/updatekeycap', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardkeycap':keebKeycap.toJSON()
+            'keyboardkeycap':keebKeycap.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 
 })
@@ -865,10 +845,7 @@ router.post('/keyboardkeycap/:product_id/update', checkIfAuthenticated, async (r
 //update KeyboardStabilizer by id
 router.get('/keyboardstabilizer/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
-    const keebStabilizer = await Keyboardstabilizer.where({
-        'id': productId}).fetch({
-            require: true
-        });
+    const keebStabilizer = await dataLayer.getKeyboardStabilizerById(productId);
 
         const productForm = createkeyboardStabilizerForm();
         
@@ -878,10 +855,16 @@ router.get('/keyboardstabilizer/:product_id/update', checkIfAuthenticated, async
         productForm.fields.quantity.value = keebStabilizer.get('quantity');
         productForm.fields.cost.value = keebStabilizer.get('cost');
         productForm.fields.description.value = keebStabilizer.get('description');
+        // 1 - set the image url in the product form
+        productForm.fields.image_url.value = keebStabilizer.get('image_url');
 
         res.render('products/updatestabilizer', {
             'form': productForm.toHTML(bootstrapField),
-            'keyboardstabilizer':keebStabilizer.toJSON()
+            'keyboardstabilizer':keebStabilizer.toJSON(),
+            // 2 - send to the HBS file the cloudinary information
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 
 })

@@ -1,27 +1,48 @@
-{{#extends 'base'}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/formstyles.css">
+    <title>The Keyboard Shop</title>
+</head>
+<body id="body">
+
+    {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Welcome Admin <br>Update {{keyboardcases.name}}</h1>
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    {{{form}}}
 
-    <!-- 1. shows the image if exists -->
-    <div>
-        {{#if keyboardcases.image_url}}
-            <img src="{{keyboardcases.image_url}}" id="uploaded_image" />
-        {{else}}
-            <img src="" style="display:none" id="uploaded_image" />
-        {{/if}}
+<div class="container" >
+    <h1 class="justify-content-center">Welcome Admin <br>Update {{keyboardcases.name}}</h1>
+    <div class="container justify-content-center " id="form">
+        <div id="formmethod">
+            <form method="POST" class="col col-sm-12 col-md-12 col-lg-6 ">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            {{{form}}}
+        </div>
+
+
+        <!-- 1. shows the image if exists -->
+        <div>
+            {{#if keyboardcases.image_url}}
+                <img src="{{keyboardcases.image_url}}" id="uploaded_image" />
+            {{else}}
+                <img src="" style="display:none" id="uploaded_image" />
+            {{/if}}
+        </div>
+
+        <div>
+            <a href="#" class="btn btn-primary my-2" id="upload_widget">Upload Image</a>
+        </div>
+
+        <input type="submit" value="Add Product" class="btn btn-primary my-3"/>
+        <a href="/products/catalog" class="btn btn-outline-primary">Cancel</a>
+        </form>
     </div>
+    
+</div>
 
-    <div>
-        <a href="#" class="btn btn-primary" id="upload_widget">Update Image</a>
-    </div>
-
-    <input type="submit" value="Update Product" class="btn btn-primary"/>
-    <a href="/products/catalog" class="btn btn-outline-primary">Cancel</a>
-</form>
 {{/block}}
 
 {{/extends}}
@@ -68,3 +89,6 @@ myWidget.open();
 }, false);
 </script>
 {{/block}}
+    
+</body>
+</html>
