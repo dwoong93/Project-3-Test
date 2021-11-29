@@ -5,7 +5,8 @@ const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlew
 const { bootstrapField, createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
     createkeyboardSwitchForm, createkeyboardKeycapForm,
-    createkeyboardStabilizerForm, createkeyboardCaseSearchForm} = require('../forms');
+    createkeyboardStabilizerForm, createkeyboardCaseSearchForm,
+    createkeyboardPcbSearchForm} = require('../forms');
 
 // #1 import in the Product model
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
@@ -52,6 +53,8 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 //     })
 
 // })
+
+
 // FILTER Cases
 router.get('/keyboardcases', async function(req,res){
     //get all categories
@@ -138,10 +141,97 @@ router.get('/keyboardcases', async function(req,res){
 
 })
 
+// FILTER PCB
+router.get('/keyboardpcbs', async function(req,res){
+    //get all categories
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    //create a fake cat that represents search all
+    allCategories.unshift([0,'----'])
+
+    // get all pcb
+    const allKeyboardCase = await (await Keyboardcase.fetchAll()).map(function(keyboardcase){
+        return[keyboardcase.get('id'), keyboardcase.get('name') ]
+    })
+    const allConnectionType = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+        return[keyboardpcb.get('id'), keyboardpcb.get('switchConnectionType') ]
+    })
+    allConnectionType.unshift([0,'----'])
 
 
+    //create search form
+    let searchForm = createkeyboardPcbSearchForm(allCategories, allKeyboardCase, allConnectionType);
+    let q = Keyboardpcb.collection();
 
-//Display keyboard Cases for Customer
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let keyboardpcbs = await q.fetch({
+                withRelated: ['category']
+        })
+            res.render('products/selectpcb', {
+                'keyboardpcbs': keyboardpcbs.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let keyboardpcbs = await q.fetch({
+                withRelated: ['category']
+        })
+            res.render('products/selectpcb', {
+                'keyboardpcbs': keyboardpcbs.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            if (form.data.name) {
+                q = q.where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if (form.data.switchConnectionType) {
+                q = q.where('switchConnectionType', 'like', '%' + req.query.switchConnectionType + '%')
+            }
+
+            if (form.data.brand) {
+                q = q.where('brand', 'like', '%' + req.query.brand + '%')
+            }
+
+            // if (form.data.category_id && form.data.category_id != "0"
+            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
+            //     .where('categories.name', 'like', '%' + req.query.category + '%')
+            // }
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            // if (form.data.min_cost) {
+            //     q = q.where('cost', '>=', req.query.min_cost)
+            // }
+
+            if (form.data.max_cost) {
+                q = q.where('cost', '<=', req.query.max_cost);
+            }
+
+            // if (form.data.keyboardpcb) {
+            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
+            //     .where('keyboardcase_id', 'in')
+            // }
+
+            let keyboardpcbs = await q.fetch({
+                withRelated: ['category']
+            })
+                res.render('products/selectpcb', {
+                    'keyboardpcbs': keyboardpcbs.toJSON(),
+                    'form': form.toHTML(bootstrapField)
+                })
+                
+        }
+    })
+
+})
+
+
+//Display keyboard products for Customer
 router.get('/customer/catalog', async function(req,res){
     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
     let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
@@ -161,6 +251,8 @@ router.get('/customer/catalog', async function(req,res){
     })
 
 })
+
+
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create keyboardCase
 router.get('/keyboardcases/create', checkIfAuthenticated, async (req, res) => {

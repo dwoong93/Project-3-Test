@@ -1,0 +1,38 @@
+#body{
+    justify-content: center;
+}
+#Card{
+    height:40rem;
+    width: 23rem;
+    border-radius: 10px;
+    margin-bottom: 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-self: center;
+}
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    height: 5px;
+    background: linear-gradient(transparent, rgb(84, 0, 139));
+    border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+    border-radius: 10rem;
+    background: transparent;
+}
+
+#cardContainer{
+    justify-content: center;
+}
+
+#searchForm{
+    justify-content: center;
+    
+}
+
+#nextButton{
+    justify-content:end;
+}

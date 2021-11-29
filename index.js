@@ -23,6 +23,7 @@ app.set("view engine", "hbs");
 
 // static folder
 app.use(express.static("public"));
+app.use("/bootstrap",express.static(__dirname+"/node_modules/bootstrap/dist"))
 
 
 // setup wax-on

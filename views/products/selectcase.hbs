@@ -1,37 +1,71 @@
-{{#extends 'base'}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <title>Keyboard Shop</title>
+</head>
+<body id="body">
+    {{#extends 'base'}}
 {{#block 'content'}}
-<h1>Shop Catalog</h1>
-<h3>Admin </h3>
-<a href="/products/catalog" class="btn btn-primary btn-sm">Select Pcb</a>
-
-    <div class="row align-items-center col-3">
+<div class="container">
+    <div>
+    <h1>Shop Cases</h1>
+    </div>
+    <div id="nextButton">
+        <a href="/products/catalog" class="btn btn-primary btn-sm" >Go to PCB Selection</a>
+    </div>
+    <div class="container lg-col-4 md-col-6 col-12" id="searchForm">
         <form method="GET">
             {{{form}}}
             <input type="submit" class="mb-3 mt-3 btn btn-primary" value="Search"/>
         </form>
     </div>
+    <div class="container " id="cardContainer">
+        <div class="row ">
+            {{!-- <link rel="stylesheet" href="/style/{{this}}"> --}}
+            {{#each keyboardcases}}
+            <div class=" col-lg-4 col-md-12 col-12">
+                <div class="card shadow-sm " id="Card"> 
+                    <img src="{{this.image_url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this.brand}}</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><h6>Form Factor: {{this.category.name}}</h6></li>
+                        <li class="list-group-item"><h6>Material: {{this.material}}</h6></li>
+                        <li class="list-group-item"><h6>Cost: {{this.cost}}</h6></li>
+                    </ul>
+                    <div class="mx-3">
+                        <p class="card-text">{{this.description}}</p>
+                    </div>
+                    <div class="card-body row">
+                        <div class="col">
+                            <a href="/products/keyboardcase/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                            <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                        <div class="col text-end mx-3">
+                            <h6 class="text-muted">Stock Count</h6>
+                            <h5>{{this.quantity}}</h5>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
 
-<div class="row ">
-    <div class="card" style="width: 18rem;">
-        {{#each keyboardcases}}
-    <img src="..." class="card-img-top " alt="...">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{this.name}}</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-    </ul>
-    <div class="card-body">
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-    </div>
-    {{/each}}
-    </div>
+
 </div>
-<table class="table">
+
+
+    
+
+{{!-- <table class="table">
 
     <thead>
         <tr>
@@ -99,13 +133,14 @@
         {{/each}}
     </tbody>
 
-
-
-
-
-    
-
-</table>
+</table> --}}
 
 {{/block}}
 {{/extends}}
+    
+</body>
+</html>
+
+
+
+

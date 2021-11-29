@@ -95,6 +95,7 @@ const createkeyboardCaseForm = (categories, keyboardpcb) => {
             }
         }),
         'image_url':fields.string({
+            required: true,
             widget: widgets.hidden()
         })
             
@@ -175,6 +176,7 @@ const createkeyboardPcbForm = (categories, keyboardcase) => {
         }
     }),
     'image_url':fields.string({
+        required: true,
         widget: widgets.hidden()
     })
 })
@@ -240,6 +242,7 @@ const createkeyboardPlateForm = (categories) => {
         }
     }),
     'image_url':fields.string({
+        required: true,
         widget: widgets.hidden()
     })
 })
@@ -298,6 +301,7 @@ const createkeyboardSwitchForm = () => {
         }
     }),
     'image_url':fields.string({
+        required: true,
         widget: widgets.hidden()
     })
 })
@@ -363,6 +367,7 @@ const createkeyboardKeycapForm = () => {
         }
     }),
     'image_url':fields.string({
+        required: true,
         widget: widgets.hidden()
     })
 })
@@ -413,6 +418,7 @@ const createkeyboardStabilizerForm = () => {
         }
     }),
     'image_url':fields.string({
+        required: true,
         widget: widgets.hidden()
     })
 })
@@ -583,7 +589,8 @@ const UpdateCustomerAccountForm = () => {
 }
 
 //Search Engine
-//create keyboard case form function
+
+//create keyboard case filter form function
 const createkeyboardCaseSearchForm = (categories, keyboardpcb) => {
     return forms.create({
     'name': fields.string({required: false,
@@ -661,6 +668,89 @@ const createkeyboardCaseSearchForm = (categories, keyboardpcb) => {
         
 })
 };
+
+//create keyboard pcb filter form function
+const createkeyboardPcbSearchForm = (categories, keyboardcase) => {
+    return forms.create({
+    'name': fields.string({required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'switchConnectionType': fields.string({
+        required: false,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices: {'Hotswap':'Hotswap', 'Solder':'Solder'},
+        cssClasses: {
+            label: ['form-label']
+        }
+        
+    }),
+    'category_id': fields.string({
+        label: 'Form Factor',
+        required: false,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices:categories
+        }),
+    // 'quantity': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     'validators':[validators.integer()]
+        
+    // }),
+    // 'keyboardKit': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     }
+    // }),
+    // 'keyboardcase': fields.string({
+    //     label: 'Compatible Cases',
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     widget: widgets.multipleSelect(),
+    //     choices: keyboardcase
+    // }),
+    'max_cost': fields.string({
+        label: 'Maximum Cost',
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    // 'description': fields.string({
+    //     required: false,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     }
+    // }),
+    // 'image_url':fields.string({
+    //     required: false,
+    //     widget: widgets.hidden()
+    // })
+})
+};
+
+
   
 module.exports = { 
     createkeyboardCaseForm, 
@@ -676,5 +766,6 @@ module.exports = {
     createCustomerLoginForm,
     UpdateCustomerAccountForm,
     createkeyboardCaseSearchForm,
+    createkeyboardPcbSearchForm,
     bootstrapField };
         
