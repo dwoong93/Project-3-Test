@@ -33,7 +33,7 @@ exports.up = function (db) {
         }
       }
     },
-    keyboardcase_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
@@ -47,7 +47,7 @@ exports.up = function (db) {
           mapping: 'id'
         }
     },
-    keyboardpcb_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
@@ -61,7 +61,7 @@ exports.up = function (db) {
           mapping: 'id'
         }
     },
-    keyboardplate_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
@@ -75,7 +75,7 @@ exports.up = function (db) {
           mapping: 'id'
         }
     },
-    keyboardstabilizer_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
@@ -89,7 +89,7 @@ exports.up = function (db) {
           mapping: 'id'
         }
     },
-    keyboardswitch_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
@@ -103,7 +103,7 @@ exports.up = function (db) {
           mapping: 'id'
         }
     },
-    keyboardkeycap_id: {
+    product_id: {
       type: 'int',
       notNull: true,
       unsigned: true,

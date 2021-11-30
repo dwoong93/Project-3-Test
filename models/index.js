@@ -57,24 +57,27 @@ const Customer = bookshelf.model('Customer',{
 
 const CartItem = bookshelf.model('CartItem', {
     tableName: 'cart_items',
-        keyboardcase() {
-            return this.belongsTo('Keyboardcase')
-        },
-        keyboardpcb() {
-            return this.belongsTo('Keyboardpcb')
-        },
-        keyboardplate() {
-            return this.belongsTo('Keyboardplate')
-        },
-        keyboardstabilizer() {
-            return this.belongsTo('Keyboardstabilizer')
-        },
-        keyboardswitch() {
-            return this.belongsTo('Keyboardswitch')
-        },
-        keyboardkeycap() {
-            return this.belongsTo('Keyboardkeycap')
-        }
+    product() {
+        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch')
+   }
+        // keyboardcase() {
+        //     return this.belongsTo('Keyboardcase')
+        // },
+        // keyboardpcb() {
+        //     return this.belongsTo('Keyboardpcb')
+        // },
+        // keyboardplate() {
+        //     return this.belongsTo('Keyboardplate')
+        // },
+        // keyboardstabilizer() {
+        //     return this.belongsTo('Keyboardstabilizer')
+        // },
+        // keyboardswitch() {
+        //     return this.belongsTo('Keyboardswitch')
+        // },
+        // keyboardkeycap() {
+        //     return this.belongsTo('Keyboardkeycap')
+        // }
 })
 
 
