@@ -17,7 +17,7 @@
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark mx-0">
           <div class="container-fluid">
             <a class="navbar-brand" href="/products/keyboardcases">
-              <div class="logo-image">
+              <div class="logo-image" id="navlogo">
                     <img src="https://res.cloudinary.com/dc9n2casu/image/upload/v1638271447/random%20images/tkbs-xs_hfzwdv.png" class="img-fluid max-height-40%">
               </div>
             </a>
@@ -113,11 +113,17 @@
     {{/block}}
 
     <div class="text-center color-primary bg-dark text-white">
-      <a href="https://discord.gg/5bUfDVTjHY" target="_blank" class="ml-3 btn btn-outline-white btn-success btn-sm">
+      {{!-- <a href="https://discord.gg/5bUfDVTjHY" target="_blank" class="ml-3 btn btn-outline-white btn-success btn-sm">
       Join our Discord!
-      </a><br>
-      <h7>This is a placeholder for the Footer</h7><br>
-      {{!-- <img src="https://artsy-media-uploads.s3.amazonaws.com/GP4I3qF9kYD-ZWf0UcRPmA%2Fpepe-infowars-settle-mag.jpg" class="img-responsive img-icon" alt="Join Our Discord Community!"> --}}
+      </a><br> --}}
+      <div>
+        <h7>Join Our Discord Server!</h7>
+        <a class="ml-3 btn btn-sm" id="discordlink" href="https://discord.gg/5bUfDVTjHY">
+          <div class="logo-image">
+            <img src="https://res.cloudinary.com/dc9n2casu/image/upload/v1638271447/random%20images/tkbs-xs_hfzwdv.png" class="img-fluid max-height-40%">
+          </div>
+        </a>
+      </div>
     </div>
     </div>
 

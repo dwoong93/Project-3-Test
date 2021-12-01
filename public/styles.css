@@ -38,3 +38,17 @@
 #nextButton{
     justify-content:end;
 }
+
+#discordlink{
+    background-color: rgb(75, 122, 211);
+    outline-color: rgb(206, 223, 255);
+}    
+
+#navlogo{
+    background-color:rgb(255, 166, 0);
+    border-radius: 12px;
+    padding-left: 4px;
+    
+    
+
+}
