@@ -34,28 +34,6 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 
 })
 
-// //Display Case
-// router.get('/keyboardcases', checkIfAuthenticated, async function(req,res){
-//     let keebCases = await Keyboardcase.collection().fetch({withRelated:['category']});
-//     let keebPcb = await Keyboardpcb.collection().fetch({withRelated:['category']});
-//     let keebPlate = await Keyboardplate.collection().fetch({withRelated:['category']});
-//     let keebSwitch = await Keyboardswitch.collection().fetch();
-//     let keebKeycap = await Keyboardkeycap.collection().fetch();
-//     let keebStabilizer = await Keyboardstabilizer.collection().fetch();
-
-//     res.render('products/selectcase',{
-//         'keyboardcases':keebCases.toJSON(),
-//         'keyboardpcb':keebPcb.toJSON(),
-//         'keyboardplate':keebPlate.toJSON(),
-//         'keyboardswitch':keebSwitch.toJSON(),
-//         'keyboardkeycap':keebKeycap.toJSON(),
-//         'keyboardstabilizer':keebStabilizer.toJSON()
-
-//     })
-
-// })
-
-
 // FILTER Cases
 router.get('/keyboardcases', async function(req,res){
     //get all categories
@@ -287,7 +265,7 @@ router.post('/keyboardcases/create', checkIfAuthenticated, async(req,res)=>{
 
             
             
-            res.redirect('/products/catalog');
+            res.redirect('/products/keyboardcases');
         },
         'error': async (form) => {
             res.render('products/createpcb', {
@@ -339,7 +317,7 @@ router.post('/keyboardpcb/create', checkIfAuthenticated, async(req,res)=>{
                 await product.keyboardcases().attach(form.data.keyboardcase.split(','))
             }
             console.log(form.data.keyboardcase);
-            res.redirect('/products/catalog');
+            res.redirect('/products/keyboardpcbs');
         },
         'error': async (form) => {
             res.render('products/createpcb', {
@@ -573,7 +551,7 @@ router.post('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req
 
 
             
-            res.redirect('/products/catalog');
+            res.redirect('/products/keyboardcases');
         },
         'error':async (form) =>{
             res.render('products/updatecase',{
@@ -651,13 +629,13 @@ router.post('/keyboardpcb/:product_id/update', checkIfAuthenticated, async (req,
             //remove pcbs not selected anymore
             let toRemove = id=> keyboardcaseIds.includes(id) === false;
             await keebPcb.keyboardcases().detach(toRemove);
-            // await keebCases.keyboardpcbs().detach(id=>keyboardpcbIds.includes(id) === false);
+            
             //add in pcbs that are selected
             await keebPcb.keyboardcases().attach(keyboardcaseIds);
 
 
 
-            res.redirect('/products/catalog');
+            res.redirect('/products/keyboardpcbs');
         },
 
 

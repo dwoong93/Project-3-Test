@@ -1,4 +1,142 @@
-{{#extends 'base'}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <title>Keyboard Shop</title>
+</head>
+<body id="body">
+    {{#extends 'base'}}
+{{#block 'content'}}
+<div class="container">
+    <div>
+    <h1>Shop PCBs</h1>
+    </div>
+    <div id="nextButton">
+        <a href="/products/keyboardcases" class="btn btn-primary btn-sm" >Back to Case Selection</a>
+        <a href="/products/keyboardpcbs" class="btn btn-primary btn-sm" >Go to Plate Selection</a>
+    </div>
+    <div class="container lg-col-4 md-col-6 col-12" id="searchForm">
+        <form method="GET">
+            {{{form}}}
+            <input type="submit" class="mb-3 mt-3 btn btn-primary" value="Search"/>
+        </form>
+    </div>
+    <div class="container " id="cardContainer">
+        <div class="row justify-content-center">
+            {{!-- <link rel="stylesheet" href="/style/{{this}}"> --}}
+            {{#each keyboardpcbs}}
+            <div class=" col-lg-4 col-md-12 col-12">
+                <div class="card shadow-sm " id="Card"> 
+                    <img src="{{this.image_url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this.brand}}</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><h6>Form Factor: {{this.category.name}}</h6></li>
+                        <li class="list-group-item"><h6>Switch Connection Type: {{this.switchConnectionType}}</h6></li>
+                        <li class="list-group-item"><h6>Cost: {{this.cost}}</h6></li>
+                    </ul>
+                    <div class="mx-3">
+                        <p class="card-text">{{this.description}}</p>
+                    </div>
+                    <div class="card-body row">
+                        <div class="col">
+                            <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to cart</a>
+                            <a href="/products/keyboardpcb/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                            <a href="/products/keyboardpcb/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                        <div class="col text-end mx-3">
+                            <h6 class="text-muted">Stock Count</h6>
+                            <h5>{{this.quantity}}</h5>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+
+</div>
+
+{{/block}}
+{{/extends}}
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{!-- {{#extends 'base'}}
 {{#block 'content'}}
 <h1>Shop PCBs</h1>
 <h3>Admin </h3>
@@ -10,106 +148,107 @@
             <input type="submit" class="mb-3 mt-3 btn btn-primary" value="Search"/>
         </form>
     </div>
-<div class="container">
-    <div class="row ">
-        {{#each keyboardpcb}}
-        <div class="col-4 my-3">
-            <div class="card shadow-sm" id="caseCard" style="height-10px">
-                <img src="{{this.image_url}}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.name}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{this.brand}}</h6>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><h6>Form Factor: {{this.category.name}}</h6></li>
-                    <li class="list-group-item"><h6>Material: {{this.material}}</h6></li>
-                    <li class="list-group-item"><h6>Cost: {{this.cost}}</h6></li>
-                </ul>
-                <div class="mx-3">
-                    <p class="card-text">{{this.description}}</p>
-                </div>
-                <div class="card-body row">
-                    <div class="col">
-                        <a href="/products/keyboardcase/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-                        <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+
+    <div class="container">
+        <div class="row ">
+            {{#each keyboardpcb}}
+            <div class="col-4 my-3">
+                <div class="card shadow-sm" id="caseCard" style="height-10px">
+                    <img src="{{this.image_url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this.brand}}</h6>
                     </div>
-                    <div class="col text-end mx-3">
-                        <h6 class="text-muted">Stock Count</h6>
-                        <h5>{{this.quantity}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><h6>Form Factor: {{this.category.name}}</h6></li>
+                        <li class="list-group-item"><h6>Material: {{this.switchConnectionType}</h6></li>
+                        <li class="list-group-item"><h6>Cost: {{this.cost}}</h6></li>
+                    </ul>
+                    <div class="mx-3">
+                        <p class="card-text">{{this.description}}</p>
                     </div>
+                    <div class="card-body row">
+                        <div class="col">
+                            <a href="/products/keyboardcase/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                            <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                        <div class="col text-end mx-3">
+                            <h6 class="text-muted">Stock Count</h6>
+                            <h5>{{this.quantity}}</h5>
+                        </div>
+                    </div>
+                    
                 </div>
-                
             </div>
+            {{/each}}
         </div>
-        {{/each}}
     </div>
-</div>
-<table class="table">
+    <table class="table">
 
-    <thead>
-        <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Brand</th>
-        <th>Form Factor</th>
-        <th>Keycap Profile</th>
-        <th>Material</th>
-        <th>Type</th>
-        <th>Connection Type</th>
-        <th>Keyboard Kit</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Stock Count</th>
-        <th></th>
-        </tr>
-    </thead>
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Form Factor</th>
+            <th>Keycap Profile</th>
+            <th>Material</th>
+            <th>Type</th>
+            <th>Connection Type</th>
+            <th>Keyboard Kit</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock Count</th>
+            <th></th>
+            </tr>
+        </thead>
 
-    <tbody>
-        {{#each keyboardpcbs}}
-        <tr>
-            <td>
-                {{this.id}}
-            </td>
-            <td>
-                {{this.name}}
-            </td>
-            <td>
-                {{this.brand}}
-            </td>
-            <td>
-                {{this.category.name}}
-            </td>
-            <td>
-                NA
-            </td>
-            <td>
-                NA
-            </td>
-            <td>
-                NA
-            </td>
-            <td>
-                {{this.switchConnectionType}}
-            </td>
-            <td>
-                {{this.keyboardKit}}
-            </td>
-            <td>
-                {{this.description}}
-            </td>
-            <td>
-                {{this.cost}}
-            </td>
-            <td>
-                {{this.quantity}}
-            </td>
-            <td>
-                <a href="/products/keyboardpcb/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-                <a href="/products/keyboardpcb/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-
+        <tbody>
+            {{#each keyboardpcbs}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    {{this.name}}
+                </td>
+                <td>
+                    {{this.brand}}
+                </td>
+                <td>
+                    {{this.category.name}}
+                </td>
+                <td>
+                    NA
+                </td>
+                <td>
+                    NA
+                </td>
+                <td>
+                    NA
+                </td>
+                <td>
+                    {{this.switchConnectionType}}
+                </td>
+                <td>
+                    {{this.keyboardKit}}
+                </td>
+                <td>
+                    {{this.description}}
+                </td>
+                <td>
+                    {{this.cost}}
+                </td>
+                <td>
+                    {{this.quantity}}
+                </td>
+                <td>
+                    <a href="/products/keyboardpcb/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                    <a href="/products/keyboardpcb/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
 {{/block}}
-{{/extends}}
+
+{{/extends}} --}}
