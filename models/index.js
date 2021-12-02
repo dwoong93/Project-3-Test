@@ -58,7 +58,7 @@ const Customer = bookshelf.model('Customer',{
 const CartItem = bookshelf.model('CartItem', {
     tableName: 'cart_items',
     product() {
-        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch')
+        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch', Keyboardkeycap)
    }
         // keyboardcase() {
         //     return this.belongsTo('Keyboardcase')
@@ -100,5 +100,5 @@ module.exports = {
     'Category': Category,
     'User': User,
     'Customer': Customer,
-    'Cartitem':CartItem
+    'CartItem':CartItem
 }

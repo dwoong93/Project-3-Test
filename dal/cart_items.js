@@ -17,7 +17,8 @@ const getCart = async (customerId) => {
 
 //check if a specific product exists in a user's shopping cart.If it does, it will return the cart item
 const getCartItemByCustomerAndProduct = async (userId, productId) => {
-    return await CartItem.where({
+    
+    return await CartItem.where({ 
         'user_id': userId,
         'product_id': productId
     }).fetch({
@@ -25,7 +26,7 @@ const getCartItemByCustomerAndProduct = async (userId, productId) => {
         withRelated: ['keyboardcase', 'keyboardcase.category',
                     'keyboardpcb', 'keyboardpcb.category',
                     'keyboardplate', 'keyboardplate.category',
-                    'keyboardstabilizer', 'keyboardcase.switch',
+                    'keyboardstabilizer', 'keyboardswitch',
                     'keyboardkeycap']
     });
 }
@@ -54,9 +55,11 @@ async function removeFromCart(userId, productId) {
 //update quantity of a given cart item
 async function updateQuantity(userId, productId, newQuantity) {
     let cartItem = await getCartItemByCustomerAndProduct(userId, productId);
+    console.log(cartItem)
     if (cartItem) {
         cartItem.set('quantity', newQuantity);
         cartItem.save();
+        
         return true;
     }
     return false;
