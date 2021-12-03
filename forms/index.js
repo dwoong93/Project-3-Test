@@ -23,6 +23,97 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
+
+//create product form function
+const createproductForm = (categories, types) => {
+    return forms.create({
+    'name': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'type_id': fields.string({
+        label: 'Product Type',
+        required: true,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices:types
+
+        }),
+    'material': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'category_id': fields.string({
+        label: 'Form Factor',
+        required: true,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices:categories
+
+        }),
+    'keyboardKit': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    // 'keyboardpcb': fields.string({
+    //     label: 'Compatible PCB',
+    //     required: true,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     widget: widgets.multipleSelect(),
+    //     choices: keyboardpcb
+    // }),
+    'quantity': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+        
+    }),
+    'cost': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        // 'validators':[validators.integer()]
+    }),
+    'description': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    // 'image_url':fields.string({
+    //     required: true,
+    //     widget: widgets.hidden()
+    // })
+        
+})
+};
+
+
+
+
 //create keyboard case form function
 const createkeyboardCaseForm = (categories, keyboardpcb) => {
         return forms.create({
@@ -752,7 +843,8 @@ const createkeyboardPcbSearchForm = (categories, keyboardcase) => {
 
 
   
-module.exports = { 
+module.exports = {
+    createproductForm,
     createkeyboardCaseForm, 
     createkeyboardPcbForm, 
     createkeyboardPlateForm, 

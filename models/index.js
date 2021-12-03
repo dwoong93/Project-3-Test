@@ -1,5 +1,19 @@
 const bookshelf = require('../bookshelf')
 
+const Product = bookshelf.model('Product', {
+    tableName:'products',
+    types(){
+        return this.belongsTo('Type')
+    },
+    });
+
+const Types = bookshelf.model('Types', {
+    tableName:'types',
+    products(){
+        return this.hasMany('Product')
+    },
+    });
+
 const Keyboardcase = bookshelf.model('Keyboardcase', {
     tableName:'keyboardCase',
     category(){
@@ -58,7 +72,7 @@ const Customer = bookshelf.model('Customer',{
 const CartItem = bookshelf.model('CartItem', {
     tableName: 'cart_items',
     product() {
-        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch', Keyboardkeycap)
+        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch', 'Keyboardkeycap')
    }
         // keyboardcase() {
         //     return this.belongsTo('Keyboardcase')
@@ -91,6 +105,8 @@ const CartItem = bookshelf.model('CartItem', {
 
 
 module.exports = {
+    'Product':Product,
+    'Types':Types,
     'Keyboardcase':Keyboardcase,
     'Keyboardpcb':Keyboardpcb,
     'Keyboardplate':Keyboardplate,

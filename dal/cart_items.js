@@ -3,13 +3,17 @@ const { CartItem } = require('../models');
 
 
 //get the items of a user's shopping cart
-const getCart = async (customerId) => {
+const getCart = async (userId) => {
     return await CartItem.collection()
     .where({
-    'customer_id': customerId
+    'user_id': userId
     }).fetch({
     require: false,
-    withRelated: ['product', 'product.category']
+    withRelated: ['keyboardcase', 'keyboardcase.category',
+    'keyboardpcb', 'keyboardpcb.category',
+    'keyboardplate', 'keyboardplate.category',
+    'keyboardstabilizer', 'keyboardswitch',
+    'keyboardkeycap'] 
 });
 
         
@@ -32,9 +36,9 @@ const getCartItemByCustomerAndProduct = async (userId, productId) => {
 }
  
 //create cart item
-async function createCartItem(userId, productId, quantity) {
+async function createCartItem(customerId, productId, quantity) {
     let cartItem = new CartItem({
-    'user_id': userId,
+    'customer_id': customerId,
     'product_id': productId,
     'quantity': quantity
     })
@@ -43,8 +47,8 @@ async function createCartItem(userId, productId, quantity) {
     }
 
 //remove cart item
-async function removeFromCart(userId, productId) {
-    let cartItem = await getCartItemByCustomerAndProduct(userId, productId);
+async function removeFromCart(customerId, productId) {
+    let cartItem = await getCartItemByCustomerAndProduct(customerId, productId);
     if (cartItem) {
         await cartItem.destroy();
         return true;
@@ -53,8 +57,8 @@ async function removeFromCart(userId, productId) {
 }
 
 //update quantity of a given cart item
-async function updateQuantity(userId, productId, newQuantity) {
-    let cartItem = await getCartItemByCustomerAndProduct(userId, productId);
+async function updateQuantity(customerId, productId, newQuantity) {
+    let cartItem = await getCartItemByCustomerAndProduct(customerId, productId, keyboardpcbId);
     console.log(cartItem)
     if (cartItem) {
         cartItem.set('quantity', newQuantity);

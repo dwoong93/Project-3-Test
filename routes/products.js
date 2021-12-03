@@ -3,14 +3,14 @@ const router = express.Router();
 const dataLayer = require('../dal/products')
 const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlewares');
 // import in  Forms
-const { bootstrapField, createkeyboardCaseForm, 
+const { bootstrapField, createproductForm ,createkeyboardCaseForm, 
     createkeyboardPcbForm, createkeyboardPlateForm, 
     createkeyboardSwitchForm, createkeyboardKeycapForm,
     createkeyboardStabilizerForm, createkeyboardCaseSearchForm,
     createkeyboardPcbSearchForm} = require('../forms');
 
 // #1 import in the Product model
-const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category} = require('../models')
+const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types} = require('../models')
 
 
 //Display keyboard Cases for Admin
@@ -213,6 +213,77 @@ router.get('/customer/catalog', async function(req,res){
 
 
 //////////////////////////////////CREATE///////////////////////////////////////////
+// Create Product
+router.get('/product/create', checkIfAuthenticated, async (req, res) => {
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+
+    const allTypes = await Types.fetchAll().map(function(types){
+        return [types.get('id'), types.get('name')]
+    })
+    // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+    //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    // })
+    const productForm = createproductForm(allCategories, allTypes);
+
+    res.render('products/createproduct', {
+        'form': productForm.toHTML(bootstrapField),
+        // cloudinaryName: process.env.CLOUDINARY_NAME,
+        // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+        })
+        
+})
+// post created Product
+router.post('/product/create', checkIfAuthenticated, async(req,res)=>{
+    const allCategories = await Category.fetchAll().map(function(category){
+        return [category.get('id'), category.get('name')]
+    })
+    const allTypes = await Types.fetchAll().map(function(types){
+        return [types.get('id'), types.get('name')]
+    })
+    // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
+    //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
+    // })
+    const productForm = createproductForm(allCategories, allTypes);
+    productForm.handle(req, {
+        'success': async (form) => {
+
+            const product = new Product();
+            product.set('name', form.data.name);
+            product.set('brand', form.data.brand);
+            product.set('material', form.data.material);
+            product.set('category_id', form.data.category_id);
+            product.set('type_id', form.data.type_id);
+            product.set('keyboardKit', form.data.keyboardKit);
+            product.set('quantity', form.data.quantity);
+            product.set('cost', (parseFloat(form.data.cost)));
+            product.set('description', form.data.description);
+            
+            // product.set('image_url', form.data.image_url)
+            await product.save();
+             //check it user has selected compatible pcb
+             
+            // if (form.data.keyboardpcb) {
+            //     await product.keyboardpcbs().attach(form.data.keyboardpcb.split(','))
+            // }
+
+            req.flash("success_messages", `New Product
+            ${product.get('name')} has been created`)
+
+            
+            
+            res.redirect('/products/keyboardcases');
+        },
+        'error': async (form) => {
+            res.render('products/createproduct', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
 // Create keyboardCase
 router.get('/keyboardcases/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
