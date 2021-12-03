@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
 })
 
 //Customer registration
-router.get('/customer/register', (req,res)=>{
+router.get('/customer/register', checkIfCustomerAuthenticated, (req,res)=>{
     const registerForm = createCustomerRegistrationForm();
     res.render('users/customerregister', {
         'form': registerForm.toHTML(bootstrapField),

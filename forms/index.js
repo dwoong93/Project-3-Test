@@ -25,7 +25,7 @@ var bootstrapField = function (name, object) {
 
 
 //create product form function
-const createproductForm = (categories, types) => {
+const createproductForm = (categories, types, subtypes) => {
     return forms.create({
     'name': fields.string({required: true,
         errorAfterField: true,
@@ -44,9 +44,15 @@ const createproductForm = (categories, types) => {
         required: true,
         errorAfterField: true,
         widget: widgets.select(),
-        choices:types
-
-        }),
+        choices: types
+    }),
+    'subtype_id': fields.string({
+        label: 'Product Subtype',
+        required: true,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices: subtypes
+    }),
     'material': fields.string({
         required: true,
         errorAfterField: true,

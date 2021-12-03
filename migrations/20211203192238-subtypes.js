@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('types', {
+  return db.createTable('subtypes', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -29,7 +29,11 @@ exports.up = function (db) {
   })
 };
 exports.down = function (db) {
-  return db.dropTable('types');
+  return db.dropTable('subtypes');
+};
+
+exports._meta = {
+  "version": 1
 };
 
 exports._meta = {

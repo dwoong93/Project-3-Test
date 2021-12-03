@@ -10,7 +10,7 @@ const { bootstrapField, createproductForm ,createkeyboardCaseForm,
     createkeyboardPcbSearchForm} = require('../forms');
 
 // #1 import in the Product model
-const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types} = require('../models')
+const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes} = require('../models')
 
 
 //Display keyboard Cases for Admin
@@ -218,14 +218,16 @@ router.get('/product/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
-
     const allTypes = await Types.fetchAll().map(function(types){
         return [types.get('id'), types.get('name')]
+    })
+    const allSubTypes = await Subtypes.fetchAll().map(function(subtypes){
+        return [subtypes.get('id'), subtypes.get('name')]
     })
     // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
     //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     // })
-    const productForm = createproductForm(allCategories, allTypes);
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
 
     res.render('products/createproduct', {
         'form': productForm.toHTML(bootstrapField),
@@ -236,17 +238,20 @@ router.get('/product/create', checkIfAuthenticated, async (req, res) => {
         
 })
 // post created Product
-router.post('/product/create', checkIfAuthenticated, async(req,res)=>{
+router.post('/product/create', async(req,res)=>{
     const allCategories = await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]
     })
     const allTypes = await Types.fetchAll().map(function(types){
         return [types.get('id'), types.get('name')]
     })
+    const allSubTypes = await Subtypes.fetchAll().map(function(subtypes){
+        return [subtypes.get('id'), subtypes.get('name')]
+    })
     // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
     //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     // })
-    const productForm = createproductForm(allCategories, allTypes);
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
     productForm.handle(req, {
         'success': async (form) => {
 
@@ -256,6 +261,7 @@ router.post('/product/create', checkIfAuthenticated, async(req,res)=>{
             product.set('material', form.data.material);
             product.set('category_id', form.data.category_id);
             product.set('type_id', form.data.type_id);
+            product.set('subtype_id', form.data.subtype_id);
             product.set('keyboardKit', form.data.keyboardKit);
             product.set('quantity', form.data.quantity);
             product.set('cost', (parseFloat(form.data.cost)));

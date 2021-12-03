@@ -14,7 +14,7 @@ const checkIfCustomerAuthenticated = (req, res, next) => {
     } 
     else {
         req.flash("error_messages", "You need to Log in to access this page");
-        res.redirect('/users/customer/login');
+        res.redirect('users/customer/login');
     }
 }
 

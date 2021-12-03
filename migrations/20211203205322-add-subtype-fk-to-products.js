@@ -16,13 +16,13 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.addColumn(
-    'products', 'types_id', {
+    'products', 'subtype_id', {
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'products_types_fk',
-        table: 'types',
+        name: 'products_subtype_fk',
+        table: 'categories',
         rules: {
           onDelete: 'cascade',
           onUpdate: 'restrict'
@@ -35,8 +35,8 @@ exports.up = function(db) {
 
 exports.down = function(db) {
   return db.removeForeignKey(
-    'products', 'products_types_fk',function(){
-    db.removeColumn('products','types_id')
+    'products', 'products_subtype_fk',function(){
+    db.removeColumn('products','subtype_id')
     }
   )
 };

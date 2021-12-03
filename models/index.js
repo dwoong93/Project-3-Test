@@ -2,13 +2,23 @@ const bookshelf = require('../bookshelf')
 
 const Product = bookshelf.model('Product', {
     tableName:'products',
-    types(){
+    types(){//if runs into error, try type
         return this.belongsTo('Type')
+    },
+    subtypes(){//if runs into error, try subtype
+        return this.belongsTo('Subtype')
     },
     });
 
 const Types = bookshelf.model('Types', {
     tableName:'types',
+    products(){
+        return this.hasMany('Product')
+    },
+    });
+
+const Subtypes = bookshelf.model('Subtypes', {
+    tableName:'subtypes',
     products(){
         return this.hasMany('Product')
     },
@@ -107,6 +117,7 @@ const CartItem = bookshelf.model('CartItem', {
 module.exports = {
     'Product':Product,
     'Types':Types,
+    'Subtypes':Subtypes,
     'Keyboardcase':Keyboardcase,
     'Keyboardpcb':Keyboardpcb,
     'Keyboardplate':Keyboardplate,
