@@ -76,7 +76,7 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
     //     }
     // }),
     'keyboardkits': fields.string({
-        label: 'Compatible PCB',
+        label: 'Compatible PCB (Ctrl + Click to select or deselect multiple kits)',
         required: true,
         errorAfterField: true,
         cssClasses: {
