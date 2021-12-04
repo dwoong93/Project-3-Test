@@ -25,7 +25,7 @@ var bootstrapField = function (name, object) {
 
 
 //create product form function
-const createproductForm = (categories, types, subtypes) => {
+const createproductForm = (categories, types, subtypes, keyboardkits) => {
     return forms.create({
     'name': fields.string({required: true,
         errorAfterField: true,
@@ -68,23 +68,23 @@ const createproductForm = (categories, types, subtypes) => {
         choices:categories
 
         }),
-    'keyboardKit': fields.string({
-        required: false,
-        errorAfterField: true,
-        cssClasses: {
-            label: ['form-label']
-        }
-    }),
-    // 'keyboardpcb': fields.string({
-    //     label: 'Compatible PCB',
-    //     required: true,
+    // 'keyboardKit': fields.string({
+    //     required: false,
     //     errorAfterField: true,
     //     cssClasses: {
     //         label: ['form-label']
-    //     },
-    //     widget: widgets.multipleSelect(),
-    //     choices: keyboardpcb
+    //     }
     // }),
+    'keyboardkits': fields.string({
+        label: 'Compatible PCB',
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        widget: widgets.multipleSelect(),
+        choices: keyboardkits
+    }),
     'quantity': fields.string({
         required: true,
         errorAfterField: true,

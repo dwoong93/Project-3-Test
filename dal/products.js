@@ -1,5 +1,5 @@
 // #1 import in the Product model
-const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Product} = require('../models')
+const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Product, Keyboardkit} = require('../models')
 
 const getAllCategories = async ()=>{
     return await Category.fetchAll().map(function(category){
@@ -21,6 +21,14 @@ const getAllSubtypes = async ()=>{
     })
 
 }
+
+const getAllKeyboardKits = async ()=>{
+    return await (await Keyboardkit.fetchAll()).map(function(keyboardkit){
+        return[keyboardkit.get('id'), keyboardkit.get('name') ]
+    })
+
+}
+
 
 
 const getAllKeyboardPcb = async ()=>{
@@ -113,7 +121,7 @@ const getKeyboardKeycapById = async(productId) => {
 
 
 module.exports = {
-    getAllCategories, getAllTypes, getAllSubtypes, getAllKeyboardCase, getAllKeyboardPcb, getKeyboardCaseById, 
+    getAllCategories, getAllTypes, getAllSubtypes, getAllKeyboardKits,getAllKeyboardCase, getAllKeyboardPcb, getKeyboardCaseById, 
     getKeyboardPcbById, getKeyboardPlateById, getKeyboardStabilizerById, 
     getKeyboardSwitchById, getKeyboardKeycapById, getProductById
     }

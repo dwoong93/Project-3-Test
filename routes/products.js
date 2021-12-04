@@ -10,7 +10,7 @@ const { bootstrapField, createproductForm ,createkeyboardCaseForm,
     createkeyboardPcbSearchForm} = require('../forms');
 
 // #1 import in the Product model
-const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes} = require('../models')
+const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Keyboardkit} = require('../models')
 
 
 //Display keyboard Cases for Admin
@@ -218,10 +218,8 @@ router.get('/product/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await dataLayer.getAllCategories();
     const allTypes = await dataLayer.getAllTypes();
     const allSubTypes = await dataLayer.getAllSubtypes();
-    // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
-    //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
-    // })
-    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes,allKeyboardKits);
 
     res.render('products/createproduct', {
         'form': productForm.toHTML(bootstrapField),
@@ -236,10 +234,8 @@ router.post('/product/create', async(req,res)=>{
     const allCategories = await dataLayer.getAllCategories();
     const allTypes = await dataLayer.getAllTypes();
     const allSubTypes = await dataLayer.getAllSubtypes();
-    // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
-    //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
-    // })
-    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes, allKeyboardKits);
     productForm.handle(req, {
         'success': async (form) => {
 
@@ -259,9 +255,9 @@ router.post('/product/create', async(req,res)=>{
             await product.save();
              //check it user has selected compatible pcb
              
-            // if (form.data.keyboardpcb) {
-            //     await product.keyboardpcbs().attach(form.data.keyboardpcb.split(','))
-            // }
+            if (form.data.keyboardkits) {
+                await product.keyboardkits().attach(form.data.keyboardkits.split(','))
+            }
 
             req.flash("success_messages", `New Product
             ${product.get('name')} has been created`)

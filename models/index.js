@@ -8,6 +8,9 @@ const Product = bookshelf.model('Product', {
     subtypes(){//if runs into error, try subtype
         return this.belongsTo('Subtype')
     },
+    keyboardkits(){
+        return this.belongsToMany('Keyboardkit')
+    }
     });
 
 const Types = bookshelf.model('Types', {
@@ -24,6 +27,60 @@ const Subtypes = bookshelf.model('Subtypes', {
     },
     });
 
+const Keyboardkit = bookshelf.model('Keyboardkit', {
+    tableName:'keyboardkits',
+    products(){
+        return this.belongsToMany('Product')
+    }
+    });
+
+const Category = bookshelf.model('Category', {
+    tableName:'categories',
+    keyboardcases(){
+        return this.hasMany('Keyboardcase')
+    },
+    keyboardpcbs(){
+        return this.hasMany('Keyboardpcb')
+    },
+    keyboardplates(){
+        return this.hasMany('Keyboardplate')
+    },
+    });
+const User = bookshelf.model('User',{
+    tableName: 'users'
+    });
+const Customer = bookshelf.model('Customer',{
+    tableName: 'customers'
+    })
+
+const CartItem = bookshelf.model('CartItem', {
+    tableName: 'cart_items',
+    product() {
+        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch', 'Keyboardkeycap')
+    }
+        // keyboardcase() {
+        //     return this.belongsTo('Keyboardcase')
+        // },
+        // keyboardpcb() {
+        //     return this.belongsTo('Keyboardpcb')
+        // },
+        // keyboardplate() {
+        //     return this.belongsTo('Keyboardplate')
+        // },
+        // keyboardstabilizer() {
+        //     return this.belongsTo('Keyboardstabilizer')
+        // },
+        // keyboardswitch() {
+        //     return this.belongsTo('Keyboardswitch')
+        // },
+        // keyboardkeycap() {
+        //     return this.belongsTo('Keyboardkeycap')
+        // }
+})
+
+
+
+//to be unused 
 const Keyboardcase = bookshelf.model('Keyboardcase', {
     tableName:'keyboardCase',
     category(){
@@ -60,49 +117,7 @@ const Keyboardkeycap = bookshelf.model('Keyboardkeycap', {
 const Keyboardstabilizer = bookshelf.model('Keyboardstabilizer', {
     tableName:'keyboardStabilizer'
     });
-const Category = bookshelf.model('Category', {
-    tableName:'categories',
-    keyboardcases(){
-        return this.hasMany('Keyboardcase')
-    },
-    keyboardpcbs(){
-        return this.hasMany('Keyboardpcb')
-    },
-    keyboardplates(){
-        return this.hasMany('Keyboardplate')
-    },
-    });
-const User = bookshelf.model('User',{
-    tableName: 'users'
-    });
-const Customer = bookshelf.model('Customer',{
-    tableName: 'customers'
-    })
 
-const CartItem = bookshelf.model('CartItem', {
-    tableName: 'cart_items',
-    product() {
-        return this.belongsTo('Keyboardcase','Keyboardpcb', 'Keyboardplate', 'Keyboardstabilizer', 'Keyboardswitch', 'Keyboardswitch', 'Keyboardkeycap')
-   }
-        // keyboardcase() {
-        //     return this.belongsTo('Keyboardcase')
-        // },
-        // keyboardpcb() {
-        //     return this.belongsTo('Keyboardpcb')
-        // },
-        // keyboardplate() {
-        //     return this.belongsTo('Keyboardplate')
-        // },
-        // keyboardstabilizer() {
-        //     return this.belongsTo('Keyboardstabilizer')
-        // },
-        // keyboardswitch() {
-        //     return this.belongsTo('Keyboardswitch')
-        // },
-        // keyboardkeycap() {
-        //     return this.belongsTo('Keyboardkeycap')
-        // }
-})
 
 
 
@@ -118,6 +133,7 @@ module.exports = {
     'Product':Product,
     'Types':Types,
     'Subtypes':Subtypes,
+    'Keyboardkit': Keyboardkit,
     'Keyboardcase':Keyboardcase,
     'Keyboardpcb':Keyboardpcb,
     'Keyboardplate':Keyboardplate,
