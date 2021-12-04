@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/formstyles.css">
+    <title>The Keyboard Shop</title>
+</head>
+<body id="body">
+
+    {{#extends 'base'}}
+
+{{#block 'content'}}
+
+<div class="container" >
+    <h1 class="justify-content-center">Welcome Admin <br>Delete Product : {{products.name}}</h1>
+    <div class="container justify-content-center " id="form">
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+        <div class="alert alert-danger">
+        <p>Are you sure you want to delete the product?</p>
+        <input type="submit" class="btn btn-danger" value="Yes"/>
+        <a href="/products/keyboardcases" class="btn btn-success">No</a>
+        </div>
+        </form>
+    </div>
+    
+</div>
+
+{{/block}}
+
+{{/extends}}
+   
+</body>
+</html>

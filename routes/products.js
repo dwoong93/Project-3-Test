@@ -215,15 +215,9 @@ router.get('/customer/catalog', async function(req,res){
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create Product
 router.get('/product/create', checkIfAuthenticated, async (req, res) => {
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
-    const allTypes = await Types.fetchAll().map(function(types){
-        return [types.get('id'), types.get('name')]
-    })
-    const allSubTypes = await Subtypes.fetchAll().map(function(subtypes){
-        return [subtypes.get('id'), subtypes.get('name')]
-    })
+    const allCategories = await dataLayer.getAllCategories();
+    const allTypes = await dataLayer.getAllTypes();
+    const allSubTypes = await dataLayer.getAllSubtypes();
     // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
     //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     // })
@@ -239,15 +233,9 @@ router.get('/product/create', checkIfAuthenticated, async (req, res) => {
 })
 // post created Product
 router.post('/product/create', async(req,res)=>{
-    const allCategories = await Category.fetchAll().map(function(category){
-        return [category.get('id'), category.get('name')]
-    })
-    const allTypes = await Types.fetchAll().map(function(types){
-        return [types.get('id'), types.get('name')]
-    })
-    const allSubTypes = await Subtypes.fetchAll().map(function(subtypes){
-        return [subtypes.get('id'), subtypes.get('name')]
-    })
+    const allCategories = await dataLayer.getAllCategories();
+    const allTypes = await dataLayer.getAllTypes();
+    const allSubTypes = await dataLayer.getAllSubtypes();
     // const allKeyboardPcb = await (await Keyboardpcb.fetchAll()).map(function(keyboardpcb){
     //     return[keyboardpcb.get('id'), keyboardpcb.get('name') ]
     // })
@@ -555,6 +543,83 @@ router.post('/keyboardstabilizer/create', checkIfAuthenticated, async(req,res)=>
 
 
 //////////////////////////////////UPDATE////////////////////////////////////////////////
+//update Product by id
+router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res) => {
+    // const allKeyboardPcb = await dataLayer.getAllKeyboardPcb();
+    const allCategories = await dataLayer.getAllCategories();
+    const allTypes = await dataLayer.getAllTypes();
+    const allSubTypes = await dataLayer.getAllSubtypes();
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductById(productId);
+    
+    
+    
+        
+
+        const productForm = createproductForm(allCategories, allTypes, allSubTypes);
+        
+        productForm.fields.name.value = product.get('name');
+        productForm.fields.brand.value = product.get('brand');
+        productForm.fields.material.value = product.get('material');
+        productForm.fields.category_id.value = product.get('category_id');
+        productForm.fields.type_id.value = product.get('type_id');
+        productForm.fields.subtype_id.value = product.get('subtype_id');
+        productForm.fields.keyboardKit.value = product.get('keyboardKit');
+        productForm.fields.quantity.value = product.get('quantity');
+        productForm.fields.cost.value = product.get('cost');
+        productForm.fields.description.value = product.get('description');
+        // 1 - set the image url in the product form
+        // productForm.fields.image_url.value = product.get('image_url');
+
+        //fetch all related keyboard pcbs
+        // let selectedKeyboardpcbs = await keebCases.related('keyboardpcbs').pluck('id');
+        // productForm.fields.keyboardpcb.value = selectedKeyboardpcbs;
+
+        res.render('products/updateproduct', {
+            'form': productForm.toHTML(bootstrapField),
+            'products':product.toJSON()
+            // 2 - send to the HBS file the cloudinary information
+            // cloudinaryName: process.env.CLOUDINARY_NAME,
+            // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+        })
+})
+
+//process update of Product
+router.post('/product/:product_id/update', checkIfAuthenticated, async (req, res) => {
+    const allCategories = await dataLayer.getAllCategories();
+    const allTypes = await dataLayer.getAllTypes();
+    const allSubTypes = await dataLayer.getAllSubtypes();
+
+    // fetch the product that we want to update
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
+    productForm.handle(req,{
+        'success': async (form)=>{
+            product.set(form.data);
+            product.save();
+            res.redirect('/products/keyboardcases');
+        },
+        'error':async (form) =>{
+            res.render('products/updateproduct',{
+                'form': form.toHTML(bootstrapField),
+                'products': product.toJSON()
+            })
+        }
+    })
+    
+})
+
+
+
+
+
+
 //update KeyboardCase by id
 router.get('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allKeyboardPcb = await dataLayer.getAllKeyboardPcb();
@@ -951,6 +1016,32 @@ router.post('/keyboardstabilizer/:product_id/update', checkIfAuthenticated, asyn
 })
 
 //////////////////////////////////DELETE//////////////////////////////////////////
+//Delete product
+router.get('/product/:product_id/delete', checkIfAuthenticated, async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await Product.where({
+        'id': productId}).fetch({
+            require: true
+        });
+
+        res.render('products/deleteproduct', {
+            'products':product.toJSON()
+        })
+})
+//process delete product
+router.post('/product/:product_id/delete', checkIfAuthenticated, async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await Product.where({
+        'id': productId}).fetch({
+            require: true
+        });
+
+    await product.destroy();
+    res.redirect('/products/keyboardcases')
+})
+
+
+
 //Delete keyboardCase
 router.get('/keyboardcase/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
