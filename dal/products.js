@@ -45,11 +45,12 @@ const getAllKeyboardCase = async ()=>{
 
 }
 
-//keebcases
+//get by id
 const getProductById = async(productId) => {
     return await Product.where({
         'id': productId}).fetch({
-            require: true
+            require: true,
+            'withRelated': ['keyboardkits']
         });
 
 } 

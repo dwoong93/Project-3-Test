@@ -545,6 +545,7 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
     const allCategories = await dataLayer.getAllCategories();
     const allTypes = await dataLayer.getAllTypes();
     const allSubTypes = await dataLayer.getAllSubtypes();
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
     const productId = req.params.product_id;
     const product = await dataLayer.getProductById(productId);
     
@@ -552,7 +553,7 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
     
         
 
-        const productForm = createproductForm(allCategories, allTypes, allSubTypes);
+        const productForm = createproductForm(allCategories, allTypes, allSubTypes, allKeyboardKits);
         
         productForm.fields.name.value = product.get('name');
         productForm.fields.brand.value = product.get('brand');
@@ -560,7 +561,7 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
         productForm.fields.category_id.value = product.get('category_id');
         productForm.fields.type_id.value = product.get('type_id');
         productForm.fields.subtype_id.value = product.get('subtype_id');
-        productForm.fields.keyboardKit.value = product.get('keyboardKit');
+        // productForm.fields.keyboardKit.value = product.get('keyboardKit');
         productForm.fields.quantity.value = product.get('quantity');
         productForm.fields.cost.value = product.get('cost');
         productForm.fields.description.value = product.get('description');
@@ -568,8 +569,8 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
         // productForm.fields.image_url.value = product.get('image_url');
 
         //fetch all related keyboard pcbs
-        // let selectedKeyboardpcbs = await keebCases.related('keyboardpcbs').pluck('id');
-        // productForm.fields.keyboardpcb.value = selectedKeyboardpcbs;
+        let selectedKeyboardkits = await product.related('keyboardkits').pluck('id');
+        productForm.fields.keyboardkits.value = selectedKeyboardkits;
 
         res.render('products/updateproduct', {
             'form': productForm.toHTML(bootstrapField),
@@ -586,6 +587,7 @@ router.post('/product/:product_id/update', checkIfAuthenticated, async (req, res
     const allCategories = await dataLayer.getAllCategories();
     const allTypes = await dataLayer.getAllTypes();
     const allSubTypes = await dataLayer.getAllSubtypes();
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
 
     // fetch the product that we want to update
     const product = await Product.where({
@@ -594,20 +596,38 @@ router.post('/product/:product_id/update', checkIfAuthenticated, async (req, res
         require: true
     })
     //process form
-    const productForm = createproductForm(allCategories, allTypes, allSubTypes);
-    productForm.handle(req,{
-        'success': async (form)=>{
-            product.set(form.data);
-            product.save();
-            res.redirect('/products/keyboardcases');
-        },
-        'error':async (form) =>{
-            res.render('products/updateproduct',{
-                'form': form.toHTML(bootstrapField),
-                'products': product.toJSON()
-            })
-        }
-    })
+    const productForm = createproductForm(allCategories, allTypes, allSubTypes, allKeyboardKits);
+        productForm.handle(req,{
+            'success': async (form)=>{
+                let {keyboardkits, ...productData} = form.data;
+                product.set(productData);
+                await product.save();
+
+            
+                //update the relationship
+                let keyboardkitIds= keyboardkits.split(',')
+                //get all pcbs selected
+                let existingkeyboardkitIds = await product.related('keyboardkits').pluck('id')
+                           
+                //remove pcbs not selected anymore
+                let toRemove = id=> keyboardkitIds.includes(id) === false;
+                await product.keyboardkits().detach(toRemove);
+                // await keebCases.keyboardpcbs().detach(id=>keyboardpcbIds.includes(id) === false);
+                //add in pcbs that are selected
+                await product.keyboardkits().attach(keyboardkitIds);
+
+
+
+                
+                res.redirect('/products/keyboardcases');
+            },
+            'error':async (form) =>{
+                res.render('products/updateproduct',{
+                    'form': form.toHTML(bootstrapField),
+                    'products': product.toJSON()
+                })
+            }
+        })
     
 })
 
