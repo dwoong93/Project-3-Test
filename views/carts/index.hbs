@@ -7,7 +7,7 @@
     {{#each shoppingCart}}
     <li class="list-group-item">
         <h4>{{this.product.name}}</h3>
-            <h5>Category: {{this.product.category.name}}</h5>
+            <h5>Category: {{this.product.types.name}}</h5>
             <h5>Cost: {{this.product.cost}} </h5>
             <form method="POST" action="/cart/{{this.id}}/quantity/update">
                 <input type="hidden" value="{{../csrfToken}}" name="_csrf"/> 

@@ -28,7 +28,7 @@
             {{!-- <link rel="stylesheet" href="/style/{{this}}"> --}}
             {{#each products}}
             <div class=" col-lg-4 col-md-12 col-12">
-                <div class="card shadow-sm " id="Card"> 
+                <div class="card shadow-lg " id="Card"> 
                     <img src="{{this.image_url}}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{this.name}}</h5>
@@ -37,7 +37,7 @@
                         </h6>
                         <h6 class="card-subtitle mb-2 text-muted">Brand: {{this.brand}}</h6>
                     </div>
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush" id="CardTable">
                         <li class="list-group-item"><h6>Subtype: {{this.subtypes.name}}</h6></li>
                         <li class="list-group-item"><h6>Form Factor: {{this.category.name}}</h6></li>
                         <li class="list-group-item">
@@ -82,6 +82,30 @@
     
 </body>
 </html>
+
+{{!-- {{#each products}}
+    <tr>
+        <td>
+            {{this.id}}
+        </td>
+        <td>
+            {{this.name}}
+        </td>
+        <td>
+            {{this.types.name}}
+        </td>
+        <td>
+            {{this.cost}}
+        </td>
+        
+
+        <td>
+            <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to cart</a>
+            <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+            <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+    </tr>
+        {{/each}} --}}
 
 
 

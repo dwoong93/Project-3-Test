@@ -10,6 +10,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     justify-self: center;
+    background-color: rgb(100, 100, 100);
 }
 ::-webkit-scrollbar {
     width: 0px;
@@ -24,7 +25,15 @@
     border-radius: 10rem;
     background: transparent;
 }
+#Card:hover{
+    background-color: rgb(26, 26, 26);
+    box-shadow: rgb(194, 0, 0);
+    transition: 300ms;
+}
+.list-group-item{
+    background-color: rgb(100, 100, 100);
 
+}
 #cardContainer{
     justify-content: center;
 }

@@ -3,35 +3,26 @@ const { CartItem } = require('../models');
 
 
 //get the items of a user's shopping cart
-const getCart = async (userId) => {
+const getCart = async (customerId) => {
     return await CartItem.collection()
     .where({
-    'user_id': userId
+    'customer_id': customerId
     }).fetch({
     require: false,
-    withRelated: ['keyboardcase', 'keyboardcase.category',
-    'keyboardpcb', 'keyboardpcb.category',
-    'keyboardplate', 'keyboardplate.category',
-    'keyboardstabilizer', 'keyboardswitch',
-    'keyboardkeycap'] 
-});
+    withRelated: ['product','product.types']    
+    });
 
         
 }
 
 //check if a specific product exists in a user's shopping cart.If it does, it will return the cart item
-const getCartItemByCustomerAndProduct = async (userId, productId) => {
+const getCartItemByCustomerAndProduct = async (customerId, productId) => {
     
     return await CartItem.where({ 
-        'user_id': userId,
+        'customer_id': customerId,
         'product_id': productId
     }).fetch({
-        require: false,
-        withRelated: ['keyboardcase', 'keyboardcase.category',
-                    'keyboardpcb', 'keyboardpcb.category',
-                    'keyboardplate', 'keyboardplate.category',
-                    'keyboardstabilizer', 'keyboardswitch',
-                    'keyboardkeycap']
+        require: false
     });
 }
  
@@ -58,16 +49,14 @@ async function removeFromCart(customerId, productId) {
 
 //update quantity of a given cart item
 async function updateQuantity(customerId, productId, newQuantity) {
-    let cartItem = await getCartItemByCustomerAndProduct(customerId, productId, keyboardpcbId);
-    console.log(cartItem)
+    let cartItem = await getCartItemByCustomerAndProduct(customerId, productId);
     if (cartItem) {
         cartItem.set('quantity', newQuantity);
         cartItem.save();
-        
         return true;
     }
     return false;
-    }
+}
 
 
 
