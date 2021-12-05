@@ -2,11 +2,14 @@ const bookshelf = require('../bookshelf')
 
 const Product = bookshelf.model('Product', {
     tableName:'products',
+    category(){
+        return this.belongsTo('Category')
+    },
     types(){//if runs into error, try type
-        return this.belongsTo('Type')
+        return this.belongsTo('Types')
     },
     subtypes(){//if runs into error, try subtype
-        return this.belongsTo('Subtype')
+        return this.belongsTo('Subtypes')
     },
     keyboardkits(){
         return this.belongsToMany('Keyboardkit')

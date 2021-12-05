@@ -1,6 +1,8 @@
 // #1 import in the Product model
 const {Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Product, Keyboardkit} = require('../models')
 
+
+
 const getAllCategories = async ()=>{
     return await Category.fetchAll().map(function(category){
         return [category.get('id'), category.get('name')]

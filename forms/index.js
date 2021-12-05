@@ -62,7 +62,7 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
     }),
     'category_id': fields.string({
         label: 'Form Factor',
-        required: true,
+        required: false, //if doesnt work, change to true
         errorAfterField: true,
         widget: widgets.select(),
         choices:categories
@@ -76,8 +76,8 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
     //     }
     // }),
     'keyboardkits': fields.string({
-        label: 'Compatible PCB (Ctrl + Click to select or deselect multiple kits)',
-        required: true,
+        label: 'Compatible Keyboard Kit(s) (Ctrl + Click to select or deselect multiple kits)',
+        required: false, //if doesnt work, change to true
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']
@@ -109,10 +109,10 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
             label: ['form-label']
         }
     }),
-    // 'image_url':fields.string({
-    //     required: true,
-    //     widget: widgets.hidden()
-    // })
+    'image_url':fields.string({
+        required: true,
+        widget: widgets.hidden()
+    })
         
 })
 };
@@ -687,6 +687,104 @@ const UpdateCustomerAccountForm = () => {
 
 //Search Engine
 
+//create product filter form function
+const createproductSearchForm = (categories, types, subtypes, keyboardkits) => {
+    return forms.create({
+    'name': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'brand': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'type_id': fields.string({
+        label: 'Product Type',
+        required: false,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices: types
+    }),
+    'subtype_id': fields.string({
+        label: 'Product Subtype',
+        required: false,
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices: subtypes
+    }),
+    'material': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    }),
+    'category_id': fields.string({
+        label: 'Form Factor',
+        required: false, 
+        errorAfterField: true,
+        widget: widgets.select(),
+        choices:categories
+
+        }),
+    'keyboardkits': fields.string({
+        label: 'Compatible with Keyboard Kit:',
+        required: false, 
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        widget: widgets.multipleSelect(),
+        choices: keyboardkits
+    }),
+    'quantity': fields.string({
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+        
+    }),
+    // 'cost': fields.string({
+    //     required: true,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     },
+    //     'validators':[validators.integer()]
+    // }),
+    'max_cost': fields.string({
+        label: 'Maximum Cost',
+        required: false,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+    }),
+    
+    // 'description': fields.string({
+    //     required: true,
+    //     errorAfterField: true,
+    //     cssClasses: {
+    //         label: ['form-label']
+    //     }
+    // }),
+    // 'image_url':fields.string({
+    //     required: true,
+    //     widget: widgets.hidden()
+    // })
+        
+})
+};
+
+
 //create keyboard case filter form function
 const createkeyboardCaseSearchForm = (categories, keyboardpcb) => {
     return forms.create({
@@ -865,5 +963,6 @@ module.exports = {
     UpdateCustomerAccountForm,
     createkeyboardCaseSearchForm,
     createkeyboardPcbSearchForm,
+    createproductSearchForm,
     bootstrapField };
         

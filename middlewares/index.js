@@ -13,8 +13,8 @@ const checkIfCustomerAuthenticated = (req, res, next) => {
         next()
     } 
     else {
-        req.flash("error_messages", "You need to Log in to access this page");
-        res.redirect('users/customer/login');
+        req.flash("error_messages", "hi daryl");
+        res.redirect('/users/login');
     }
 }
 

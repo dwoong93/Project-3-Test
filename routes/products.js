@@ -7,7 +7,7 @@ const { bootstrapField, createproductForm ,createkeyboardCaseForm,
     createkeyboardPcbForm, createkeyboardPlateForm, 
     createkeyboardSwitchForm, createkeyboardKeycapForm,
     createkeyboardStabilizerForm, createkeyboardCaseSearchForm,
-    createkeyboardPcbSearchForm} = require('../forms');
+    createkeyboardPcbSearchForm, createproductSearchForm} = require('../forms');
 
 // #1 import in the Product model
 const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Keyboardkit} = require('../models')
@@ -30,6 +30,113 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
         'keyboardkeycap':keebKeycap.toJSON(),
         'keyboardstabilizer':keebStabilizer.toJSON()
 
+    })
+
+})
+
+// FILTER and display all Products
+router.get('/all', async function(req,res){
+    //get all categories
+    const allCategories = await dataLayer.getAllCategories();
+    //create a fake cat that represents search all
+    allCategories.unshift([0,'All Layouts']);
+
+    //get all Types
+    const allTypes = await dataLayer.getAllTypes();
+    //create a fake cat that represents search all
+    allTypes.unshift([0,'All Keyboard Components']);
+
+    //get all Subtypes
+    const allSubtypes = await dataLayer.getAllSubtypes();
+    //create a fake subtype that represents search all
+    allSubtypes.unshift([0,'All Component Subtypes']);
+
+
+    // get all Many-Many relationship kits
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    
+
+    //create search form
+    let searchForm = createproductSearchForm(allCategories, allTypes, allSubtypes, allKeyboardKits);
+    let q = Product.collection();
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/productcatalog', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/selectcase', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            
+            if (form.data.name) {
+                q = q.where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if (form.data.material) {
+                q = q.where('material', 'like', '%' + req.query.material + '%')
+            }
+
+            if (form.data.brand) {
+                q = q.where('brand', 'like', '%' + req.query.brand + '%')
+            }
+
+            // if (form.data.category_id && form.data.category_id != "0"
+            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
+            //     .where('categories.name', 'like', '%' + req.query.category + '%')
+            // }
+            if (form.data.type_id && form.data.type_id != "0") {
+                q.where('type_id', '=', form.data.type_id)
+            }
+
+            if (form.data.subtype_id && form.data.subtype_id != "0") {
+                q.where('subtype_id', '=', form.data.subtype_id)
+            }
+
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            if (form.data.keyboardkits) {
+                q.query('join', 'keyboardkits_products', 'products.id', 'product_id')
+                .where('keyboardkit_id', 'in', form.data.keyboardkits.split(','))
+                }
+                
+
+            // if (form.data.min_cost) {
+            //     q = q.where('cost', '>=', req.query.min_cost)
+            // }
+
+            if (form.data.max_cost) {
+                q = q.where('cost', '<=', req.query.max_cost);
+            }
+
+            // if (form.data.keyboardpcb) {
+            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
+            //     .where('keyboardcase_id', 'in')
+            // }
+
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+            })
+                res.render('products/productcatalog', {
+                    'products': products.toJSON(),
+                    'form': form.toHTML(bootstrapField)
+                })
+                
+        }
     })
 
 })
@@ -212,6 +319,7 @@ router.get('/customer/catalog', async function(req,res){
 })
 
 
+
 //////////////////////////////////CREATE///////////////////////////////////////////
 // Create Product
 router.get('/product/create', checkIfAuthenticated, async (req, res) => {
@@ -223,14 +331,14 @@ router.get('/product/create', checkIfAuthenticated, async (req, res) => {
 
     res.render('products/createproduct', {
         'form': productForm.toHTML(bootstrapField),
-        // cloudinaryName: process.env.CLOUDINARY_NAME,
-        // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
-        // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
         
 })
 // post created Product
-router.post('/product/create', async(req,res)=>{
+router.post('/product/create', checkIfAuthenticated, async(req,res)=>{
     const allCategories = await dataLayer.getAllCategories();
     const allTypes = await dataLayer.getAllTypes();
     const allSubTypes = await dataLayer.getAllSubtypes();
@@ -251,7 +359,7 @@ router.post('/product/create', async(req,res)=>{
             product.set('cost', (parseFloat(form.data.cost)));
             product.set('description', form.data.description);
             
-            // product.set('image_url', form.data.image_url)
+            product.set('image_url', form.data.image_url)
             await product.save();
              //check it user has selected compatible pcb
              
@@ -566,7 +674,7 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
         productForm.fields.cost.value = product.get('cost');
         productForm.fields.description.value = product.get('description');
         // 1 - set the image url in the product form
-        // productForm.fields.image_url.value = product.get('image_url');
+        productForm.fields.image_url.value = product.get('image_url');
 
         //fetch all related keyboard pcbs
         let selectedKeyboardkits = await product.related('keyboardkits').pluck('id');
@@ -574,11 +682,11 @@ router.get('/product/:product_id/update', checkIfAuthenticated, async (req, res)
 
         res.render('products/updateproduct', {
             'form': productForm.toHTML(bootstrapField),
-            'products':product.toJSON()
+            'products':product.toJSON(),
             // 2 - send to the HBS file the cloudinary information
-            // cloudinaryName: process.env.CLOUDINARY_NAME,
-            // cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
-            // cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            cloudinaryName: process.env.CLOUDINARY_NAME,
+            cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+            cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
         })
 })
 
@@ -606,7 +714,7 @@ router.post('/product/:product_id/update', checkIfAuthenticated, async (req, res
             
                 //update the relationship
                 let keyboardkitIds= keyboardkits.split(',')
-                //get all pcbs selected
+                //get all kit ids selected
                 let existingkeyboardkitIds = await product.related('keyboardkits').pluck('id')
                            
                 //remove pcbs not selected anymore
