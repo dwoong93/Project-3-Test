@@ -100,7 +100,7 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
         cssClasses: {
             label: ['form-label']
         },
-        // 'validators':[validators.integer()]
+        'validators':[validators.integer()]
     }),
     'description': fields.string({
         required: true,
