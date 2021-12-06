@@ -54,7 +54,7 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
         choices: subtypes
     }),
     'material': fields.string({
-        required: true,
+        required: false,
         errorAfterField: true,
         cssClasses: {
             label: ['form-label']

@@ -78,7 +78,7 @@ app.use(function(req,res,next){
 //Import Routes
 const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
-const shoppingCartRoutes = require('./routes/shoppingCart');
+const shoppingCartRoutes = require('./routes/cart');
 const mainRoutes = require('./routes/main');
 
 

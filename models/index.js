@@ -57,11 +57,14 @@ const Customer = bookshelf.model('Customer',{
     })
 
 const CartItem = bookshelf.model('CartItem', {
-    tableName: 'cart_items',
+    'tableName': 'cart_items',
     product() {
         return this.belongsTo('Product')
+    },
+    customer() {
+        return this.belongsTo('Customer')
     }
-        
+
 })
 
 

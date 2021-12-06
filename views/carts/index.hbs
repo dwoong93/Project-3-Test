@@ -9,11 +9,11 @@
         <h4>{{this.product.name}}</h3>
             <h5>Category: {{this.product.types.name}}</h5>
             <h5>Cost: {{this.product.cost}} </h5>
-            <form method="POST" action="/cart/{{this.id}}/quantity/update">
+            <form method="POST" action="/cart/{{this.id}}/quantity">
                 <input type="hidden" value="{{../csrfToken}}" name="_csrf"/> 
                 <h5>
                     Quantity: <input type="text" name="newQuantity" value="{{this.quantity}}" style="width:30px" /> 
-                    <input type="submit" value="Update Quantity" class="btn btn-success btn-sm" />
+                    {{!-- <input type="submit" value="Update Quantity" class="btn btn-success btn-sm" /> --}}
                 </h5>
             </form>
             <div>
@@ -23,7 +23,7 @@
     </li>
     {{/each}}
 </ul>
-
+<a href="/products/all" class="btn btn-primary my-3">Return to Shop</a>
 
 {{/block}}
 
