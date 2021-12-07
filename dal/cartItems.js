@@ -54,6 +54,12 @@ async function updateQuantity(userId, productId, newQuantity) {
     return false;
 }
 
+const getAllCartItem = async ()=>{
+    return await (await CartItem.fetchAll()).map(function(customer){
+        return[customer.get('id'), customer.get('username'), customer.get('address'), customer.get('contact'), customer.get('email') ]
+    })
+
+}
 module.exports = {
-    createCartItem, getCartItemByUserAndProduct, getCart, removeFromCart, updateQuantity
+    createCartItem, getCartItemByUserAndProduct, getCart, removeFromCart, updateQuantity, getAllCartItem
 } 

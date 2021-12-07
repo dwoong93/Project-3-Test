@@ -1,5 +1,6 @@
 const express = require("express");
 const {checkIfAuthenticated, checkIfCustomerAuthenticated} = require('../middlewares');
+const dataLayer = require('../dal/cartItems')
 const router = express.Router();
 const crypto = require('crypto');
 const getHashedPassword = (password) => {
@@ -101,6 +102,20 @@ router.get('/user/:user_id/update', async (req, res) => {
             'form': userForm.toHTML(bootstrapField),
             'user':user.toJSON()
         })
+})
+
+//Show all product orders to staff (User)
+router.get('/orders', async function(req,res){
+    let allOrders = await dataLayer.getAllCartItem();
+    console.log(allOrders)
+    
+    res.render('users/orders',{
+        'allOrders':allOrders,
+        'test':'test'
+
+
+    })
+
 })
 
 //Process update user by id
@@ -298,15 +313,17 @@ router.get('/profile', (req, res) => {
 })
 
 //customer profile
-router.get('/customer/profile', (req, res) => {
+router.get('/customer/profile',(req, res) => {
     const user = req.session.customer;
     if (!user) {
         req.flash('error_messages', 'You do not have permission to view this page')
         return res.redirect('/users/customer/login');
     }
     else {
+        
     res.render('users/customerprofile',{
-        'user': user})
+        'user': user
+    })
     }
 })
 
