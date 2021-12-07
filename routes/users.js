@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
 })
 
 //Customer registration
-router.get('/customer/register', checkIfCustomerAuthenticated, (req,res)=>{
+router.get('/customer/register', (req,res)=>{
     const registerForm = createCustomerRegistrationForm();
     res.render('users/customerregister', {
         'form': registerForm.toHTML(bootstrapField),
@@ -65,6 +65,8 @@ router.post('/customer/register', (req, res) => {
             const customer = new Customer({
                 'username': form.data.username,
                 'password': getHashedPassword(form.data.password),
+                'address': form.data.address,
+                'contact': form.data.contact,
                 'email': form.data.email,
             });
             await customer.save();
@@ -136,6 +138,8 @@ router.get('/customer/:customer_id/update', async (req, res) => {
         const userForm = UpdateCustomerAccountForm();
         
         userForm.fields.username.value = customer.get('username');
+        userForm.fields.address.value = customer.get('address');
+        userForm.fields.contact.value = customer.get('contact');
         userForm.fields.email.value = customer.get('email');
         userForm.fields.password.value = customer.get('password');
         
@@ -159,6 +163,8 @@ router.post('/customer/:customer_id/update', async (req, res) => {
             'success': async (form) => {
                 customer.set('username', form.data.username);
                 customer.set('email', form.data.email);
+                customer.set('address', form.data.address);
+                customer.set('contact', form.data.contact);
                 customer.set('password',getHashedPassword(form.data.password));
                 await customer.save();
                 res.redirect('/users/customer/profile');

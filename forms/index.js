@@ -621,6 +621,22 @@ const createCustomerRegistrationForm = () => {
         label: ['form-label']
         }
     }),
+    'address': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'contact': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+        
+    }),
     'password': fields.password({
         required: true,
         errorAfterField: true,
@@ -675,6 +691,22 @@ const UpdateCustomerAccountForm = () => {
         cssClasses: {
         label: ['form-label']
         }
+    }),
+    'address': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+        label: ['form-label']
+        }
+    }),
+    'contact': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        },
+        'validators':[validators.integer()]
+        
     }),
     'password': fields.password({
         required: true,

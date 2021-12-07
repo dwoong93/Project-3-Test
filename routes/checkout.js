@@ -31,8 +31,12 @@ router.get('/', async function(req,res){
         
         // add in the id of the product and the quantity
         meta.push({
-            'product_id': item.product_id,
-            'quantity': item.quantity
+            'customer_id': item.get('customer_id'),
+            'username': item.get('username'),
+            'contact': item.get('contact'),
+            'address': item.get('address'),
+            'product_id': item.get('product_id'),
+            'quantity': item.get('quantity')
         })
     }
 
@@ -48,7 +52,9 @@ router.get('/', async function(req,res){
         'success_url': process.env.STRIPE_SUCCESS_URL,
         'cancel_url': process.env.STRIPE_ERROR_URL,
         'metadata': {
-            'orders': metaData
+            'orders': metaData,
+            'customer_id':req.session.customer_id,
+            'username':req.session.username
         }        
     }
 
@@ -69,8 +75,7 @@ router.post('/process_payment', bodyParser.raw({type: 'application/json'}),async
         let sigHeader = req.headers["stripe-signature"];
         let event;
         try {
-            event = Stripe.webhooks.constructEvent(payload, sigHeader,
-                endpointSecret);
+            event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
         } catch (e) {
             res.send({
                 'error': e.message
