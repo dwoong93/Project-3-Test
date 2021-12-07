@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
 const csrf = require('csurf');
 const cloudinaryRoutes = require('./routes/cloudinary.js')
+const bodyParser = require('body-parser')
 
 
 // console.log(process.env.CLOUDINARY_NAME)

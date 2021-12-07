@@ -95,6 +95,7 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
         
     }),
     'cost': fields.string({
+        'label':'Cost (Please type in cents)',
         required: true,
         errorAfterField: true,
         cssClasses: {

@@ -63,10 +63,7 @@ router.get('/', async function(req,res){
 
 })
 
-router.post('/process_payment', bodyParser.raw({
-    type: 'application/json'
-}),
-async (req, res) => {
+router.post('/process_payment', bodyParser.raw({type: 'application/json'}),async function (req, res){
         let payload = req.body;
         let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
         let sigHeader = req.headers["stripe-signature"];
@@ -92,7 +89,8 @@ async (req, res) => {
 
 
 router.get('/success', function(req,res){
-    res.render('checkout/success')
+    res.render('checkout/success');
+    
 })
 router.get('/error', function(req,res){
     res.render('checkout/error')
