@@ -9,7 +9,7 @@ const getHashedPassword = (password) => {
     return hash;
 }
 // import in the User model
-const { User, Customer } = require('../models');
+const { User, Customer, CartItem } = require('../models');
 const { createRegistrationForm, createCustomerRegistrationForm , 
         createLoginForm, createCustomerLoginForm, 
         UpdateAccountForm, UpdateCustomerAccountForm, 
@@ -339,5 +339,17 @@ router.get('/customer/logout', (req, res) => {
     res.redirect('/products/customer/catalog');
     })
     
+//Delete cart items
+router.get('/:cartItem_id/delete', checkIfAuthenticated, async (req, res) => {
+    const cartItemId = req.params.cartItem_id;
+    const cartitem = await CartItem.where({
+        'id': cartItemId}).fetch({
+            require: true
+        });
+
+        res.render('users/orders', {
+            'allOrders':cartitem.toJSON()
+        })
+})
 
        

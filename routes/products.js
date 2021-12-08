@@ -35,7 +35,7 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 })
 
 // FILTER and display all Products
-router.get('/all', async function(req,res){
+router.get('/all',checkIfCustomerAuthenticated, async function(req,res){
     //get all categories
     const allCategories = await dataLayer.getAllCategories();
     //create a fake cat that represents search all
