@@ -107,13 +107,10 @@ router.get('/user/:user_id/update', async (req, res) => {
 //Show all product orders to staff (User)
 router.get('/orders', async function(req,res){
     let allOrders = await dataLayer.getAllCartItem();
-    console.log(allOrders)
+    // console.log(allOrders)
     
     res.render('users/orders',{
-        'allOrders':allOrders,
-        'test':'test'
-
-
+        'allOrders':allOrders
     })
 
 })

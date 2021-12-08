@@ -28,15 +28,15 @@ router.get('/', async function(req,res){
         }
         // add the line item to the array of line items
         lineItems.push(lineItem);
+        // console.log(item.related('customer'),item.related('product'), 'test')
         
         // add in the id of the product and the quantity
         meta.push({
             'customer_id': item.get('customer_id'),
-            'username': item.get('username'),
-            'contact': item.get('contact'),
-            'address': item.get('address'),
-            'product_id': item.get('product_id'),
-            'quantity': item.get('quantity')
+            'username': item.related('customer').get('username'),
+            'email': item.related('customer').get('email'),
+            'address': item.related('customer').get('address'),
+            'contact': item.related('customer').get('contact'),
         })
     }
 
