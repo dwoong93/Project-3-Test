@@ -105,7 +105,7 @@ router.get('/user/:user_id/update', async (req, res) => {
 })
 
 //Show all product orders to staff (User)
-router.get('/orders', async function(req,res){
+router.get('/orders', checkIfAuthenticated, async function(req,res){
     let allOrders = await dataLayer.getAllCartItem();
     // console.log(allOrders)
     
@@ -140,7 +140,7 @@ router.post('/user/:user_Id/update', async (req, res) => {
 })
 
 //update customer by id
-router.get('/customer/:customer_id/update', async (req, res) => {
+router.get('/customer/:customer_id/update', checkIfCustomerAuthenticated, async (req, res) => {
     const customerId = req.params.customer_id
     const customer = await Customer.where({
         'id': customerId}).fetch({
@@ -278,7 +278,7 @@ router.post('/customer/login', async (req, res) => {
                                 email: customer.get('email')
                             }
                             req.flash("success_messages", "Welcome back, " + customer.get('username'));
-                            res.redirect('/users/customer/profile');//RMB TO CHANGE
+                            res.redirect('/products/allproducts');//RMB TO CHANGE
                         } 
                         else {
                             req.flash("error_messages", "Sorry, the login details that you have provided is not correct.")
@@ -310,16 +310,18 @@ router.get('/profile', (req, res) => {
 })
 
 //customer profile
-router.get('/customer/profile',(req, res) => {
+router.get('/customer/profile',checkIfCustomerAuthenticated,(req, res) => {
     const user = req.session.customer;
     if (!user) {
         req.flash('error_messages', 'You do not have permission to view this page')
         return res.redirect('/users/customer/login');
+        
     }
     else {
-        
+        console.log(user)
     res.render('users/customerprofile',{
         'user': user
+        
     })
     }
 })
@@ -336,7 +338,7 @@ router.get('/logout', (req, res) => {
 router.get('/customer/logout', (req, res) => {
     req.session.customer = null;
     req.flash('success_messages', "Logged out successfully, Goodbye");
-    res.redirect('/products/customer/catalog');
+    res.redirect('/users/customer/login');
     })
     
 //Delete cart items

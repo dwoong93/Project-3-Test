@@ -34,8 +34,8 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 
 })
 
-// FILTER and display all Products
-router.get('/all',checkIfCustomerAuthenticated, async function(req,res){
+// FILTER and display all Products for Admin
+router.get('/all', checkIfAuthenticated, async function(req,res){
     //get all categories
     const allCategories = await dataLayer.getAllCategories();
     //create a fake cat that represents search all
@@ -140,6 +140,221 @@ router.get('/all',checkIfCustomerAuthenticated, async function(req,res){
     })
 
 })
+
+// FILTER and display all Products for Customer
+router.get('/allproducts', checkIfCustomerAuthenticated, async function(req,res){
+    //get all categories
+    const allCategories = await dataLayer.getAllCategories();
+    //create a fake cat that represents search all
+    allCategories.unshift([0,'All Layouts']);
+
+    //get all Types
+    const allTypes = await dataLayer.getAllTypes();
+    //create a fake cat that represents search all
+    allTypes.unshift([0,'All Keyboard Components']);
+
+    //get all Subtypes
+    const allSubtypes = await dataLayer.getAllSubtypes();
+    //create a fake subtype that represents search all
+    allSubtypes.unshift([0,'All Component Subtypes']);
+
+
+    // get all Many-Many relationship kits
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    
+
+    //create search form
+    let searchForm = createproductSearchForm(allCategories, allTypes, allSubtypes, allKeyboardKits);
+    let q = Product.collection();
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/customerproductcatalog', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/customerproductcatalog', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            
+            if (form.data.name) {
+                q = q.where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if (form.data.material) {
+                q = q.where('material', 'like', '%' + req.query.material + '%')
+            }
+
+            if (form.data.brand) {
+                q = q.where('brand', 'like', '%' + req.query.brand + '%')
+            }
+
+            // if (form.data.category_id && form.data.category_id != "0"
+            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
+            //     .where('categories.name', 'like', '%' + req.query.category + '%')
+            // }
+            if (form.data.type_id && form.data.type_id != "0") {
+                q.where('type_id', '=', form.data.type_id)
+            }
+
+            if (form.data.subtype_id && form.data.subtype_id != "0") {
+                q.where('subtype_id', '=', form.data.subtype_id)
+            }
+
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            if (form.data.keyboardkits) {
+                q.query('join', 'keyboardkits_products', 'products.id', 'product_id')
+                .where('keyboardkit_id', 'in', form.data.keyboardkits.split(','))
+                }
+                
+
+            // if (form.data.min_cost) {
+            //     q = q.where('cost', '>=', req.query.min_cost)
+            // }
+
+            if (form.data.max_cost) {
+                q = q.where('cost', '<=', req.query.max_cost);
+            }
+
+            // if (form.data.keyboardpcb) {
+            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
+            //     .where('keyboardcase_id', 'in')
+            // }
+
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+            })
+                res.render('products/customerproductcatalog', {
+                    'products': products.toJSON(),
+                    'form': form.toHTML(bootstrapField)
+                })
+                
+        }
+    })
+
+})
+
+// FILTER and display all Products for Public (nonlogin)
+router.get('/allpublic', async function(req,res){
+    //get all categories
+    const allCategories = await dataLayer.getAllCategories();
+    //create a fake cat that represents search all
+    allCategories.unshift([0,'All Layouts']);
+
+    //get all Types
+    const allTypes = await dataLayer.getAllTypes();
+    //create a fake cat that represents search all
+    allTypes.unshift([0,'All Keyboard Components']);
+
+    //get all Subtypes
+    const allSubtypes = await dataLayer.getAllSubtypes();
+    //create a fake subtype that represents search all
+    allSubtypes.unshift([0,'All Component Subtypes']);
+
+
+    // get all Many-Many relationship kits
+    const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    
+
+    //create search form
+    let searchForm = createproductSearchForm(allCategories, allTypes, allSubtypes, allKeyboardKits);
+    let q = Product.collection();
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/publicproductcatalog', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+        })
+            res.render('products/publicproductcatalog', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            
+            if (form.data.name) {
+                q = q.where('name', 'like', '%' + req.query.name + '%')
+            }
+
+            if (form.data.material) {
+                q = q.where('material', 'like', '%' + req.query.material + '%')
+            }
+
+            if (form.data.brand) {
+                q = q.where('brand', 'like', '%' + req.query.brand + '%')
+            }
+
+            // if (form.data.category_id && form.data.category_id != "0"
+            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
+            //     .where('categories.name', 'like', '%' + req.query.category + '%')
+            // }
+            if (form.data.type_id && form.data.type_id != "0") {
+                q.where('type_id', '=', form.data.type_id)
+            }
+
+            if (form.data.subtype_id && form.data.subtype_id != "0") {
+                q.where('subtype_id', '=', form.data.subtype_id)
+            }
+
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            if (form.data.keyboardkits) {
+                q.query('join', 'keyboardkits_products', 'products.id', 'product_id')
+                .where('keyboardkit_id', 'in', form.data.keyboardkits.split(','))
+                }
+                
+
+            // if (form.data.min_cost) {
+            //     q = q.where('cost', '>=', req.query.min_cost)
+            // }
+
+            if (form.data.max_cost) {
+                q = q.where('cost', '<=', req.query.max_cost);
+            }
+
+            // if (form.data.keyboardpcb) {
+            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
+            //     .where('keyboardcase_id', 'in')
+            // }
+
+            let products = await q.fetch({
+                withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
+            })
+                res.render('products/publicproductcatalog', {
+                    'products': products.toJSON(),
+                    'form': form.toHTML(bootstrapField)
+                })
+                
+        }
+    })
+
+})
+
 
 // FILTER Cases
 router.get('/keyboardcases', async function(req,res){
@@ -372,7 +587,7 @@ router.post('/product/create', checkIfAuthenticated, async(req,res)=>{
 
             
             
-            res.redirect('/products/keyboardcases');
+            res.redirect('/products/all');
         },
         'error': async (form) => {
             res.render('products/createproduct', {

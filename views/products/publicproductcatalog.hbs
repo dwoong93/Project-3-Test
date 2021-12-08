@@ -12,13 +12,11 @@
 {{#block 'content'}}
 <div id="externalbackground">
     <div>
-    <h1 id="header">Welcome, Admin.</h1>
-        <a href="/users/profile" class="btn border-warning btn-md" >Back to Profile</a>
-        <a href="/products/product/create" class="btn btn-warning btn-md my-3 mx-2 text-light" >Add Product</a>
-        <button "searchtoggle" class="btn btn-warning text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Search Filter
-        </button>
+    <h1 id="header">Shop Our Keyboard Components</h1>
     </div>
+    <button "searchtoggle" class="btn btn-warning text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Search Filter
+  </button>
   <div class="collapse" id="collapseExample">
       {{!-- Toggle for search form --}}
     <div class="card card-body" id='searchformtoggle'>
@@ -30,7 +28,7 @@
         </div>
     </div>
 </div>
-
+    
     <div class="container " id="cardContainer">
         <div class="row justify-content-center">
             {{!-- <link rel="stylesheet" href="/style/{{this}}"> --}}
@@ -64,10 +62,7 @@
                     </div>
                     <div class="card-body row">
                         <div class="col">
-                            <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to cart</a>
-                            <a href="/products/product/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-                            
-                            <a href="/products/keyboardcase/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="/users/customer/login" class="btn btn-success btn-sm">Add to cart</a>
                         </div>
                         <div class="col text-end mx-3">
                             <h6 class="text-muted">Stock Count</h6>
@@ -91,29 +86,6 @@
 </body>
 </html>
 
-{{!-- {{#each products}}
-    <tr>
-        <td>
-            {{this.id}}
-        </td>
-        <td>
-            {{this.name}}
-        </td>
-        <td>
-            {{this.types.name}}
-        </td>
-        <td>
-            {{this.cost}}
-        </td>
-        
-
-        <td>
-            <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to cart</a>
-            <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-            <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-        </td>
-    </tr>
-        {{/each}} --}}
 
 
 

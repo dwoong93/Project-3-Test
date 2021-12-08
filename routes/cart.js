@@ -15,7 +15,7 @@ router.get('/:product_id/add', async function(req,res){
     let cart = new CartServices(req.session.customer.id);
     cart.addToCart(req.params.product_id, 1);
     req.flash("success_messages", "Product has been added to cart");
-    res.redirect('/products/all');
+    res.redirect('/products/allproducts');
 })
 
 //remove from cart

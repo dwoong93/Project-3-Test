@@ -1,11 +1,19 @@
 {{#extends 'base'}}
     {{#block 'content'}}
+    <div id="adminnavbutton">
+        <a class="btn btn-sm btn-primary" style="mx-3 my-3" href="/users/user/{{user.id}}/update">Edit profile</a>
+        <a href="/users/register" class="btn btn-primary btn-sm" >Register another Admin account</a>
+        <a href="/products/all" class="btn my-3 btn-primary btn-sm" >View Admin Catalog</a>
+        <a href="/products/product/create" class="btn btn-primary btn-sm" >Create a new Product</a>
+        <div></div>
+        
+    </div>
         <h1>User Profile</h1>
         <ul>
         <li>Username: {{user.username}}</li>
         <li>Email:{{user.email}}</li>
         
         </ul>
-        <a class="btn btn-primary" style="mx-3 my-3" href="/users/user/{{user.id}}/update">Edit profile</a>
+        
     {{/block}}
 {{/extends}}
