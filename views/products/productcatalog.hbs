@@ -10,9 +10,9 @@
 <body id="body">
     {{#extends 'base'}}
 {{#block 'content'}}
-<div class="container">
+<div id="externalbackground">
     <div>
-    <h1>Shop Our Keyboard Components</h1>
+    <h1 id="header">Shop Our Keyboard Components</h1>
     </div>
     {{!-- <div id="nextButton">
         <a href="/products/keyboardpcbs" class="btn btn-primary btn-sm" >Go to PCB Selection</a>
@@ -29,7 +29,7 @@
             {{#each products}}
             <div class=" col-lg-4 col-md-12 col-12">
                 <div class="card shadow-lg " id="Card"> 
-                    <img src="{{this.image_url}}" class="card-img-top" alt="...">
+                    <img src="{{this.image_url}}" class="card-img-top" alt="item-image" id="cardimage">
                     <div class="card-body">
                         <h5 class="card-title">{{this.name}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">

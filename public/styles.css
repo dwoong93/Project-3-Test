@@ -1,6 +1,16 @@
 #body{
     justify-content: center;
 }
+
+#externalbackground{
+    background-color: rgba(86, 181, 245, 0.1);
+    justify-content: center;
+    
+}
+#header{
+    margin-left: 130px;
+    
+}
 #Card{
     height:40rem;
     width: 23rem;
@@ -10,7 +20,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     justify-self: center;
-    background-color: rgb(100, 100, 100);
+    background-color: rgba(100, 100, 100, 0.1);
 }
 ::-webkit-scrollbar {
     width: 0px;
@@ -26,12 +36,19 @@
     background: transparent;
 }
 #Card:hover{
-    background-color: rgb(26, 26, 26);
+    background-color: rgba(252, 206, 0, 0.2);
+    transform: translateY(-10px) rotate(1.5deg) ;
+    
     box-shadow: rgb(194, 0, 0);
-    transition: 300ms;
+    transition: 500ms;
+}
+#cardimage{
+    height: 350px;
+    object-fit: cover;
+    
 }
 .list-group-item{
-    background-color: rgb(100, 100, 100);
+    background-color: rgba(221, 221, 221, 0.1);
 
 }
 #cardContainer{
