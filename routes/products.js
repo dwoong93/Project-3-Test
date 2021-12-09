@@ -7,7 +7,7 @@ const { bootstrapField, createproductForm ,createkeyboardCaseForm,
     createkeyboardPcbForm, createkeyboardPlateForm, 
     createkeyboardSwitchForm, createkeyboardKeycapForm,
     createkeyboardStabilizerForm, createkeyboardCaseSearchForm,
-    createkeyboardPcbSearchForm, createproductSearchForm} = require('../forms');
+    createkeyboardPcbSearchForm, createproductSearchForm, createkeyboardKitForm} = require('../forms');
 
 // #1 import in the Product model
 const {Product,Keyboardcase, Keyboardpcb, Keyboardplate, Keyboardswitch, Keyboardkeycap, Keyboardstabilizer, Category, Types, Subtypes, Keyboardkit} = require('../models')
@@ -34,6 +34,7 @@ router.get('/catalog', checkIfAuthenticated, async function(req,res){
 
 })
 
+
 // FILTER and display all Products for Admin
 router.get('/all', checkIfAuthenticated, async function(req,res){
     //get all categories
@@ -59,14 +60,17 @@ router.get('/all', checkIfAuthenticated, async function(req,res){
     //create search form
     let searchForm = createproductSearchForm(allCategories, allTypes, allSubtypes, allKeyboardKits);
     let q = Product.collection();
+    let r = Keyboardkit.collection();
 
     searchForm.handle(req, {
         'empty': async (form) => {
             let products = await q.fetch({
                 withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
         })
+        let kits = await r.fetch()
             res.render('products/productcatalog', {
                 'products': products.toJSON(),
+                'kits':kits.toJSON(),
                 'form': form.toHTML(bootstrapField)
             })
         },
@@ -74,8 +78,10 @@ router.get('/all', checkIfAuthenticated, async function(req,res){
             let products = await q.fetch({
                 withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
         })
+        let kits = await r.fetch()
             res.render('products/selectcase', {
                 'products': products.toJSON(),
+                'kits':kits.toJSON(),
                 'form': form.toHTML(bootstrapField)
             })
         },
@@ -93,10 +99,6 @@ router.get('/all', checkIfAuthenticated, async function(req,res){
                 q = q.where('brand', 'like', '%' + req.query.brand + '%')
             }
 
-            // if (form.data.category_id && form.data.category_id != "0"
-            // ) {q = q.query('join', 'categories', 'category_id', 'categories.id')
-            //     .where('categories.name', 'like', '%' + req.query.category + '%')
-            // }
             if (form.data.type_id && form.data.type_id != "0") {
                 q.where('type_id', '=', form.data.type_id)
             }
@@ -114,25 +116,17 @@ router.get('/all', checkIfAuthenticated, async function(req,res){
                 .where('keyboardkit_id', 'in', form.data.keyboardkits.split(','))
                 }
                 
-
-            // if (form.data.min_cost) {
-            //     q = q.where('cost', '>=', req.query.min_cost)
-            // }
-
             if (form.data.max_cost) {
                 q = q.where('cost', '<=', req.query.max_cost);
             }
 
-            // if (form.data.keyboardpcb) {
-            //     q.query('join', 'keyboardCase_keyboardPcb', 'keyboardcase.id', 'keyboardcase_id')
-            //     .where('keyboardcase_id', 'in')
-            // }
-
             let products = await q.fetch({
                 withRelated: ['category', 'types', 'subtypes', 'keyboardkits']
             })
+            let kits = await r.fetch()
                 res.render('products/productcatalog', {
                     'products': products.toJSON(),
+                    'kits':kits.toJSON(),
                     'form': form.toHTML(bootstrapField)
                 })
                 
@@ -536,6 +530,44 @@ router.get('/customer/catalog', async function(req,res){
 
 
 //////////////////////////////////CREATE///////////////////////////////////////////
+// Create Keyboard Kit
+router.get('/keyboardkit/create', checkIfAuthenticated, async (req, res) => {
+    const kitForm = createkeyboardKitForm();
+
+    res.render('products/createkit', {
+        'kitform': kitForm.toHTML(bootstrapField)
+        })
+        
+})
+
+
+// post created Product
+router.post('/keyboardkit/create', checkIfAuthenticated, async(req,res)=>{
+    // const allKeyboardKits = await dataLayer.getAllKeyboardKits();
+    const kitForm = createkeyboardKitForm();
+
+    kitForm.handle(req, {
+        'success': async (form) => {
+
+            const keyboardkit = new Keyboardkit();
+            keyboardkit.set('name', form.data.name);
+            await keyboardkit.save();
+
+            req.flash("success_messages", `New Keyboard Kit
+            ${keyboardkit.get('name')} has been created`)
+
+            
+            
+            res.redirect('/products/all');
+        },
+        'error': async (form) => {
+            res.render('products/createkit', {
+                'kitform': kitForm.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
 // Create Product
 router.get('/product/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await dataLayer.getAllCategories();
@@ -954,10 +986,50 @@ router.post('/product/:product_id/update', checkIfAuthenticated, async (req, res
     
 })
 
+//update KeyboardKit by id
+router.get('/keyboardkit/:product_id/update', checkIfAuthenticated, async (req, res) => {
+    const kitId = req.params.product_id;
+    console.log(req.params.product_id)
+    const keebKit = await dataLayer.getKeyboardKitById(kitId);
+
+        const kitForm = createkeyboardKitForm();
+        
+        kitForm.fields.name.value = keebKit.get('name');
 
 
+        res.render('products/updatekit', {
+            'kitform': kitForm.toHTML(bootstrapField),
+            'keyboardkits':keebKit.toJSON()
+        })
 
+})
+//process update of KeyboardKit
+router.post('/keyboardkit/:product_id/update', checkIfAuthenticated, async (req, res) => {
+    // fetch the product that we want to update
+    const keebKit = await Keyboardkit.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
+    //process form
+    const kitForm = createkeyboardKitForm();
+    kitForm.handle(req,{
+        'success': async (kitform)=>{
+            keebKit.set(kitform.data);
+            keebKit.save();
+            res.redirect('/products/all');
+        },
+        'error':async (kitform) =>{
+            res.render('products/updatekit',{
+                'kitform': kitForm.toHTML(bootstrapField),
+                'keyboardkits':keebKit.toJSON()
+            })
+        }
+    })
+    
+})
 
+/////////////////////////////////////////////////////////////////////////////
 
 //update KeyboardCase by id
 router.get('/keyboardcase/:product_id/update', checkIfAuthenticated, async (req, res) => {
@@ -1379,6 +1451,33 @@ router.post('/product/:product_id/delete', checkIfAuthenticated, async (req, res
     res.redirect('/products/keyboardcases')
 })
 
+
+
+
+//Delete keyboardKit
+router.get('/keyboardkit/:product_id/delete', checkIfAuthenticated, async (req, res) => {
+    const kitId = req.params.product_id;
+    const keebKit = await Keyboardkit.where({
+        'id': kitId
+    }).fetch({
+        require: true
+    })
+        res.render('products/deletekit', {
+            'keyboardkits':keebKit.toJSON()
+        })
+})
+
+//process delete keyboard Kit
+router.post('/keyboardkit/:product_id/delete', checkIfAuthenticated, async (req, res) => {
+    const kitId = req.params.product_id;
+    const keebKit = await Keyboardkit.where({
+        'id': kitId
+    }).fetch({
+        require: true
+    })
+    await keebKit.destroy();
+    res.redirect('/products/all')
+})
 
 
 //Delete keyboardCase

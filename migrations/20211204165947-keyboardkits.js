@@ -30,7 +30,7 @@ exports.up = function (db) {
   })
 };
 exports.down = function (db) {
-  return db.dropTable('keybaordkits');
+  return db.dropTable('keyboardkits');
 };
 
 exports._meta = {

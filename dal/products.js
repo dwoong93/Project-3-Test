@@ -34,6 +34,14 @@ const getAllKeyboardKits = async ()=>{
 
 }
 
+const getKeyboardKitById = async(kitId) => {
+    return await Keyboardkit.where({
+        'id': kitId}).fetch({
+            require: true
+        });
+    
+} 
+
 
 
 const getAllKeyboardPcb = async ()=>{
@@ -129,5 +137,5 @@ const getKeyboardKeycapById = async(productId) => {
 module.exports = {
     getAllCategories, getAllTypes, getAllSubtypes, getAllKeyboardKits,getAllKeyboardCase, getAllKeyboardPcb, getKeyboardCaseById, 
     getKeyboardPcbById, getKeyboardPlateById, getKeyboardStabilizerById, 
-    getKeyboardSwitchById, getKeyboardKeycapById, getProductById, getAllProducts
+    getKeyboardSwitchById, getKeyboardKeycapById, getProductById, getAllProducts, getKeyboardKitById
     }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/formstyles.css">
+    <title>The Keyboard Shop</title>
+</head>
+<body id="body">
+
+{{#extends 'base'}}
+
+{{#block 'content'}}
+
+<div class="container" >
+    <h1 class="justify-content-center">Welcome Admin <br>Create a new Keyboard Kit</h1>
+    <div class="container justify-content-center " id="form">
+        <div id="formmethod">
+            <form method="POST" class="col col-sm-12 col-md-12 col-lg-6 ">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            {{{kitform}}}
+        </div>
+
+        <input type="submit" value="Add Keyboard Kit" class="btn btn-primary my-3"/>
+        <a href="/products/all" class="btn btn-outline-primary">Cancel</a>
+        </form>
+    </div>
+    
+</div>
+
+{{/block}}
+{{/extends}}
+
+
+    
+</body>
+</html>

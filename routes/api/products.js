@@ -21,14 +21,15 @@ router.post('/', async(req,res)=>{
   productForm.handle(req, {
       'success': async (form) => {
 
-        let {categories, alltypes, allsubtypes, ...productData} = form.data;
+        let {categories, alltypes, allsubtypes, keyboardkits, ...productData} = form.data;
         const product = new Product(productData);
         await product.save();
 
-        if (categories, alltypes, allsubtypes) {
+        if (categories, alltypes, allsubtypes, keyboardkits) {
           await product.categories().attach(categories.split(",")),
           await product.alltypes().attach(alltypes.split(",")),
           await product.allsubtypes().attach(allsubtypes.split(","))
+          await product.keyboardKit().attach(keyboardkits.split(","))
         }
         res.send(product)
           

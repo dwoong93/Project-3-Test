@@ -118,7 +118,20 @@ const createproductForm = (categories, types, subtypes, keyboardkits) => {
 })
 };
 
+//create keyboard kit form function
+const createkeyboardKitForm = () => {
+    return forms.create({
 
+    'name': fields.string({
+        required: true,
+        errorAfterField: true,
+        cssClasses: {
+            label: ['form-label']
+        }
+    })
+        
+})
+};
 
 
 //create keyboard case form function
@@ -982,6 +995,7 @@ const createkeyboardPcbSearchForm = (categories, keyboardcase) => {
   
 module.exports = {
     createproductForm,
+    createkeyboardKitForm,
     createkeyboardCaseForm, 
     createkeyboardPcbForm, 
     createkeyboardPlateForm, 

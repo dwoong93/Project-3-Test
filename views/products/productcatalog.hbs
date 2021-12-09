@@ -15,11 +15,15 @@
     <h1 id="header">Welcome, Admin.</h1>
         <a href="/users/profile" class="btn border-warning btn-md" >Back to Profile</a>
         <a href="/products/product/create" class="btn btn-warning btn-md my-3 mx-2 text-light" >Add Product</a>
-        <button "searchtoggle" class="btn btn-warning text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <button "searchtoggle" class="btn btn-warning text-light mx-2" type="button" data-bs-toggle="collapse" data-bs-target="#keyboardkittable" aria-expanded="false" aria-controls="collapseExample">
+            Show Keyboard Kits
+        </button>
+        <button "searchtoggle" class="btn btn-warning text-light" type="button" data-bs-toggle="collapse" data-bs-target="#searchform" aria-expanded="false" aria-controls="collapseExample">
             Search Filter
         </button>
+        
     </div>
-  <div class="collapse" id="collapseExample">
+  <div class="collapse" id="searchform">
       {{!-- Toggle for search form --}}
     <div class="card card-body" id='searchformtoggle'>
         <div class="container lg-col-4 md-col-6 col-12" id="searchForm">
@@ -30,7 +34,40 @@
         </div>
     </div>
 </div>
+<div class="collapse" id="keyboardkittable">
+    <a href="/products/keyboardkit/create" class="btn btn-primary btn-sm">Add a Keyboard Kit</a>
+    <table class="table">
 
+        <thead>
+            <tr>
+            <th>Id</th>
+            <th>Kit Name</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {{#each kits}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    {{this.name}}
+                </td>
+                <td>
+                    <a href="/products/keyboardkit/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                    <a href="/products/keyboardkit/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+
+        </tbody>
+
+        
+
+    </table>
+</div>
     <div class="container " id="cardContainer">
         <div class="row justify-content-center">
             {{!-- <link rel="stylesheet" href="/style/{{this}}"> --}}
