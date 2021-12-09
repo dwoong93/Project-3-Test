@@ -1,9 +1,62 @@
-#body{
-    justify-content: center;
+#maincontainer{
+    padding: 0;
+    margin: 0;
+}
+#header{
+    color: white;
+}
+#landingdiv{
+    height: 95.5vh;
+    width: 100vw;
+}
+#carouseldiv{
+    
+
+}
+#slideimage1{
+    width: 100vw;
+    max-height: 1060px;
+}
+#slideimage2{
+    width: 2015px;
+    max-height: 100vh;
+}
+#slideimage3{
+    width: 2015px;
+    max-height: 100vh;
+}
+#navbar{
+    background: rgba(2,0,36,0.1);
+}
+#navbuttons{
+    font-weight: bolder;
+    color: white;
+}
+#customerbutton{
+    padding-bottom: 10px;
+    
+}
+#right-components{
+    text-align: end;
+
 }
 
+#footer{
+    text-align: center;
+    margin-top: 5px;
+    height: 100px;
+}
+#discordbtn{
+    margin-top: 5px;
+}
+#alertmessages{
+    width: 300px;
+    height: 20px;
+    text-align: center;
+}
 #externalbackground{
-    background-color: rgba(86, 181, 245, 0.1);
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(95,153,166,1) 69%, rgba(92,109,112,1) 100%, rgba(97,97,97,0.6082808123249299) 100%);
     justify-content: center;
     
 }
@@ -17,7 +70,8 @@
 }
 
 #header{
-    margin-left: 130px;
+    /* margin-left: 130px; */
+    padding-top: 140px;
     
 }
 #Card{

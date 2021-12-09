@@ -12,11 +12,11 @@
 
 
   <body>
-    <div class="container-fluid bg-light">
+    <div class="container-fluid bg-light" id="maincontainer">
       <div class="row">
-        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark mx-0" >
+        <nav class="navbar fixed-top navbar-expand-lg  mx-0" id="navbar">
           <div class="container-fluid">
-            <a class="navbar-brand" href="/products/allpublic">
+            <a class="navbar-brand" href="/">
               <div class="logo-image" id="navlogo">
                     <img src="https://res.cloudinary.com/dc9n2casu/image/upload/v1638271447/random%20images/tkbs-xs_hfzwdv.png" class="img-fluid max-height-40%">
               </div>
@@ -25,84 +25,51 @@
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbuttons">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Shop By Category</a>
-                </li>
-
-              {{!-- Shop By Dropdown --}}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="shopByDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Create Product
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="shopByDropdown">
-                    <li><a class="dropdown-item" href="/products/keyboardcases/create">Case</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardpcb/create">PCB</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardplate/create">Plate</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardstabilizer/create">Stabilizer</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardswitch/create">Switch</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardkeycap/create">Keycap</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/products/product/create">Something else here</a></li>
-                  </ul>
-                </li>
-                
-              
-            {{!-- Create menu --}}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Null
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/products/keyboardcases/create">Case</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardpcb/create">PCB</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardplate/create">Plate</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardstabilizer/create">Stabilizer</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardswitch/create">Switch</a></li>
-                    <li><a class="dropdown-item" href="/products/keyboardkeycap/create">Keycap</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
+                  <a class="nav-link" aria-current="page" href="/products/allpublic">Shop</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-              </ul>
+                  <a class="nav-link" aria-current="page" href="/cart/basket">Shopping Cart</a>
+              </li>
 
-              {{!-- Right side components --}}
+            {{!-- Right side components --}}
               {{!-- Display username and dropdown options menu --}}
-              <div class="d-flex, text-white">
+              <div class="nav-link">
                 {{#if customer}}
                 <div class="nav-item dropdown">
-                  <a class="nav-link dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a class="nav-link" href="#" id="customerbutton" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{customer.username}}
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
                     <li><a class="dropdown-item" href="/users/customer/logout">Logout</a></li>
-                    <li><a class="dropdown-item" href="/users/register">Edit Account</a></li>
                   </ul>
                 </li>
                 <a class="navbar-brand" href="/cart/basket">
-                  <div class="logo-image" id="cartlogo">
-                    <img src="https://res.cloudinary.com/dc9n2casu/image/upload/v1638751891/cart_fdcb5u.png" class="img-fluid">
-                  </div>
                 </a>
                 {{else}}
                 
-                <div>Welcome, Guest!</div>
                 
-                <a href="/users/customer/login" class="ml-3 btn btn-primary btn-sm" id="loginbtn" >Login</a>
+                  <a href="/users/customer/login" class="ml-3 btn btn-primary btn-sm" id="loginbtn" >Welcome, create an account here!</a>
+                
+                
                 {{/if}}
                 
               </div>
+
+              
+
+
+
+              
             </div>
           </div>
         </nav>
       </div>
     {{#if success_messages }}
     {{#each success_messages}}
-      <div class="alert alert-success">
+      <div class="alert alert-success fixed-top" id="alertmessages">
         {{this}}
       </div>
     {{/each}}
@@ -120,17 +87,9 @@
     </div>  
     
 
-    <div class="text-center color-primary bg-dark text-white">
-      {{!-- <a href="https://discord.gg/5bUfDVTjHY" target="_blank" class="ml-3 btn btn-outline-white btn-success btn-sm">
-      Join our Discord!
-      </a><br> --}}
+    <div class="text-center sticky-top color-primary bg-dark text-white" id="footer">
       <div>
-        <h7>Join Our Discord Server!</h7>
-        <a class="ml-3 btn btn-sm" id="discordlink" href="https://discord.gg/5bUfDVTjHY">
-          <div class="logo-image">
-            <img src="https://res.cloudinary.com/dc9n2casu/image/upload/v1638271447/random%20images/tkbs-xs_hfzwdv.png" class="img-fluid max-height-40%">
-          </div>
-        </a>
+        <a href="https://discord.gg/5bUfDVTjHY" class="btn btn-success btn-sm" id="discordbtn">Join our Discord Server!</a>
       </div>
     </div>
     </div>

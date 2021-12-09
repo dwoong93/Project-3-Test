@@ -1,31 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <title>Keyboard Shop</title>
+</head>
+<body id="body">
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>My shopping cart</h1>
+    <div id="externalbackground">
+        <h1 id="header" class="mx-3">My shopping cart</h1>
+        <a href="/products/allproducts" class="btn text-light my-3 mx-1">Return to Shop</a>
+        <a href="/checkout" class='btn btn-warning'>Checkout</a>
+        <ul class="list-group mx-3">
+            {{#each shoppingCart}}
+            <li class="list-group-item text-light">
+                <h4>{{this.product.name}}</h3>
+                    <h5>Category: {{this.product.types.name}}</h5>
+                    <h5>Cost: {{this.product.cost}} </h5>
+                    <form method="POST" action="/cart/{{this.id}}/quantity">
+                        <input type="hidden" value="{{../csrfToken}}" name="_csrf"/> 
+                        <h5>
+                            Quantity: <input type="text" name="newQuantity" value="{{this.quantity}}" style="width:30px" /> 
+                            {{!-- <input type="submit" value="Update Quantity" class="btn btn-success btn-sm" /> --}}
+                        </h5>
+                    </form>
+                    <div>
+                        <a href="/cart/{{this.product.id}}/remove" class="btn btn-danger">Remove</a>
+                    </div>
 
-<a href="/checkout" class='btn btn-primary'>Checkout</a>
-<ul class="list-group">
-    {{#each shoppingCart}}
-    <li class="list-group-item">
-        <h4>{{this.product.name}}</h3>
-            <h5>Category: {{this.product.types.name}}</h5>
-            <h5>Cost: {{this.product.cost}} </h5>
-            <form method="POST" action="/cart/{{this.id}}/quantity">
-                <input type="hidden" value="{{../csrfToken}}" name="_csrf"/> 
-                <h5>
-                    Quantity: <input type="text" name="newQuantity" value="{{this.quantity}}" style="width:30px" /> 
-                    {{!-- <input type="submit" value="Update Quantity" class="btn btn-success btn-sm" /> --}}
-                </h5>
-            </form>
-            <div>
-                <a href="/cart/{{this.product.id}}/remove" class="btn btn-danger">Remove</a>
-            </div>
-
-    </li>
-    {{/each}}
-</ul>
-<a href="/products/allproducts" class="btn btn-primary my-3">Return to Shop</a>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
 
 {{/block}}
 
+
 {{/extends}}
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
