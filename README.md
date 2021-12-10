@@ -34,6 +34,10 @@ Create
 
 --
 
+Read 
+
+--
+
 Update
 --
 
@@ -44,24 +48,6 @@ Delete
 
 
 
-
---
-
-Create 
-
---
-
-Adding, Updating and Deleting 
-
---
-
-Updating 
-
---
-
-Deleting Workout
-
---
 
 
 
