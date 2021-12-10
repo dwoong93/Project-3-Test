@@ -32,18 +32,11 @@ Test Cases
 
 Create 
 
---
-
-Read 
-
---
+Read
 
 Update
---
 
-
-Delete 
---
+Delete
 
 
 
